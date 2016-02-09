@@ -28,8 +28,8 @@ import static com.nurkiewicz.jdbcrepository.mysql.JdbcRepositoryTestMysqlConfig.
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestMysqlConfig.class)
 public class JdbcRepositoryGeneratedKeyMysqlTest extends JdbcRepositoryGeneratedKeyTest {
 
-	public JdbcRepositoryGeneratedKeyMysqlTest() {
-		super(MYSQL_PORT);
-	}
+    public JdbcRepositoryGeneratedKeyMysqlTest() {
+        super(MYSQL_PORT);
+    }
 
 }

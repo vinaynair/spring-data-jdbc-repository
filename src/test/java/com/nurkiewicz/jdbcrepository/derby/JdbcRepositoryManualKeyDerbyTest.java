@@ -25,7 +25,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
  */
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestDerbyConfig.class)
 public class JdbcRepositoryManualKeyDerbyTest extends JdbcRepositoryManualKeyTest {
-	public JdbcRepositoryManualKeyDerbyTest() {
-		super(-1);
-	}
+    public JdbcRepositoryManualKeyDerbyTest() {
+        super(-1);
+    }
 }

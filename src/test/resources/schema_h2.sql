@@ -21,4 +21,3 @@ CREATE TABLE IF NOT EXISTS BOARDING_PASS (
   seat CHAR(3),
   PRIMARY KEY (flight_no, seq_no)
 );
-

@@ -23,8 +23,8 @@ import com.nurkiewicz.jdbcrepository.sql.DerbySqlGenerator;
  */
 public class CommentWithUserDerbySqlGenerator extends DerbySqlGenerator {
 
-	public CommentWithUserDerbySqlGenerator() {
-		super("c.*, u.date_of_birth, u.reputation, u.enabled");
-	}
+    public CommentWithUserDerbySqlGenerator() {
+        super("c.*, u.date_of_birth, u.reputation, u.enabled");
+    }
 
 }

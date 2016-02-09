@@ -26,7 +26,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestOracleConfig.class)
 public class JdbcRepositoryCompoundPkOracleTest extends JdbcRepositoryCompoundPkTest {
 
-	public JdbcRepositoryCompoundPkOracleTest() {
-		super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
-	}
+    public JdbcRepositoryCompoundPkOracleTest() {
+        super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
+    }
 }

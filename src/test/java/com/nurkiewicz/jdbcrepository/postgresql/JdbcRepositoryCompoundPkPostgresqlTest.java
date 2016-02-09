@@ -27,7 +27,7 @@ import static com.nurkiewicz.jdbcrepository.postgresql.JdbcRepositoryTestPostgre
  */
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestPostgresqlConfig.class)
 public class JdbcRepositoryCompoundPkPostgresqlTest extends JdbcRepositoryCompoundPkTest {
-	public JdbcRepositoryCompoundPkPostgresqlTest() {
-		super(POSTGRESQL_PORT);
-	}
+    public JdbcRepositoryCompoundPkPostgresqlTest() {
+        super(POSTGRESQL_PORT);
+    }
 }

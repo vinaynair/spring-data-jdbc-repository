@@ -27,12 +27,12 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcRepositoryTestH2Config extends JdbcRepositoryTestConfig {
 
-	@Bean
-	@Override
-	public DataSource dataSource() {
-		JdbcDataSource ds = new JdbcDataSource();
-		ds.setURL("jdbc:h2:mem:DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema_h2.sql'");
-		return ds;
-	}
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        JdbcDataSource ds = new JdbcDataSource();
+        ds.setURL("jdbc:h2:mem:DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema_h2.sql'");
+        return ds;
+    }
 
 }

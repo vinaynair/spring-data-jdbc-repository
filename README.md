@@ -26,14 +26,14 @@ Each DAO provides built-in support for:
 * Sorting over several columns (database agnostic)
 * Optional support for *many-to-one* relationships
 * Supported databases (continuously tested):
-	* MySQL
-	* PostgreSQL
-	* H2
-	* HSQLDB
-	* Derby
-	* MS SQL Server (2008, 2012)
-	* Oracle 10g / 11g (9i should work too)
-	* ...and most likely many others
+    * MySQL
+    * PostgreSQL
+    * H2
+    * HSQLDB
+    * Derby
+    * MS SQL Server (2008, 2012)
+    * Oracle 10g / 11g (9i should work too)
+    * ...and most likely many others
 * Easily extendable to other database dialects via [`SqlGenerator`](https://github.com/nurkiewicz/spring-data-jdbc-repository/blob/master/src/main/java/com/nurkiewicz/jdbcrepository/sql/SqlGenerator.java) class.
 * Easy retrieval of records by ID
 
@@ -43,19 +43,19 @@ Compatible with Spring Data [`PagingAndSortingRepository`](http://static.springs
 
 ```java
 public interface PagingAndSortingRepository<T, ID extends Serializable> extends CrudRepository<T, ID> {
-			 T  save(T entity);
-	Iterable<T> save(Iterable<? extends T> entities);
-			 T  findOne(ID id);
-		boolean exists(ID id);
-	Iterable<T> findAll();
-		   long count();
-		   void delete(ID id);
-		   void delete(T entity);
-		   void delete(Iterable<? extends T> entities);
-		   void deleteAll();
-	Iterable<T> findAll(Sort sort);
-		Page<T> findAll(Pageable pageable);
-	Iterable<T> findAll(Iterable<ID> ids);
+             T  save(T entity);
+    Iterable<T> save(Iterable<? extends T> entities);
+             T  findOne(ID id);
+        boolean exists(ID id);
+    Iterable<T> findAll();
+           long count();
+           void delete(ID id);
+           void delete(T entity);
+           void delete(Iterable<? extends T> entities);
+           void deleteAll();
+    Iterable<T> findAll(Sort sort);
+        Page<T> findAll(Pageable pageable);
+    Iterable<T> findAll(Iterable<ID> ids);
 }
 ```
 
@@ -63,13 +63,13 @@ public interface PagingAndSortingRepository<T, ID extends Serializable> extends 
 
 ```java
 Page<User> page = userRepository.findAll(
-	new PageRequest(
-		5, 10, 
-		new Sort(
-			new Order(DESC, "reputation"), 
-			new Order(ASC, "user_name")
-		)
-	)
+    new PageRequest(
+        5, 10,
+        new Sort(
+            new Order(DESC, "reputation"),
+            new Order(ASC, "user_name")
+        )
+    )
 );
 ```
 
@@ -86,13 +86,13 @@ LIMIT 50 OFFSET 10
 
 ```sql
 SELECT * FROM (
-	SELECT ROW_NUMBER() OVER () AS ROW_NUM, t.*
-	FROM (
-		SELECT * 
-		FROM USERS 
-		ORDER BY reputation DESC, user_name ASC
-		) AS t
-	) AS a 
+    SELECT ROW_NUMBER() OVER () AS ROW_NUM, t.*
+    FROM (
+        SELECT *
+        FROM USERS
+        ORDER BY reputation DESC, user_name ASC
+        ) AS t
+    ) AS a
 WHERE ROW_NUM BETWEEN 51 AND 60
 ```
 
@@ -102,7 +102,7 @@ No matter which database you use, you'll get `Page<User>` object in return (you 
 
 * You consider migration to JPA or even some NoSQL database in the future.
 
-	Since your code will rely only on methods defined in [`PagingAndSortingRepository`](http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/PagingAndSortingRepository.html) and [`CrudRepository`](http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) from [Spring Data Commons](http://www.springsource.org/spring-data/commons) umbrella project you are free to switch from [`JdbcRepository`](https://github.com/nurkiewicz/spring-data-jdbc-repository/blob/master/src/main/java/com/nurkiewicz/jdbcrepository/JdbcRepository.java) implementation (from this project) to: [`JpaRepository`](http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/JpaRepository.html), [`MongoRepository`](http://static.springsource.org/spring-data/data-mongodb/docs/current/api/org/springframework/data/mongodb/repository/MongoRepository.html), [`GemfireRepository`](http://static.springsource.org/spring-data-gemfire/docs/current/api/org/springframework/data/gemfire/repository/GemfireRepository.html) or [`GraphRepository`](http://static.springsource.org/spring-data/data-graph/docs/current/api/org/springframework/data/neo4j/repository/GraphRepository.html). They all implement the same common API. Of course don't expect that switching from JDBC to JPA or MongoDB will be as simple as switching imported JAR dependencies - but at least you minimize the impact by using same DAO API.
+    Since your code will rely only on methods defined in [`PagingAndSortingRepository`](http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/PagingAndSortingRepository.html) and [`CrudRepository`](http://static.springsource.org/spring-data/data-commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) from [Spring Data Commons](http://www.springsource.org/spring-data/commons) umbrella project you are free to switch from [`JdbcRepository`](https://github.com/nurkiewicz/spring-data-jdbc-repository/blob/master/src/main/java/com/nurkiewicz/jdbcrepository/JdbcRepository.java) implementation (from this project) to: [`JpaRepository`](http://static.springsource.org/spring-data/data-jpa/docs/current/api/org/springframework/data/jpa/repository/JpaRepository.html), [`MongoRepository`](http://static.springsource.org/spring-data/data-mongodb/docs/current/api/org/springframework/data/mongodb/repository/MongoRepository.html), [`GemfireRepository`](http://static.springsource.org/spring-data-gemfire/docs/current/api/org/springframework/data/gemfire/repository/GemfireRepository.html) or [`GraphRepository`](http://static.springsource.org/spring-data/data-graph/docs/current/api/org/springframework/data/neo4j/repository/GraphRepository.html). They all implement the same common API. Of course don't expect that switching from JDBC to JPA or MongoDB will be as simple as switching imported JAR dependencies - but at least you minimize the impact by using same DAO API.
 
 * You need a fast, simple JDBC wrapper library. JPA or even [MyBatis](http://blog.mybatis.org/) is an overkill
 
@@ -126,9 +126,9 @@ Maven coordinates:
 
 ```xml
 <dependency>
-	<groupId>com.nurkiewicz.jdbcrepository</groupId>
-	<artifactId>jdbcrepository</artifactId>
-	<version>0.4</version>
+    <groupId>com.nurkiewicz.jdbcrepository</groupId>
+    <artifactId>jdbcrepository</artifactId>
+    <version>0.4</version>
 </dependency>
 ```
 
@@ -145,19 +145,19 @@ In order to start your project must have `DataSource` bean present and transacti
 @Configuration
 public class MinimalConfig {
 
-	@Bean
-	public PlatformTransactionManager transactionManager() {
-		return new DataSourceTransactionManager(dataSource());
-	}
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
 
-	@Bean
-	public DataSource dataSource() {
-		MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
-		ds.setUser("user");
-		ds.setPassword("secret");
-		ds.setDatabaseName("db_name");
-		return ds;
-	}
+    @Bean
+    public DataSource dataSource() {
+        MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
+        ds.setUser("user");
+        ds.setPassword("secret");
+        ds.setDatabaseName("db_name");
+        return ds;
+    }
 
 }
 ```
@@ -168,11 +168,11 @@ Say you have a following database table with auto-generated key (MySQL syntax):
 
 ```sql
 CREATE TABLE COMMENTS (
-	id INT AUTO_INCREMENT,
-	user_name varchar(256),
-	contents varchar(1000),
-	created_time TIMESTAMP NOT NULL,
-	PRIMARY KEY (id)
+    id INT AUTO_INCREMENT,
+    user_name varchar(256),
+    contents varchar(1000),
+    created_time TIMESTAMP NOT NULL,
+    PRIMARY KEY (id)
 );
 ```
 
@@ -181,22 +181,22 @@ First you need to create domain object [`User`](https://github.com/nurkiewicz/sp
 ```java
 public class Comment implements Persistable<Integer> {
 
-	private Integer id;
-	private String userName;
-	private String contents;
-	private Date createdTime;
+    private Integer id;
+    private String userName;
+    private String contents;
+    private Date createdTime;
 
-	@Override
-	public Integer getId() {
-		return id;
-	}
+    @Override
+    public Integer getId() {
+        return id;
+    }
 
-	@Override
-	public boolean isNew() {
-		return id == null;
-	}
-	
-	//getters/setters/constructors/...
+    @Override
+    public boolean isNew() {
+        return id == null;
+    }
+
+    //getters/setters/constructors/...
 }
 ```
 
@@ -208,19 +208,19 @@ Finally we are ready to create our [`CommentRepository`](https://github.com/nurk
 @Repository
 public class CommentRepository extends JdbcRepository<Comment, Integer> {
 
-	public CommentRepository() {
-		super(ROW_MAPPER, ROW_UNMAPPER, "COMMENTS");
-	}
+    public CommentRepository() {
+        super(ROW_MAPPER, ROW_UNMAPPER, "COMMENTS");
+    }
 
-	public static final RowMapper<Comment> ROW_MAPPER = //see below
+    public static final RowMapper<Comment> ROW_MAPPER = //see below
 
-	private static final RowUnmapper<Comment> ROW_UNMAPPER = //see below
+    private static final RowUnmapper<Comment> ROW_UNMAPPER = //see below
 
-	@Override
-	protected <S extends Comment> S postCreate(S entity, Number generatedId) {
-		entity.setId(generatedId.intValue());
-		return entity;
-	}
+    @Override
+    protected <S extends Comment> S postCreate(S entity, Number generatedId) {
+        entity.setId(generatedId.intValue());
+        return entity;
+    }
 }
 ```
 
@@ -232,15 +232,15 @@ If you ever used `JdbcTemplate` from Spring, you should be familiar with [`RowMa
 
 ```java
 public static final RowMapper<Comment> ROW_MAPPER = new RowMapper<Comment>() {
-	@Override
-	public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
-		return new Comment(
-				rs.getInt("id"),
-				rs.getString("user_name"),
-				rs.getString("contents"),
-				rs.getTimestamp("created_time")
-		);
-	}
+    @Override
+    public Comment mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new Comment(
+                rs.getInt("id"),
+                rs.getString("user_name"),
+                rs.getString("contents"),
+                rs.getTimestamp("created_time")
+        );
+    }
 };
 ```
 
@@ -248,15 +248,15 @@ public static final RowMapper<Comment> ROW_MAPPER = new RowMapper<Comment>() {
 
 ```java
 private static final RowUnmapper<Comment> ROW_UNMAPPER = new RowUnmapper<Comment>() {
-	@Override
-	public Map<String, Object> mapColumns(Comment comment) {
-		Map<String, Object> mapping = new LinkedHashMap<String, Object>();
-		mapping.put("id", comment.getId());
-		mapping.put("user_name", comment.getUserName());
-		mapping.put("contents", comment.getContents());
-		mapping.put("created_time", new java.sql.Timestamp(comment.getCreatedTime().getTime()));
-		return mapping;
-	}
+    @Override
+    public Map<String, Object> mapColumns(Comment comment) {
+        Map<String, Object> mapping = new LinkedHashMap<String, Object>();
+        mapping.put("id", comment.getId());
+        mapping.put("user_name", comment.getUserName());
+        mapping.put("contents", comment.getContents());
+        mapping.put("created_time", new java.sql.Timestamp(comment.getCreatedTime().getTime()));
+        return mapping;
+    }
 };
 ```
 
@@ -276,10 +276,10 @@ In this example we'll see how entities with user-defined primary keys are handle
 
 ```java
 CREATE TABLE USERS (
-	user_name varchar(255),
-	date_of_birth TIMESTAMP NOT NULL,
-	enabled BIT(1) NOT NULL,
-	PRIMARY KEY (user_name)
+    user_name varchar(255),
+    date_of_birth TIMESTAMP NOT NULL,
+    enabled BIT(1) NOT NULL,
+    PRIMARY KEY (user_name)
 );
 ```
 
@@ -288,27 +288,27 @@ CREATE TABLE USERS (
 ```java
 public class User implements Persistable<String> {
 
-	private transient boolean persisted;
+    private transient boolean persisted;
 
-	private String userName;
-	private Date dateOfBirth;
-	private boolean enabled;
+    private String userName;
+    private Date dateOfBirth;
+    private boolean enabled;
 
-	@Override
-	public String getId() {
-		return userName;
-	}
+    @Override
+    public String getId() {
+        return userName;
+    }
 
-	@Override
-	public boolean isNew() {
-		return !persisted;
-	}
+    @Override
+    public boolean isNew() {
+        return !persisted;
+    }
 
-	public void setPersisted(boolean persisted) {
-		this.persisted = persisted;
-	}
+    public void setPersisted(boolean persisted) {
+        this.persisted = persisted;
+    }
 
-	//getters/setters/constructors/...
+    //getters/setters/constructors/...
 
 }
 ```
@@ -321,25 +321,25 @@ And finally our DAO, [`UserRepository`](https://github.com/nurkiewicz/spring-dat
 @Repository
 public class UserRepository extends JdbcRepository<User, String> {
 
-	public UserRepository() {
-		super(ROW_MAPPER, ROW_UNMAPPER, "USERS", "user_name");
-	}
+    public UserRepository() {
+        super(ROW_MAPPER, ROW_UNMAPPER, "USERS", "user_name");
+    }
 
-	public static final RowMapper<User> ROW_MAPPER = //...
+    public static final RowMapper<User> ROW_MAPPER = //...
 
-	public static final RowUnmapper<User> ROW_UNMAPPER = //...
+    public static final RowUnmapper<User> ROW_UNMAPPER = //...
 
-	@Override
-	protected <S extends User> S postUpdate(S entity) {
-		entity.setPersisted(true);
-		return entity;
-	}
+    @Override
+    protected <S extends User> S postUpdate(S entity) {
+        entity.setPersisted(true);
+        return entity;
+    }
 
-	@Override
-	protected <S extends User> S postCreate(S entity, Number generatedId) {
-		entity.setPersisted(true);
-		return entity;
-	}
+    @Override
+    protected <S extends User> S postCreate(S entity, Number generatedId) {
+        entity.setPersisted(true);
+        return entity;
+    }
 }
 ```
 
@@ -353,11 +353,11 @@ We also support compound primary keys (primary keys consisting of several column
 
 ```sql
 CREATE TABLE BOARDING_PASS (
-	flight_no VARCHAR(8) NOT NULL,
-	seq_no INT NOT NULL,
-	passenger VARCHAR(1000),
-	seat CHAR(3),
-	PRIMARY KEY (flight_no, seq_no)
+    flight_no VARCHAR(8) NOT NULL,
+    seq_no INT NOT NULL,
+    passenger VARCHAR(1000),
+    seat CHAR(3),
+    PRIMARY KEY (flight_no, seq_no)
 );
 ```
 
@@ -366,24 +366,24 @@ I would like you to notice the type of primary key in `Persistable<T>`:
 ```java
 public class BoardingPass implements Persistable<Object[]> {
 
-	private transient boolean persisted;
+    private transient boolean persisted;
 
-	private String flightNo;
-	private int seqNo;
-	private String passenger;
-	private String seat;
+    private String flightNo;
+    private int seqNo;
+    private String passenger;
+    private String seat;
 
-	@Override
-	public Object[] getId() {
-		return pk(flightNo, seqNo);
-	}
+    @Override
+    public Object[] getId() {
+        return pk(flightNo, seqNo);
+    }
 
-	@Override
-	public boolean isNew() {
-		return !persisted;
-	}
+    @Override
+    public boolean isNew() {
+        return !persisted;
+    }
 
-	//getters/setters/constructors/...
+    //getters/setters/constructors/...
 
 }
 ```
@@ -392,18 +392,18 @@ Unfortunately library does not support small, immutable value classes encapsulat
 
 ```java
 public class BoardingPassRepository extends JdbcRepository<BoardingPass, Object[]> {
-	public BoardingPassRepository() {
-		this("BOARDING_PASS");
-	}
+    public BoardingPassRepository() {
+        this("BOARDING_PASS");
+    }
 
-	public BoardingPassRepository(String tableName) {
-		super(MAPPER, UNMAPPER, new TableDescription(tableName, null, "flight_no", "seq_no")
-		);
-	}
+    public BoardingPassRepository(String tableName) {
+        super(MAPPER, UNMAPPER, new TableDescription(tableName, null, "flight_no", "seq_no")
+        );
+    }
 
-	public static final RowMapper<BoardingPass> ROW_MAPPER = //...
+    public static final RowMapper<BoardingPass> ROW_MAPPER = //...
 
-	public static final RowUnmapper<BoardingPass> UNMAPPER = //...
+    public static final RowUnmapper<BoardingPass> UNMAPPER = //...
 
 }
 ```

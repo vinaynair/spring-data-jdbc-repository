@@ -33,27 +33,27 @@ import java.net.Socket;
 @Transactional
 public abstract class AbstractIntegrationTest {
 
-	private final int databasePort;
+    private final int databasePort;
 
-	protected AbstractIntegrationTest() {
-		this.databasePort = -1;
-	}
+    protected AbstractIntegrationTest() {
+        this.databasePort = -1;
+    }
 
-	protected AbstractIntegrationTest(int databasePort) {
-		this.databasePort = databasePort;
-	}
+    protected AbstractIntegrationTest(int databasePort) {
+        this.databasePort = databasePort;
+    }
 
-	@BeforeTransaction
-	public void ignoreIfDatabaseNotAvailable() {
-		if (databasePort > 0) {
-			try {
-				final Socket socket = new Socket();
-				socket.connect(new InetSocketAddress("localhost", databasePort));
-				socket.close();
-			} catch (IOException e) {
-				Assume.assumeNoException(e);
-			}
-		}
-	}
+    @BeforeTransaction
+    public void ignoreIfDatabaseNotAvailable() {
+        if (databasePort > 0) {
+            try {
+                final Socket socket = new Socket();
+                socket.connect(new InetSocketAddress("localhost", databasePort));
+                socket.close();
+            } catch (IOException e) {
+                Assume.assumeNoException(e);
+            }
+        }
+    }
 
 }

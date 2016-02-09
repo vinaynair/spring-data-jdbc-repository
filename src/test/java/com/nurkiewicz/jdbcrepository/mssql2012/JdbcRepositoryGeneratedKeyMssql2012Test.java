@@ -26,8 +26,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestMssql2012Config.class)
 public class JdbcRepositoryGeneratedKeyMssql2012Test extends JdbcRepositoryGeneratedKeyTest {
 
-	public JdbcRepositoryGeneratedKeyMssql2012Test() {
-		super(JdbcRepositoryTestMssql2012Config.MSSQL_PORT);
-	}
+    public JdbcRepositoryGeneratedKeyMssql2012Test() {
+        super(JdbcRepositoryTestMssql2012Config.MSSQL_PORT);
+    }
 
 }

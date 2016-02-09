@@ -27,7 +27,7 @@ import static com.nurkiewicz.jdbcrepository.mysql.JdbcRepositoryTestMysqlConfig.
  */
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestMysqlConfig.class)
 public class JdbcRepositoryCompoundPkMysqlTest extends JdbcRepositoryCompoundPkTest {
-	public JdbcRepositoryCompoundPkMysqlTest() {
-		super(MYSQL_PORT);
-	}
+    public JdbcRepositoryCompoundPkMysqlTest() {
+        super(MYSQL_PORT);
+    }
 }

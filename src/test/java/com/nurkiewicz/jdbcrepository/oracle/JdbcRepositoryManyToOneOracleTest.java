@@ -26,7 +26,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestOracleConfig.class)
 public class JdbcRepositoryManyToOneOracleTest extends JdbcRepositoryManyToOneTest {
 
-	public JdbcRepositoryManyToOneOracleTest() {
-		super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
-	}
+    public JdbcRepositoryManyToOneOracleTest() {
+        super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
+    }
 }

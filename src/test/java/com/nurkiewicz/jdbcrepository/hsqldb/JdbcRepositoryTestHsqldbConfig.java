@@ -28,13 +28,13 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcRepositoryTestHsqldbConfig extends JdbcRepositoryTestConfig {
 
-	@Bean
-	@Override
-	public DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder().
-				addScript("schema_hsqldb.sql").
-				setType(EmbeddedDatabaseType.H2).
-				build();
-	}
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        return new EmbeddedDatabaseBuilder().
+                addScript("schema_hsqldb.sql").
+                setType(EmbeddedDatabaseType.H2).
+                build();
+    }
 
 }

@@ -32,38 +32,38 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcRepositoryTestPostgresqlConfig extends JdbcRepositoryTestConfig {
 
-	public static final int POSTGRESQL_PORT = 5432;
+    public static final int POSTGRESQL_PORT = 5432;
 
-	@Bean
-	@Override
-	public CommentRepository commentRepository() {
-		return new CommentRepository("comments");
-	}
+    @Bean
+    @Override
+    public CommentRepository commentRepository() {
+        return new CommentRepository("comments");
+    }
 
-	@Bean
-	@Override
-	public UserRepository userRepository() {
-		return new UserRepository("users");
-	}
+    @Bean
+    @Override
+    public UserRepository userRepository() {
+        return new UserRepository("users");
+    }
 
-	@Override
-	public BoardingPassRepository boardingPassRepository() {
-		return new BoardingPassRepository("boarding_pass");
-	}
+    @Override
+    public BoardingPassRepository boardingPassRepository() {
+        return new BoardingPassRepository("boarding_pass");
+    }
 
-	@Bean
-	public SqlGenerator sqlGenerator() {
-		return new PostgreSqlGenerator();
-	}
+    @Bean
+    public SqlGenerator sqlGenerator() {
+        return new PostgreSqlGenerator();
+    }
 
-	@Bean
-	@Override
-	public DataSource dataSource() {
-		PoolingDataSource ds = new PoolingDataSource();
-		ds.setUser("postgres");
-		ds.setPassword(System.getProperty("postgresql.password"));
-		ds.setDatabaseName("spring_data_jdbc_repository_test");
-		return ds;
-	}
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        PoolingDataSource ds = new PoolingDataSource();
+        ds.setUser("postgres");
+        ds.setPassword(System.getProperty("postgresql.password"));
+        ds.setDatabaseName("spring_data_jdbc_repository_test");
+        return ds;
+    }
 
 }

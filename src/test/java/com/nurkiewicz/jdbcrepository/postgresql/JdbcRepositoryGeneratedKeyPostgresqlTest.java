@@ -28,8 +28,8 @@ import static com.nurkiewicz.jdbcrepository.postgresql.JdbcRepositoryTestPostgre
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestPostgresqlConfig.class)
 public class JdbcRepositoryGeneratedKeyPostgresqlTest extends JdbcRepositoryGeneratedKeyTest {
 
-	public JdbcRepositoryGeneratedKeyPostgresqlTest() {
-		super(POSTGRESQL_PORT);
-	}
+    public JdbcRepositoryGeneratedKeyPostgresqlTest() {
+        super(POSTGRESQL_PORT);
+    }
 
 }

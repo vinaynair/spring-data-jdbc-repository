@@ -27,16 +27,16 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcRepositoryTestMysqlConfig extends JdbcRepositoryTestConfig {
 
-	public static final int MYSQL_PORT = 3306;
+    public static final int MYSQL_PORT = 3306;
 
-	@Bean
-	@Override
-	public DataSource dataSource() {
-		MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
-		ds.setUser("root");
-		ds.setPassword(System.getProperty("mysql.password", ""));
-		ds.setDatabaseName("spring_data_jdbc_repository_test");
-		return ds;
-	}
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
+        ds.setUser("root");
+        ds.setPassword(System.getProperty("mysql.password", ""));
+        ds.setDatabaseName("spring_data_jdbc_repository_test");
+        return ds;
+    }
 
 }

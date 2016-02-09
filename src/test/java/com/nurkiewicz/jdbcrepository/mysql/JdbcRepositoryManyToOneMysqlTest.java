@@ -27,7 +27,7 @@ import static com.nurkiewicz.jdbcrepository.mysql.JdbcRepositoryTestMysqlConfig.
  */
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestMysqlConfig.class)
 public class JdbcRepositoryManyToOneMysqlTest extends JdbcRepositoryManyToOneTest {
-	public JdbcRepositoryManyToOneMysqlTest() {
-		super(MYSQL_PORT);
-	}
+    public JdbcRepositoryManyToOneMysqlTest() {
+        super(MYSQL_PORT);
+    }
 }

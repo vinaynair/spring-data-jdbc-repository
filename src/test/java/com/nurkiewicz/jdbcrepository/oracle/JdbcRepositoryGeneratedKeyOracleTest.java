@@ -26,8 +26,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestOracleConfig.class)
 public class JdbcRepositoryGeneratedKeyOracleTest extends JdbcRepositoryGeneratedKeyTest {
 
-	public JdbcRepositoryGeneratedKeyOracleTest() {
-		super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
-	}
+    public JdbcRepositoryGeneratedKeyOracleTest() {
+        super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
+    }
 
 }

@@ -32,42 +32,42 @@ import javax.sql.DataSource;
 @Configuration
 public class JdbcRepositoryTestOracleConfig extends JdbcRepositoryTestConfig {
 
-	public static final int ORACLE_PORT = Integer.parseInt(System.getProperty("oracle.port", "1521"));
+    public static final int ORACLE_PORT = Integer.parseInt(System.getProperty("oracle.port", "1521"));
 
-	@Bean
-	@Override
-	public CommentRepository commentRepository() {
-		return new CommentRepository("comments");
-	}
+    @Bean
+    @Override
+    public CommentRepository commentRepository() {
+        return new CommentRepository("comments");
+    }
 
-	@Bean
-	@Override
-	public UserRepository userRepository() {
-		return new UserRepository("users");
-	}
+    @Bean
+    @Override
+    public UserRepository userRepository() {
+        return new UserRepository("users");
+    }
 
-	@Override
-	public BoardingPassRepository boardingPassRepository() {
-		return new BoardingPassRepository("boarding_pass");
-	}
+    @Override
+    public BoardingPassRepository boardingPassRepository() {
+        return new BoardingPassRepository("boarding_pass");
+    }
 
-	@Bean
-	public SqlGenerator sqlGenerator() {
-		return new OracleSqlGenerator();
-	}
+    @Bean
+    public SqlGenerator sqlGenerator() {
+        return new OracleSqlGenerator();
+    }
 
-	@Bean
-	@Override
-	public DataSource dataSource() {
-		BoneCPDataSource ds = new BoneCPDataSource();
-		ds.setDriverClass("oracle.jdbc.OracleDriver");
-		final String host = System.getProperty("oracle.hostname", "localhost");
-		final String service = System.getProperty("oracle.sid", "orcl");
-		final String url = " jdbc:oracle:thin:@//" + host + ":" + ORACLE_PORT + "/" + service;
-		ds.setJdbcUrl(url);
-		ds.setUsername(System.getProperty("oracle.username"));
-		ds.setPassword(System.getProperty("oracle.password"));
-		return ds;
-	}
+    @Bean
+    @Override
+    public DataSource dataSource() {
+        BoneCPDataSource ds = new BoneCPDataSource();
+        ds.setDriverClass("oracle.jdbc.OracleDriver");
+        final String host = System.getProperty("oracle.hostname", "localhost");
+        final String service = System.getProperty("oracle.sid", "orcl");
+        final String url = " jdbc:oracle:thin:@//" + host + ":" + ORACLE_PORT + "/" + service;
+        ds.setJdbcUrl(url);
+        ds.setUsername(System.getProperty("oracle.username"));
+        ds.setPassword(System.getProperty("oracle.password"));
+        return ds;
+    }
 
 }

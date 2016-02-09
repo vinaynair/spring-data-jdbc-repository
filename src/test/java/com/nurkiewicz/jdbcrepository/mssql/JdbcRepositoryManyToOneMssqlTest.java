@@ -26,7 +26,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestMssqlConfig.class)
 public class JdbcRepositoryManyToOneMssqlTest extends JdbcRepositoryManyToOneTest {
 
-	public JdbcRepositoryManyToOneMssqlTest() {
-		super(JdbcRepositoryTestMssqlConfig.MSSQL_PORT);
-	}
+    public JdbcRepositoryManyToOneMssqlTest() {
+        super(JdbcRepositoryTestMssqlConfig.MSSQL_PORT);
+    }
 }

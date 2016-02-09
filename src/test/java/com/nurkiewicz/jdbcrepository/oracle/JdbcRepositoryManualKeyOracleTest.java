@@ -26,8 +26,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestOracleConfig.class)
 public class JdbcRepositoryManualKeyOracleTest extends JdbcRepositoryManualKeyTest {
 
-	public JdbcRepositoryManualKeyOracleTest() {
-		super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
-	}
+    public JdbcRepositoryManualKeyOracleTest() {
+        super(JdbcRepositoryTestOracleConfig.ORACLE_PORT);
+    }
 
 }

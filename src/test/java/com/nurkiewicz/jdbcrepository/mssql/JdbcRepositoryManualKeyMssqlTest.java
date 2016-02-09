@@ -26,8 +26,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = JdbcRepositoryTestMssqlConfig.class)
 public class JdbcRepositoryManualKeyMssqlTest extends JdbcRepositoryManualKeyTest {
 
-	public JdbcRepositoryManualKeyMssqlTest() {
-		super(JdbcRepositoryTestMssqlConfig.MSSQL_PORT);
-	}
+    public JdbcRepositoryManualKeyMssqlTest() {
+        super(JdbcRepositoryTestMssqlConfig.MSSQL_PORT);
+    }
 
 }

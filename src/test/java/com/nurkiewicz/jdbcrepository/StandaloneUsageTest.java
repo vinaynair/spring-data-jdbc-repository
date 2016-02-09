@@ -33,51 +33,51 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 public class StandaloneUsageTest {
 
-	public static final String JDBC_URL = "jdbc:h2:mem:DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema_h2.sql'";
+    public static final String JDBC_URL = "jdbc:h2:mem:DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema_h2.sql'";
 
-	@Test
-	public void shouldStartRepositoryWithoutSpring() throws Exception {
-		//given
-		final JdbcDataSource dataSource = new JdbcDataSource();
-		dataSource.setURL(JDBC_URL);
+    @Test
+    public void shouldStartRepositoryWithoutSpring() throws Exception {
+        //given
+        final JdbcDataSource dataSource = new JdbcDataSource();
+        dataSource.setURL(JDBC_URL);
 
-		final UserRepository userRepository = new UserRepository("users");
-		userRepository.setDataSource(dataSource);
-		userRepository.setSqlGenerator(new SqlGenerator());  //optional
+        final UserRepository userRepository = new UserRepository("users");
+        userRepository.setDataSource(dataSource);
+        userRepository.setSqlGenerator(new SqlGenerator());  //optional
 
-		//when
-		final List<User> list = userRepository.findAll();
+        //when
+        final List<User> list = userRepository.findAll();
 
-		//then
-		assertThat(list).isEmpty();
-	}
+        //then
+        assertThat(list).isEmpty();
+    }
 
-	@Test
-	public void shouldInsertIntoDatabase() throws Exception {
-		//given
-		final JdbcDataSource dataSource = new JdbcDataSource();
-		dataSource.setURL(JDBC_URL);
+    @Test
+    public void shouldInsertIntoDatabase() throws Exception {
+        //given
+        final JdbcDataSource dataSource = new JdbcDataSource();
+        dataSource.setURL(JDBC_URL);
 
-		final UserRepository userRepository = new UserRepository("users");
-		userRepository.setDataSource(dataSource);
-		userRepository.setSqlGenerator(new SqlGenerator());
+        final UserRepository userRepository = new UserRepository("users");
+        userRepository.setDataSource(dataSource);
+        userRepository.setSqlGenerator(new SqlGenerator());
 
-		//and
-		final TransactionOperations tx = new TransactionTemplate(
-				new DataSourceTransactionManager(dataSource));
+        //and
+        final TransactionOperations tx = new TransactionTemplate(
+                new DataSourceTransactionManager(dataSource));
 
-		//when
-		final List<User> users = tx.execute(new TransactionCallback<List<User>>() {
-			@Override
-			public List<User> doInTransaction(TransactionStatus status) {
-				final User user = new User("john", new Date(), 0, false);
-				userRepository.save(user);
-				return userRepository.findAll();
-			}
-		});
+        //when
+        final List<User> users = tx.execute(new TransactionCallback<List<User>>() {
+            @Override
+            public List<User> doInTransaction(TransactionStatus status) {
+                final User user = new User("john", new Date(), 0, false);
+                userRepository.save(user);
+                return userRepository.findAll();
+            }
+        });
 
-		//then
-		assertThat(users).hasSize(1);
-	}
+        //then
+        assertThat(users).hasSize(1);
+    }
 
 }
