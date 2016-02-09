@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ import com.nurkiewicz.jdbcrepository.TableDescription;
 import org.springframework.data.domain.Pageable;
 
 public class MssqlSqlGenerator extends AbstractMssqlSqlGenerator {
+
     public MssqlSqlGenerator() {
     }
 

@@ -18,9 +18,11 @@ package com.nurkiewicz.jdbcrepository.sql;
 import org.springframework.data.domain.Pageable;
 
 public class PostgreSqlGenerator extends SqlGenerator {
+
     @Override
     protected String limitClause(Pageable page) {
         int offset = page.getPageNumber() * page.getPageSize();
-        return " LIMIT " + page.getPageSize() + " OFFSET " + offset;
+
+        return String.format(" LIMIT %d OFFSET %d", page.getPageSize(), offset);
     }
 }

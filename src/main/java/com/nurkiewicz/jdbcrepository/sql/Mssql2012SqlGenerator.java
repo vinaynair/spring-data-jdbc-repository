@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,17 +32,22 @@ public class Mssql2012SqlGenerator extends AbstractMssqlSqlGenerator {
      */
     private static final String MSSQL_DEFAULT_SORT_CLAUSE = " ORDER BY 1 ASC";
 
+
     @Override
     public String selectAll(TableDescription table, Pageable page) {
+
         int offset = page.getPageNumber() * page.getPageSize() + 1;
-        String sortingClause = super.sortingClauseIfRequired(page.getSort());
+        String sortingClause = sortingClauseIfRequired(page.getSort());
 
         if (!StringUtils.hasText(sortingClause)) {
-            //The Pagination feature requires a sort clause, if none is given we sort by the first column
+            // The Pagination feature requires a sort clause, if none is given
+            // we sort by the first column.
             sortingClause = MSSQL_DEFAULT_SORT_CLAUSE;
         }
 
-        String paginationClause = " OFFSET " + (offset - 1) + " ROWS FETCH NEXT " + page.getPageSize() + " ROW ONLY";
+        String paginationClause = String.format(
+            " OFFSET %d ROWS FETCH NEXT %d ROW ONLY", offset - 1, page.getPageSize());
+
         return super.selectAll(table) + sortingClause + paginationClause;
     }
 }

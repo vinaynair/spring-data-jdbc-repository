@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +27,18 @@ import java.util.Set;
 
 public class SqlGenerator {
 
-    public static final String WHERE = " WHERE ";
-    public static final String AND = " AND ";
-    public static final String OR = " OR ";
-    public static final String SELECT = "SELECT ";
-    public static final String FROM = "FROM ";
-    public static final String DELETE = "DELETE ";
-    public static final String COMMA = ", ";
-    public static final String PARAM = " = ?";
+    public static final String
+            WHERE = " WHERE ",
+            AND = " AND ",
+            OR = " OR ",
+            SELECT = "SELECT ",
+            FROM = "FROM ",
+            DELETE = "DELETE ",
+            COMMA = ", ",
+            PARAM = " = ?";
+
     private String allColumnsClause;
+
 
     public SqlGenerator(String allColumnsClause) {
         this.allColumnsClause = allColumnsClause;
@@ -44,6 +48,7 @@ public class SqlGenerator {
         this("*");
     }
 
+
     public String count(TableDescription table) {
         return SELECT + "COUNT(*) " + FROM + table.getFromClause();
     }
@@ -52,58 +57,8 @@ public class SqlGenerator {
         return DELETE + FROM + table.getName() + whereByIdClause(table);
     }
 
-    private String whereByIdClause(TableDescription table) {
-        StringBuilder whereClause = new StringBuilder(WHERE);
-        for (Iterator<String> idColIterator = table.getIdColumns().iterator(); idColIterator.hasNext(); ) {
-            whereClause.append(idColIterator.next()).append(PARAM);
-            if (idColIterator.hasNext()) {
-                whereClause.append(AND);
-            }
-        }
-        return whereClause.toString();
-    }
-
-    private String whereByIdsClause(TableDescription table, int idsCount) {
-        List<String> idColumnNames = table.getIdColumns();
-        if (idColumnNames.size() > 1) {
-            return whereByIdsWithMultipleIdColumns(idsCount, idColumnNames);
-        } else {
-            return whereByIdsWithSingleIdColumn(idsCount, idColumnNames.get(0));
-        }
-    }
-
-    private String whereByIdsWithMultipleIdColumns(int idsCount, List<String> idColumnNames) {
-        int idColumnsCount = idColumnNames.size();
-        StringBuilder whereClause = new StringBuilder(WHERE);
-        int totalParams = idsCount * idColumnsCount;
-        for (int idColumnIdx = 0; idColumnIdx < totalParams; idColumnIdx += idColumnsCount) {
-            if (idColumnIdx > 0) {
-                whereClause.append(OR);
-            }
-            whereClause.append("(");
-            for (int i = 0; i < idColumnsCount; ++i) {
-                if (i > 0) {
-                    whereClause.append(AND);
-                }
-                whereClause.append(idColumnNames.get(i)).append(" = ?");
-            }
-            whereClause.append(")");
-        }
-        return whereClause.toString();
-    }
-
-    private String whereByIdsWithSingleIdColumn(int idsCount, String idColumn) {
-        StringBuilder whereClause = new StringBuilder(WHERE);
-        return whereClause.
-                append(idColumn).
-                append(" IN (").
-                append(repeat("?", COMMA, idsCount)).
-                append(")").
-                toString();
-    }
-
     public String selectAll(TableDescription table) {
-        return SELECT + allColumnsClause + " " + FROM + table.getFromClause();
+        return SELECT + allColumnsClause + ' ' + FROM + table.getFromClause();
     }
 
     public String selectAll(TableDescription table, Pageable page) {
@@ -112,11 +67,6 @@ public class SqlGenerator {
 
     public String selectAll(TableDescription table, Sort sort) {
         return selectAll(table) + sortingClauseIfRequired(sort);
-    }
-
-    protected String limitClause(Pageable page) {
-        int offset = page.getPageNumber() * page.getPageSize();
-        return " LIMIT " + offset + COMMA + page.getPageSize();
     }
 
     public String selectById(TableDescription table) {
@@ -134,65 +84,32 @@ public class SqlGenerator {
         }
     }
 
-    protected String sortingClauseIfRequired(Sort sort) {
-        if (sort == null) {
-            return "";
-        }
-        StringBuilder orderByClause = new StringBuilder();
-        orderByClause.append(" ORDER BY ");
-        for(Iterator<Sort.Order> iterator = sort.iterator(); iterator.hasNext();) {
-            Sort.Order order = iterator.next();
-            orderByClause.
-                    append(order.getProperty()).
-                    append(" ").
-                    append(order.getDirection().toString());
-            if (iterator.hasNext()) {
-                orderByClause.append(COMMA);
-            }
-        }
-        return orderByClause.toString();
-    }
-
     public String update(TableDescription table, Map<String, Object> columns) {
         StringBuilder updateQuery = new StringBuilder("UPDATE " + table.getName() + " SET ");
-        for(Iterator<Map.Entry<String,Object>> iterator = columns.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry<String, Object> column = iterator.next();
+
+        for (Iterator<Map.Entry<String,Object>> it = columns.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<String, Object> column = it.next();
             updateQuery.append(column.getKey()).append(" = ?");
-            if (iterator.hasNext()) {
+
+            if (it.hasNext()) {
                 updateQuery.append(COMMA);
             }
         }
         updateQuery.append(whereByIdClause(table));
+
         return updateQuery.toString();
     }
 
     public String create(TableDescription table, Map<String, Object> columns) {
         StringBuilder createQuery = new StringBuilder("INSERT INTO " + table.getName() + " (");
+
         appendColumnNames(createQuery, columns.keySet());
-        createQuery.append(")").append(" VALUES (");
-        createQuery.append(repeat("?", COMMA, columns.size()));
-        return createQuery.append(")").toString();
-    }
+        createQuery
+            .append(") VALUES (")
+            .append(repeat("?", COMMA, columns.size()));
 
-    private void appendColumnNames(StringBuilder createQuery, Set<String> columnNames) {
-        for(Iterator<String> iterator = columnNames.iterator(); iterator.hasNext();) {
-            String column = iterator.next();
-            createQuery.append(column);
-            if (iterator.hasNext()) {
-                createQuery.append(COMMA);
-            }
-        }
+        return createQuery.append(')').toString();
     }
-
-    // Unfortunately {@link org.apache.commons.lang3.StringUtils} not available
-    private static String repeat(String s, String separator, int count) {
-        StringBuilder string = new StringBuilder((s.length() + separator.length()) * count);
-        while (--count > 0) {
-            string.append(s).append(separator);
-        }
-        return string.append(s).toString();
-    }
-
 
     public String deleteAll(TableDescription table) {
         return DELETE + FROM + table.getName();
@@ -204,5 +121,104 @@ public class SqlGenerator {
 
     public String getAllColumnsClause() {
         return allColumnsClause;
+    }
+
+
+    protected String limitClause(Pageable page) {
+        int offset = page.getPageNumber() * page.getPageSize();
+        return " LIMIT " + offset + COMMA + page.getPageSize();
+    }
+
+    protected String sortingClauseIfRequired(Sort sort) {
+        if (sort == null) {
+            return "";
+        }
+        StringBuilder orderByClause = new StringBuilder();
+        orderByClause.append(" ORDER BY ");
+
+        for (Iterator<Sort.Order> iterator = sort.iterator(); iterator.hasNext();) {
+            Sort.Order order = iterator.next();
+            orderByClause
+                .append(order.getProperty())
+                .append(' ')
+                .append(order.getDirection().toString());
+
+            if (iterator.hasNext()) {
+                orderByClause.append(COMMA);
+            }
+        }
+        return orderByClause.toString();
+    }
+
+
+    private String whereByIdClause(TableDescription table) {
+        StringBuilder whereClause = new StringBuilder(WHERE);
+
+        for (Iterator<String> it = table.getIdColumns().iterator(); it.hasNext(); ) {
+            whereClause.append(it.next()).append(PARAM);
+            if (it.hasNext()) {
+                whereClause.append(AND);
+            }
+        }
+        return whereClause.toString();
+    }
+
+    private String whereByIdsClause(TableDescription table, int idsCount) {
+        List<String> idColumnNames = table.getIdColumns();
+
+        if (idColumnNames.size() > 1) {
+            return whereByIdsWithMultipleIdColumns(idsCount, idColumnNames);
+        } else {
+            return whereByIdsWithSingleIdColumn(idsCount, idColumnNames.get(0));
+        }
+    }
+
+    private String whereByIdsWithMultipleIdColumns(int idsCount, List<String> idColumnNames) {
+
+        int idColumnsCount = idColumnNames.size();
+        int totalParams = idsCount * idColumnsCount;
+        StringBuilder whereClause = new StringBuilder(WHERE);
+
+        for (int idColumnIdx = 0; idColumnIdx < totalParams; idColumnIdx += idColumnsCount) {
+            if (idColumnIdx > 0) {
+                whereClause.append(OR);
+            }
+            whereClause.append('(');
+
+            for (int i = 0; i < idColumnsCount; ++i) {
+                if (i > 0) {
+                    whereClause.append(AND);
+                }
+                whereClause.append(idColumnNames.get(i)).append(" = ?");
+            }
+            whereClause.append(')');
+        }
+        return whereClause.toString();
+    }
+
+    private String whereByIdsWithSingleIdColumn(int idsCount, String idColumn) {
+        return WHERE + idColumn + " IN (" + repeat("?", COMMA, idsCount) + ')';
+    }
+
+    private void appendColumnNames(StringBuilder createQuery, Set<String> columnNames) {
+
+        for (Iterator<String> it = columnNames.iterator(); it.hasNext();) {
+            String column = it.next();
+            createQuery.append(column);
+
+            if (it.hasNext()) {
+                createQuery.append(COMMA);
+            }
+        }
+    }
+
+    // Unfortunately {@link org.apache.commons.lang3.StringUtils} not available
+    private static String repeat(String s, String separator, int count) {
+
+        StringBuilder string = new StringBuilder((s.length() + separator.length()) * count);
+        while (--count > 0) {
+            string.append(s).append(separator);
+        }
+        return string.append(s).toString();
     }
 }

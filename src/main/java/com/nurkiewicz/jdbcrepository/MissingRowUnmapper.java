@@ -18,8 +18,9 @@ package com.nurkiewicz.jdbcrepository;
 import java.util.Map;
 
 public class MissingRowUnmapper<T> implements RowUnmapper<T> {
-    @Override
+
     public Map<String, Object> mapColumns(Object o) {
-        throw new UnsupportedOperationException("This repository is read-only, it can't store or update entities");
+        throw new UnsupportedOperationException(
+            "This repository is read-only, it can't store or update entities");
     }
 }

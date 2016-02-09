@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +22,24 @@ import org.springframework.data.domain.Pageable;
 public class DerbySqlGenerator extends SqlGenerator {
 
     public static final String ROW_NUM_COLUMN = "ROW_NUM";
-    public static final String ROW_NUM_COLUMN_CLAUSE = "SELECT * FROM (SELECT ROW_NUMBER() OVER () AS " + ROW_NUM_COLUMN + ", t.* FROM (";
+    public static final String ROW_NUM_COLUMN_CLAUSE =
+            String.format("SELECT * FROM (SELECT ROW_NUMBER() OVER () AS %s, t.* FROM (", ROW_NUM_COLUMN);
+
+
+    public DerbySqlGenerator() {
+    }
 
     public DerbySqlGenerator(String allColumnsClause) {
         super(allColumnsClause);
     }
 
-    public DerbySqlGenerator() {
-    }
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {
         int offset = page.getPageNumber() * page.getPageSize();
-        return super.selectAll(table, page) + " OFFSET " + offset + " ROWS FETCH NEXT " + page.getPageSize() + " ROWS ONLY";
+
+        return String.format("%s OFFSET %d ROWS FETCH NEXT %d ROWS ONLY",
+            super.selectAll(table, page), offset, page.getPageSize());
     }
 
     @Override

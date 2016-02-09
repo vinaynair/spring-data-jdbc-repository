@@ -19,6 +19,7 @@ import com.nurkiewicz.jdbcrepository.TableDescription;
 import org.springframework.data.domain.Pageable;
 
 public class OracleSqlGenerator extends SqlGenerator {
+
     public OracleSqlGenerator() {
     }
 

@@ -28,6 +28,7 @@ public class TableDescription {
     private final List<String> idColumns;
     private final String fromClause;
 
+
     public TableDescription(String name, String fromClause, String... idColumns) {
         Assert.notNull(name);
         Assert.notNull(idColumns);
@@ -35,16 +36,13 @@ public class TableDescription {
 
         this.name = name;
         this.idColumns = Collections.unmodifiableList(Arrays.asList(idColumns));
-        if (StringUtils.hasText(fromClause)) {
-            this.fromClause = fromClause;
-        } else {
-            this.fromClause = name;
-        }
+        this.fromClause = StringUtils.hasText(fromClause) ? fromClause : name;
     }
 
     public TableDescription(String name, String idColumn) {
         this(name, null, idColumn);
     }
+
 
     public String getName() {
         return name;
