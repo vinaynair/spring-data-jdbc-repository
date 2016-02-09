@@ -1,9 +1,12 @@
 language: java
-install: mvn install -DskipTests=true -Dgpg.skip=true
 jdk:
-  - oraclejdk7
+  - openjdk7
+  - oraclejdk8
+
 before_script:
   - mysql -e 'create database spring_data_jdbc_repository_test;'
   - mysql spring_data_jdbc_repository_test < src/test/resources/schema_mysql.sql
   - psql -c 'create database spring_data_jdbc_repository_test;' -U postgres
   - psql spring_data_jdbc_repository_test < src/test/resources/schema_postgresql.sql
+install:
+  - mvn install -DskipTests=true -Dgpg.skip=true
