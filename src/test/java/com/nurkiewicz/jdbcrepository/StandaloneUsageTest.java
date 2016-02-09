@@ -38,15 +38,15 @@ public class StandaloneUsageTest {
     @Test
     public void shouldStartRepositoryWithoutSpring() throws Exception {
         //given
-        final JdbcDataSource dataSource = new JdbcDataSource();
+        JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL(JDBC_URL);
 
-        final UserRepository userRepository = new UserRepository("users");
+        UserRepository userRepository = new UserRepository("users");
         userRepository.setDataSource(dataSource);
         userRepository.setSqlGenerator(new SqlGenerator());  //optional
 
         //when
-        final List<User> list = userRepository.findAll();
+        List<User> list = userRepository.findAll();
 
         //then
         assertThat(list).isEmpty();
@@ -55,7 +55,7 @@ public class StandaloneUsageTest {
     @Test
     public void shouldInsertIntoDatabase() throws Exception {
         //given
-        final JdbcDataSource dataSource = new JdbcDataSource();
+        JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL(JDBC_URL);
 
         final UserRepository userRepository = new UserRepository("users");
@@ -63,11 +63,11 @@ public class StandaloneUsageTest {
         userRepository.setSqlGenerator(new SqlGenerator());
 
         //and
-        final TransactionOperations tx = new TransactionTemplate(
+        TransactionOperations tx = new TransactionTemplate(
                 new DataSourceTransactionManager(dataSource));
 
         //when
-        final List<User> users = tx.execute(new TransactionCallback<List<User>>() {
+        List<User> users = tx.execute(new TransactionCallback<List<User>>() {
             @Override
             public List<User> doInTransaction(TransactionStatus status) {
                 final User user = new User("john", new Date(), 0, false);

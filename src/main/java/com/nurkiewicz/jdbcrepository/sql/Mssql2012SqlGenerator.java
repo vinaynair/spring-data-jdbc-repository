@@ -33,7 +33,7 @@ public class Mssql2012SqlGenerator extends AbstractMssqlSqlGenerator {
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {
-        final int offset = page.getPageNumber() * page.getPageSize() + 1;
+        int offset = page.getPageNumber() * page.getPageSize() + 1;
         String sortingClause = super.sortingClauseIfRequired(page.getSort());
 
         if (!StringUtils.hasText(sortingClause)) {
@@ -41,7 +41,7 @@ public class Mssql2012SqlGenerator extends AbstractMssqlSqlGenerator {
             sortingClause = MSSQL_DEFAULT_SORT_CLAUSE;
         }
 
-        final String paginationClause = " OFFSET " + (offset - 1) + " ROWS FETCH NEXT " + page.getPageSize() + " ROW ONLY";
+        String paginationClause = " OFFSET " + (offset - 1) + " ROWS FETCH NEXT " + page.getPageSize() + " ROW ONLY";
         return super.selectAll(table) + sortingClause + paginationClause;
     }
 }

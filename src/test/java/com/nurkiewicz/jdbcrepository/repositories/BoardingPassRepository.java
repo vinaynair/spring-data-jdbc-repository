@@ -44,7 +44,7 @@ public class BoardingPassRepository extends JdbcRepository<BoardingPass, Object[
     public static final RowMapper<BoardingPass> MAPPER = new RowMapper<BoardingPass>() {
         @Override
         public BoardingPass mapRow(ResultSet rs, int rowNum) throws SQLException {
-            final BoardingPass boardingPass = new BoardingPass();
+            BoardingPass boardingPass = new BoardingPass();
             boardingPass.setFlightNo(rs.getString("flight_no"));
             boardingPass.setSeqNo(rs.getInt("seq_no"));
             boardingPass.setPassenger(rs.getString("passenger"));
@@ -56,7 +56,7 @@ public class BoardingPassRepository extends JdbcRepository<BoardingPass, Object[
     public static final RowUnmapper<BoardingPass> UNMAPPER = new RowUnmapper<BoardingPass>() {
         @Override
         public Map<String, Object> mapColumns(BoardingPass boardingPass) {
-            final HashMap<String, Object> map = new HashMap<String, Object>();
+            HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("flight_no", boardingPass.getFlightNo());
             map.put("seq_no", boardingPass.getSeqNo());
             map.put("passenger", boardingPass.getPassenger());

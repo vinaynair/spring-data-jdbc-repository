@@ -43,7 +43,7 @@ public abstract class AbstractIntegrationTest {
     public void ignoreIfDatabaseNotAvailable() {
         if (databasePort > 0) {
             try {
-                final Socket socket = new Socket();
+                Socket socket = new Socket();
                 socket.connect(new InetSocketAddress("localhost", databasePort));
                 socket.close();
             } catch (IOException e) {

@@ -32,7 +32,7 @@ public class DerbySqlGenerator extends SqlGenerator {
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {
-        final int offset = page.getPageNumber() * page.getPageSize();
+        int offset = page.getPageNumber() * page.getPageSize();
         return super.selectAll(table, page) + " OFFSET " + offset + " ROWS FETCH NEXT " + page.getPageSize() + " ROWS ONLY";
     }
 

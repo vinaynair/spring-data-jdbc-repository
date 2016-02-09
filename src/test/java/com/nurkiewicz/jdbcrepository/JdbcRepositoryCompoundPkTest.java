@@ -50,13 +50,13 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
     @Test
     public void shouldStoreEntityWithCompoundPrimaryKey() throws Exception {
         //given
-        final BoardingPass entity = new BoardingPass("FOO-100", 42, "Smith", "B01");
+        BoardingPass entity = new BoardingPass("FOO-100", 42, "Smith", "B01");
 
         //when
         repository.save(entity);
 
         //then
-        final BoardingPass found = repository.findOne(pk("FOO-100", 42));
+        BoardingPass found = repository.findOne(pk("FOO-100", 42));
         assertThat(found).isEqualTo(new BoardingPass("FOO-100", 42, "Smith", "B01"));
     }
 
@@ -69,7 +69,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
         repository.save(new BoardingPass("BAR-100", 2, "Who", "E04"));
 
         //when
-        final BoardingPass foundFlight = repository.findOne(pk("BAR-100", 1));
+        BoardingPass foundFlight = repository.findOne(pk("BAR-100", 1));
 
         //then
         assertThat(foundFlight).isEqualTo(new BoardingPass("BAR-100", 1, "Gordon", "D03"));
@@ -79,7 +79,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
     public void shouldAllowUpdatingByPrimaryKey() throws Exception {
         //given
         repository.save(new BoardingPass("FOO-100", 1, "Smith", "B01"));
-        final BoardingPass secondSeat = repository.save(new BoardingPass("FOO-100", 2, "Johnson", "C02"));
+        BoardingPass secondSeat = repository.save(new BoardingPass("FOO-100", 2, "Johnson", "C02"));
 
         secondSeat.setPassenger("Jameson");
         secondSeat.setSeat("C03");
@@ -89,7 +89,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
 
         //then
         assertThat(repository.count()).isEqualTo(2);
-        final BoardingPass foundUpdated = repository.findOne(pk("FOO-100", 2));
+        BoardingPass foundUpdated = repository.findOne(pk("FOO-100", 2));
         assertThat(foundUpdated).isEqualTo(new BoardingPass("FOO-100", 2, "Jameson", "C03"));
     }
 
@@ -108,7 +108,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
     @Test
     public void shouldDeleteByEntityUsingCompoundPk() throws Exception {
         //given
-        final BoardingPass bp = repository.save(new BoardingPass("FOO-100", 1, "Smith", "B01"));
+        BoardingPass bp = repository.save(new BoardingPass("FOO-100", 1, "Smith", "B01"));
 
         //when
         repository.delete(bp);
@@ -126,7 +126,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
         repository.save(new BoardingPass("BAR-100", 1, "Gordon", "D03"));
 
         //when
-        final List<BoardingPass> all = repository.findAll(
+        List<BoardingPass> all = repository.findAll(
                 new Sort(
                         new Order(ASC, "flight_no"),
                         new Order(DESC, "seq_no")
@@ -151,7 +151,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
         repository.save(new BoardingPass("BAR-100", 1, "Gordon", "D03"));
 
         //when
-        final Page<BoardingPass> page = repository.findAll(
+        Page<BoardingPass> page = repository.findAll(
                 new PageRequest(0, 3,
                         new Sort(
                                 new Order(ASC, "flight_no"),
@@ -178,7 +178,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
         repository.save(new BoardingPass("BAR-100", 1, "Gordon", "D03"));
 
         //when
-        final Page<BoardingPass> page = repository.findAll(
+        Page<BoardingPass> page = repository.findAll(
                 new PageRequest(1, 3,
                         new Sort(
                                 new Order(ASC, "flight_no"),
@@ -198,7 +198,7 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
         repository.save(new BoardingPass("FOO-100", 3, "Smith", "B01"));
 
         //when
-        final Iterable<BoardingPass> none = repository.findAll(Collections.<Object[]>emptyList());
+        Iterable<BoardingPass> none = repository.findAll(Collections.<Object[]>emptyList());
 
         //then
         assertThat(none).isEmpty();
@@ -208,11 +208,11 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
     public void shouldSelectOneRecordById() throws Exception {
         //given
         repository.save(new BoardingPass("FOO-100", 1, "Smith", "B01"));
-        final Object[] idOfSecond = repository.save(new BoardingPass("FOO-100", 2, "Smith", "B01")).getId();
+        Object[] idOfSecond = repository.save(new BoardingPass("FOO-100", 2, "Smith", "B01")).getId();
         repository.save(new BoardingPass("FOO-100", 3, "Smith", "B01"));
 
         //when
-        final List<BoardingPass> oneRecord = Lists.newArrayList(repository.findAll(Arrays.<Object[]>asList(idOfSecond)));
+        List<BoardingPass> oneRecord = Lists.newArrayList(repository.findAll(Arrays.<Object[]>asList(idOfSecond)));
 
         //then
         assertThat(oneRecord).hasSize(1);
@@ -222,12 +222,12 @@ public abstract class JdbcRepositoryCompoundPkTest extends AbstractIntegrationTe
     @Test
     public void shouldSelectMultipleRecordsById() throws Exception {
         //given
-        final Object[] idOfFirst = repository.save(new BoardingPass("FOO-100", 1, "Smith", "B01")).getId();
+        Object[] idOfFirst = repository.save(new BoardingPass("FOO-100", 1, "Smith", "B01")).getId();
         repository.save(new BoardingPass("FOO-100", 2, "Smith", "B01"));
-        final Object[] idOfThird = repository.save(new BoardingPass("FOO-100", 3, "Smith", "B01")).getId();
+        Object[] idOfThird = repository.save(new BoardingPass("FOO-100", 3, "Smith", "B01")).getId();
 
         //when
-        final List<BoardingPass> boardingPasses = Lists.newArrayList(repository.findAll(Arrays.asList(idOfFirst, idOfThird)));
+        List<BoardingPass> boardingPasses = Lists.newArrayList(repository.findAll(Arrays.asList(idOfFirst, idOfThird)));
 
         //then
         assertThat(boardingPasses).hasSize(2);

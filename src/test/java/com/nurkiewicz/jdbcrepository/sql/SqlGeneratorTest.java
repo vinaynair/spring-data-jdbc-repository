@@ -28,10 +28,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenSingleIdColumnAndNoId() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", "num");
+        TableDescription table = new TableDescription("table", "num");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 0);
+        String sql = sqlGenerator.selectByIds(table, 0);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table");
@@ -40,10 +40,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenSingleIdColumnAndOneId() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", "num");
+        TableDescription table = new TableDescription("table", "num");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 1);
+        String sql = sqlGenerator.selectByIds(table, 1);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table WHERE num = ?");
@@ -52,10 +52,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenSingleIdColumnAndTwoIds() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", "num");
+        TableDescription table = new TableDescription("table", "num");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 2);
+        String sql = sqlGenerator.selectByIds(table, 2);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table WHERE num IN (?, ?)");
@@ -64,10 +64,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenSingleIdColumnAndSeveralIds() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", "num");
+        TableDescription table = new TableDescription("table", "num");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 4);
+        String sql = sqlGenerator.selectByIds(table, 4);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table WHERE num IN (?, ?, ?, ?)");
@@ -76,10 +76,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenMultipleIdColumnsAndNoId() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
+        TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 0);
+        String sql = sqlGenerator.selectByIds(table, 0);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table");
@@ -88,10 +88,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenMultipleIdColumnsAndOneId() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
+        TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 1);
+        String sql = sqlGenerator.selectByIds(table, 1);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table WHERE num1 = ? AND num2 = ? AND num3 = ?");
@@ -100,10 +100,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenMultipleIdColumnsAndTwoIds() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
+        TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 2);
+        String sql = sqlGenerator.selectByIds(table, 2);
 
         //then
         assertThat(sql).isEqualTo("SELECT * FROM table WHERE (num1 = ? AND num2 = ? AND num3 = ?) OR (num1 = ? AND num2 = ? AND num3 = ?)");
@@ -112,23 +112,23 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForSelectByIdsWhenMultipleIdColumnsAndSeveralIds() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
+        TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
 
         //when
-        final String sql = sqlGenerator.selectByIds(table, 4);
+        String sql = sqlGenerator.selectByIds(table, 4);
 
         //then
-        final String idClause = "(num1 = ? AND num2 = ? AND num3 = ?)";
+        String idClause = "(num1 = ? AND num2 = ? AND num3 = ?)";
         assertThat(sql).isEqualTo("SELECT * FROM table WHERE " + idClause + " OR " + idClause + " OR " + idClause + " OR " + idClause);
     }
 
     @Test
     public void buildSqlForDeleteBySingleIdColumn() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", "num");
+        TableDescription table = new TableDescription("table", "num");
 
         //when
-        final String sql = sqlGenerator.deleteById(table);
+        String sql = sqlGenerator.deleteById(table);
 
         //then
         assertThat(sql).isEqualTo("DELETE FROM table WHERE num = ?");
@@ -137,10 +137,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForDeleteByTwoIdColumns() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", null, "num1", "num2");
+        TableDescription table = new TableDescription("table", null, "num1", "num2");
 
         //when
-        final String sql = sqlGenerator.deleteById(table);
+        String sql = sqlGenerator.deleteById(table);
 
         //then
         assertThat(sql).isEqualTo("DELETE FROM table WHERE num1 = ? AND num2 = ?");
@@ -149,10 +149,10 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForDeleteByMultipleIdColumns() throws Exception {
         //given
-        final TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
+        TableDescription table = new TableDescription("table", null, "num1", "num2", "num3");
 
         //when
-        final String sql = sqlGenerator.deleteById(table);
+        String sql = sqlGenerator.deleteById(table);
 
         //then
         assertThat(sql).isEqualTo("DELETE FROM table WHERE num1 = ? AND num2 = ? AND num3 = ?");
@@ -161,11 +161,11 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForUpdateWithSingleIdColumn() throws Exception {
         //given
-        final Object ANY = new Object();
-        final TableDescription table = new TableDescription("table", "num");
+        Object ANY = new Object();
+        TableDescription table = new TableDescription("table", "num");
 
         //when
-        final String sql = sqlGenerator.update(table, ImmutableMap.of("x", ANY, "y", ANY, "z", ANY));
+        String sql = sqlGenerator.update(table, ImmutableMap.of("x", ANY, "y", ANY, "z", ANY));
 
         //then
         assertThat(sql).isEqualTo("UPDATE table SET x = ?, y = ?, z = ? WHERE num = ?");
@@ -174,11 +174,11 @@ public class SqlGeneratorTest {
     @Test
     public void buildSqlForUpdateWithMultipleIdColumns() throws Exception {
         //given
-        final Object ANY = new Object();
-        final TableDescription table = new TableDescription("table", null, "num1", "num2");
+        Object ANY = new Object();
+        TableDescription table = new TableDescription("table", null, "num1", "num2");
 
         //when
-        final String sql = sqlGenerator.update(table, ImmutableMap.of("x", ANY, "y", ANY, "z", ANY));
+        String sql = sqlGenerator.update(table, ImmutableMap.of("x", ANY, "y", ANY, "z", ANY));
 
         //then
         assertThat(sql).isEqualTo("UPDATE table SET x = ?, y = ?, z = ? WHERE num1 = ? AND num2 = ?");

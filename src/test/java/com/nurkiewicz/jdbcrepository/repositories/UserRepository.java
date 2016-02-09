@@ -48,7 +48,7 @@ public class UserRepository extends JdbcRepository<User, String> {
     public static final RowUnmapper<User> ROW_UNMAPPER = new RowUnmapper<User>() {
         @Override
         public Map<String, Object> mapColumns(User t) {
-            final LinkedHashMap<String, Object> columns = new LinkedHashMap<String, Object>();
+            LinkedHashMap<String, Object> columns = new LinkedHashMap<String, Object>();
             columns.put("user_name", t.getUserName());
             columns.put("date_of_birth", new Date(t.getDateOfBirth().getTime()));
             columns.put("reputation", t.getReputation());

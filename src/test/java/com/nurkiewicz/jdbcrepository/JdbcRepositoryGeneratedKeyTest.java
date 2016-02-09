@@ -51,7 +51,7 @@ public abstract class JdbcRepositoryGeneratedKeyTest extends AbstractIntegration
     @Test
     public void shouldGenerateKey() throws Exception {
         //given
-        final Comment comment = new Comment(someUser, "Some content", new Date(), 0);
+        Comment comment = new Comment(someUser, "Some content", new Date(), 0);
 
         //when
         repository.save(comment);
@@ -63,8 +63,8 @@ public abstract class JdbcRepositoryGeneratedKeyTest extends AbstractIntegration
     @Test
     public void shouldGenerateSubsequentIds() throws Exception {
         //given
-        final Comment firstComment = new Comment(someUser, "Some content", new Date(), 0);
-        final Comment secondComment = new Comment(someUser, "Some content", new Date(), 0);
+        Comment firstComment = new Comment(someUser, "Some content", new Date(), 0);
+        Comment secondComment = new Comment(someUser, "Some content", new Date(), 0);
 
         //when
         repository.save(firstComment);
@@ -78,13 +78,13 @@ public abstract class JdbcRepositoryGeneratedKeyTest extends AbstractIntegration
     @Test
     public void shouldUpdateCommentByGeneratedId() throws Exception {
         //given
-        final Date oldDate = new Date(100000000);
-        final Date newDate = new Date(200000000);
-        final Comment comment = repository.save(new Comment(someUser, "Some content", oldDate, 0));
-        final int id = comment.getId();
+        Date oldDate = new Date(100000000);
+        Date newDate = new Date(200000000);
+        Comment comment = repository.save(new Comment(someUser, "Some content", oldDate, 0));
+        int id = comment.getId();
 
         //when
-        final Comment updatedComment = repository.save(new Comment(id, someUser, "New content", newDate, 1));
+        Comment updatedComment = repository.save(new Comment(id, someUser, "New content", newDate, 1));
 
         //then
         assertThat(repository.count()).isEqualTo(1);

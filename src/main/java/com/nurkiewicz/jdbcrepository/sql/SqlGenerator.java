@@ -53,7 +53,7 @@ public class SqlGenerator {
     }
 
     private String whereByIdClause(TableDescription table) {
-        final StringBuilder whereClause = new StringBuilder(WHERE);
+        StringBuilder whereClause = new StringBuilder(WHERE);
         for (Iterator<String> idColIterator = table.getIdColumns().iterator(); idColIterator.hasNext(); ) {
             whereClause.append(idColIterator.next()).append(PARAM);
             if (idColIterator.hasNext()) {
@@ -64,7 +64,7 @@ public class SqlGenerator {
     }
 
     private String whereByIdsClause(TableDescription table, int idsCount) {
-        final List<String> idColumnNames = table.getIdColumns();
+        List<String> idColumnNames = table.getIdColumns();
         if (idColumnNames.size() > 1) {
             return whereByIdsWithMultipleIdColumns(idsCount, idColumnNames);
         } else {
@@ -74,8 +74,8 @@ public class SqlGenerator {
 
     private String whereByIdsWithMultipleIdColumns(int idsCount, List<String> idColumnNames) {
         int idColumnsCount = idColumnNames.size();
-        final StringBuilder whereClause = new StringBuilder(WHERE);
-        final int totalParams = idsCount * idColumnsCount;
+        StringBuilder whereClause = new StringBuilder(WHERE);
+        int totalParams = idsCount * idColumnsCount;
         for (int idColumnIdx = 0; idColumnIdx < totalParams; idColumnIdx += idColumnsCount) {
             if (idColumnIdx > 0) {
                 whereClause.append(OR);
@@ -93,7 +93,7 @@ public class SqlGenerator {
     }
 
     private String whereByIdsWithSingleIdColumn(int idsCount, String idColumn) {
-        final StringBuilder whereClause = new StringBuilder(WHERE);
+        StringBuilder whereClause = new StringBuilder(WHERE);
         return whereClause.
                 append(idColumn).
                 append(" IN (").
@@ -115,7 +115,7 @@ public class SqlGenerator {
     }
 
     protected String limitClause(Pageable page) {
-        final int offset = page.getPageNumber() * page.getPageSize();
+        int offset = page.getPageNumber() * page.getPageSize();
         return " LIMIT " + offset + COMMA + page.getPageSize();
     }
 
@@ -141,7 +141,7 @@ public class SqlGenerator {
         StringBuilder orderByClause = new StringBuilder();
         orderByClause.append(" ORDER BY ");
         for(Iterator<Sort.Order> iterator = sort.iterator(); iterator.hasNext();) {
-            final Sort.Order order = iterator.next();
+            Sort.Order order = iterator.next();
             orderByClause.
                     append(order.getProperty()).
                     append(" ").
@@ -154,7 +154,7 @@ public class SqlGenerator {
     }
 
     public String update(TableDescription table, Map<String, Object> columns) {
-        final StringBuilder updateQuery = new StringBuilder("UPDATE " + table.getName() + " SET ");
+        StringBuilder updateQuery = new StringBuilder("UPDATE " + table.getName() + " SET ");
         for(Iterator<Map.Entry<String,Object>> iterator = columns.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry<String, Object> column = iterator.next();
             updateQuery.append(column.getKey()).append(" = ?");
@@ -167,7 +167,7 @@ public class SqlGenerator {
     }
 
     public String create(TableDescription table, Map<String, Object> columns) {
-        final StringBuilder createQuery = new StringBuilder("INSERT INTO " + table.getName() + " (");
+        StringBuilder createQuery = new StringBuilder("INSERT INTO " + table.getName() + " (");
         appendColumnNames(createQuery, columns.keySet());
         createQuery.append(")").append(" VALUES (");
         createQuery.append(repeat("?", COMMA, columns.size()));
@@ -176,7 +176,7 @@ public class SqlGenerator {
 
     private void appendColumnNames(StringBuilder createQuery, Set<String> columnNames) {
         for(Iterator<String> iterator = columnNames.iterator(); iterator.hasNext();) {
-            final String column = iterator.next();
+            String column = iterator.next();
             createQuery.append(column);
             if (iterator.hasNext()) {
                 createQuery.append(COMMA);

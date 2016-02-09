@@ -62,7 +62,7 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
     @Test
     public void shouldGenerateKey() throws Exception {
         //given
-        final CommentWithUser comment = new CommentWithUser(someUser, "Some content", SOME_TIMESTAMP, 0);
+        CommentWithUser comment = new CommentWithUser(someUser, "Some content", SOME_TIMESTAMP, 0);
 
         //when
         repository.save(comment);
@@ -74,25 +74,25 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
     @Test
     public void shouldReturnCommentWithUserAttached() throws Exception {
         //given
-        final CommentWithUser comment = new CommentWithUser(someUser, "Some content", SOME_TIMESTAMP, 0);
+        CommentWithUser comment = new CommentWithUser(someUser, "Some content", SOME_TIMESTAMP, 0);
 
         //when
         repository.save(comment);
 
         //then
-        final CommentWithUser foundComment = repository.findOne(comment.getId());
+        CommentWithUser foundComment = repository.findOne(comment.getId());
         assertThat(foundComment).isEqualTo(new CommentWithUser(comment.getId(), someUser, "Some content", SOME_TIMESTAMP, 0));
     }
 
     @Test
     public void shouldReturnMultipleCommentsAttachedToTheSameUser() throws Exception {
         //given
-        final CommentWithUser first = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
-        final CommentWithUser second = repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
-        final CommentWithUser third = repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
+        CommentWithUser first = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
+        CommentWithUser second = repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
+        CommentWithUser third = repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
 
         //when
-        final List<CommentWithUser> all = repository.findAll(new Sort("favourite_count"));
+        List<CommentWithUser> all = repository.findAll(new Sort("favourite_count"));
 
         //then
         assertThat(all).containsExactly(third, second, first);
@@ -101,16 +101,16 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
     @Test
     public void shouldReturnMultipleCommentsAttachedToDifferentUsers() throws Exception {
         //given
-        final User firstUser = userRepository.save(new User("First user", SOME_DATE, 10, false));
-        final User secondUser = userRepository.save(new User("Second user", SOME_DATE, 20, false));
-        final User thirdUser = userRepository.save(new User("Third user", SOME_DATE, 30, false));
+        User firstUser = userRepository.save(new User("First user", SOME_DATE, 10, false));
+        User secondUser = userRepository.save(new User("Second user", SOME_DATE, 20, false));
+        User thirdUser = userRepository.save(new User("Third user", SOME_DATE, 30, false));
 
-        final CommentWithUser first = repository.save(new CommentWithUser(firstUser, "First comment", SOME_TIMESTAMP, 3));
-        final CommentWithUser second = repository.save(new CommentWithUser(secondUser, "Second comment", SOME_TIMESTAMP, 2));
-        final CommentWithUser third = repository.save(new CommentWithUser(thirdUser, "Third comment", SOME_TIMESTAMP, 1));
+        CommentWithUser first = repository.save(new CommentWithUser(firstUser, "First comment", SOME_TIMESTAMP, 3));
+        CommentWithUser second = repository.save(new CommentWithUser(secondUser, "Second comment", SOME_TIMESTAMP, 2));
+        CommentWithUser third = repository.save(new CommentWithUser(thirdUser, "Third comment", SOME_TIMESTAMP, 1));
 
         //when
-        final List<CommentWithUser> all = repository.findAll(new Sort(DESC, "favourite_count"));
+        List<CommentWithUser> all = repository.findAll(new Sort(DESC, "favourite_count"));
 
         //then
         assertThat(all).containsExactly(first, second, third);
@@ -119,12 +119,12 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
     @Test
     public void shouldReturnOnlyFirstPageWithUsers() throws Exception {
         //given
-        final CommentWithUser first = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
-        final CommentWithUser second = repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
+        CommentWithUser first = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
+        CommentWithUser second = repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
         repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
 
         //when
-        final Page<CommentWithUser> page = repository.findAll(new PageRequest(0, 2, ASC, "contents"));
+        Page<CommentWithUser> page = repository.findAll(new PageRequest(0, 2, ASC, "contents"));
 
         //then
         assertThat(page.getTotalElements()).isEqualTo(3);
@@ -137,10 +137,10 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
         //given
         repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
         repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
-        final CommentWithUser third = repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
+        CommentWithUser third = repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
 
         //when
-        final Page<CommentWithUser> page = repository.findAll(new PageRequest(1, 2, ASC, "contents"));
+        Page<CommentWithUser> page = repository.findAll(new PageRequest(1, 2, ASC, "contents"));
 
         //then
         assertThat(page.getTotalElements()).isEqualTo(3);
@@ -151,7 +151,7 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
     @Test
     public void shouldDeleteCommentWithoutDeletingUser() throws Exception {
         //given
-        final CommentWithUser comment = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
+        CommentWithUser comment = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
 
         //when
         repository.delete(comment);
@@ -164,8 +164,8 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
     @Test
     public void shouldUpdateCommentByAttachingDifferentUser() throws Exception {
         //given
-        final User firstUser = userRepository.save(new User("First user", SOME_DATE, 10, false));
-        final CommentWithUser comment = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
+        User firstUser = userRepository.save(new User("First user", SOME_DATE, 10, false));
+        CommentWithUser comment = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
 
         //when
         comment.setUser(firstUser);
@@ -173,16 +173,16 @@ public abstract class JdbcRepositoryManyToOneTest extends AbstractIntegrationTes
 
         //then
         assertThat(repository.count()).isEqualTo(1);
-        final CommentWithUser foundComment = repository.findOne(comment.getId());
+        CommentWithUser foundComment = repository.findOne(comment.getId());
         assertThat(foundComment.getUser()).isEqualTo(firstUser);
     }
 
     @Test
     public void shouldDeleteAllCommentsWithoutDeletingUsers() throws Exception {
         //given
-        final CommentWithUser first = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
-        final CommentWithUser second = repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
-        final CommentWithUser third = repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
+        CommentWithUser first = repository.save(new CommentWithUser(someUser, "First comment", SOME_TIMESTAMP, 3));
+        CommentWithUser second = repository.save(new CommentWithUser(someUser, "Second comment", SOME_TIMESTAMP, 2));
+        CommentWithUser third = repository.save(new CommentWithUser(someUser, "Third comment", SOME_TIMESTAMP, 1));
 
         //when
         repository.deleteAll();

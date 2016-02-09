@@ -46,7 +46,7 @@ public class CommentWithUserRepository extends JdbcRepository<CommentWithUser, I
 
         @Override
         public CommentWithUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-            final User user = UserRepository.MAPPER.mapRow(rs, rowNum);
+            User user = UserRepository.MAPPER.mapRow(rs, rowNum);
             return new CommentWithUser(
                     rs.getInt("id"),
                     user,
