@@ -61,12 +61,15 @@ public class JdbcRepositoryTestOracleConfig extends JdbcRepositoryTestConfig {
     public DataSource dataSource() {
         BoneCPDataSource ds = new BoneCPDataSource();
         ds.setDriverClass("oracle.jdbc.OracleDriver");
-        final String host = System.getProperty("oracle.hostname", "localhost");
-        final String service = System.getProperty("oracle.sid", "orcl");
-        final String url = " jdbc:oracle:thin:@//" + host + ":" + ORACLE_PORT + "/" + service;
+
+        String host = System.getProperty("oracle.hostname", "localhost");
+        String service = System.getProperty("oracle.sid", "XE");
+        String url = String.format("jdbc:oracle:thin:@%s:%d/%s", host, ORACLE_PORT, service);
+
         ds.setJdbcUrl(url);
-        ds.setUsername(System.getProperty("oracle.username"));
-        ds.setPassword(System.getProperty("oracle.password"));
+        ds.setUsername(System.getProperty("oracle.username", "test"));
+        ds.setPassword(System.getProperty("oracle.password", "test"));
+
         return ds;
     }
 

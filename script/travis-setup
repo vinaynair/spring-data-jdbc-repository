@@ -1,0 +1,16 @@
+#!/bin/bash
+# vim: set ts=4:
+set -o errexit
+
+cd "$(dirname "$0")/.."
+
+if [ "$PROFILE" = 'oracle' ]; then
+	# Workaround for nasty buffer overflow
+	# https://github.com/travis-ci/travis-ci/issues/5227
+	sudo hostname "$(hostname | cut -c1-63)"
+	sed -e "s/^\(127\.0\.0\.1.*\)/\1 $(hostname | cut -c 1-63)/" /etc/hosts \
+		| sudo tee /etc/hosts
+
+	script/travis-install-oracle
+	script/setup-oracle
+fi

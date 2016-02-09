@@ -1,0 +1,30 @@
+#!/bin/bash
+# vim: set ts=4:
+set -o errexit -o pipefail
+
+TRAVIS_ORACLE_URL='https://github.com/cbandy/travis-oracle/archive/v2.0.0.tar.gz'
+
+export ORACLE_COOKIE='sqldev'
+export ORACLE_FILE='oracle11g/xe/oracle-xe-11.2.0-1.0.x86_64.rpm.zip'
+
+echo '==> Installing Oracle XE'
+
+mkdir -p .travis/oracle
+wget -O - "$TRAVIS_ORACLE_URL" \
+	| tar -xz --strip-components 1 -C .travis/oracle
+
+.travis/oracle/download.sh
+.travis/oracle/install.sh
+
+"$ORACLE_HOME"/bin/sqlplus -L -S / AS SYSDBA <<-SQL
+	CREATE USER test IDENTIFIED BY test;
+	GRANT CONNECT, RESOURCE TO test;
+SQL
+
+mvn install:install-file \
+	-DgroupId='com.oracle' \
+	-DartifactId='ojdbc6' \
+	-Dversion='11.2.0.3' \
+	-Dpackaging='jar' \
+	-Dfile="$ORACLE_HOME/jdbc/lib/ojdbc6.jar" \
+	-DgeneratePom=true
