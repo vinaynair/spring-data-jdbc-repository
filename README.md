@@ -470,38 +470,6 @@ Library consists of only a handful of classes, highlighted in the diagram below 
 
 SQL generation is delegated to [`SqlGenerator`](https://github.com/nurkiewicz/spring-data-jdbc-repository/blob/master/src/main/java/com/nurkiewicz/jdbcrepository/sql/SqlGenerator.java). [`PostgreSqlGenerator.`](https://github.com/nurkiewicz/spring-data-jdbc-repository/blob/master/src/main/java/com/nurkiewicz/jdbcrepository/sql/PostgreSqlGenerator.java) and [`DerbySqlGenerator`](https://github.com/nurkiewicz/spring-data-jdbc-repository/blob/master/src/main/java/com/nurkiewicz/jdbcrepository/sql/DerbySqlGenerator.java) are provided for databases that don't work with standard generator.
 
-## Changelog
-
-### 0.4.1
-
-* Fixed [*Standalone Configuration and CDI Implementation*](https://github.com/nurkiewicz/spring-data-jdbc-repository/issues/10)
-
-### 0.4
-
-* Repackaged: `com.blogspot.nurkiewicz` -> `com.nurkiewicz`
-
-### 0.3.2
-
-* First version available in Maven central repository
-* Upgraded Spring Data Commons 1.6.1 -> 1.8.0
-
-### 0.3.1
-
-* Upgraded Spring dependencies: 3.2.1 -> 3.2.4 and 1.5.0 -> 1.6.1
-* Fixed [#5 Allow manually injecting JdbcOperations, SqlGenerator and DataSource](https://github.com/nurkiewicz/spring-data-jdbc-repository/issues/5)
-
-### 0.3
-
-* Oracle 10g / 11g support (see [pull request](https://github.com/nurkiewicz/spring-data-jdbc-repository/pull/3))
-* Upgrading Spring dependency to 3.2.1.RELEASE and [Spring Data Commons](http://www.springsource.org/spring-data/commons) to 1.5.0.RELEASE (see [#4](https://github.com/nurkiewicz/spring-data-jdbc-repository/issues/4)).
-
-### 0.2
-
-* MS SQL Server 2008/2012 support (see [pull request](https://github.com/nurkiewicz/spring-data-jdbc-repository/pull/2))
-
-### 0.1
-
-* Initial revision ([announcement](http://nurkiewicz.blogspot.no/2013/01/spring-data-jdbc-generic-dao.html))
-
 ## License
+
 This project is released under version 2.0 of the [Apache License](http://www.apache.org/licenses/LICENSE-2.0) (same as [Spring framework](https://github.com/SpringSource/spring-framework)).
