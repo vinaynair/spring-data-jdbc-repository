@@ -4,6 +4,9 @@ set -o errexit
 
 cd "$(dirname "$0")/.."
 
+script/setup-mysql
+script/setup-postgresql
+
 if [ "$PROFILE" = 'oracle' ]; then
 	# Workaround for nasty buffer overflow
 	# https://github.com/travis-ci/travis-ci/issues/5227
