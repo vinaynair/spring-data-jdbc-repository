@@ -19,10 +19,6 @@ import org.springframework.data.domain.Persistable;
 
 import java.util.Date;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 1/16/13, 10:51 PM
- */
 public class CommentWithUser extends Comment implements Persistable<Integer> {
 
     private User user;

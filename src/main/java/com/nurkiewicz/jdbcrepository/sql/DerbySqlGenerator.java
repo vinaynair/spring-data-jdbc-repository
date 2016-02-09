@@ -18,10 +18,6 @@ package com.nurkiewicz.jdbcrepository.sql;
 import com.nurkiewicz.jdbcrepository.TableDescription;
 import org.springframework.data.domain.Pageable;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 1/16/13, 10:25 PM
- */
 public class DerbySqlGenerator extends SqlGenerator {
 
     public static final String ROW_NUM_COLUMN = "ROW_NUM";

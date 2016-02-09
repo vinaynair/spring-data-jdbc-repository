@@ -24,10 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 12/18/12, 9:18 PM
- */
 public class SqlGenerator {
 
     public static final String WHERE = " WHERE ";

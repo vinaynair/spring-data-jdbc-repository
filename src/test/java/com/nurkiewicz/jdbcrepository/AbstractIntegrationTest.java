@@ -25,10 +25,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 12/20/12, 10:56 PM
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public abstract class AbstractIntegrationTest {

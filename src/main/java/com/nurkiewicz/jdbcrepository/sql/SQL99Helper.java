@@ -18,9 +18,6 @@ package com.nurkiewicz.jdbcrepository.sql;
 import com.nurkiewicz.jdbcrepository.TableDescription;
 import org.springframework.data.domain.Pageable;
 
-/**
- * Author: tom
- */
 public class SQL99Helper {
     public static String ROW_NUM_WRAPPER = "SELECT a__.* FROM (SELECT row_number() OVER (ORDER BY %s) AS ROW_NUM,  t__.*  FROM   (%s) t__) a__ WHERE  a__.row_num BETWEEN %s AND %s";
 

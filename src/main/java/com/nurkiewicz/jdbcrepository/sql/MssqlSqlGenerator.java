@@ -18,9 +18,6 @@ package com.nurkiewicz.jdbcrepository.sql;
 import com.nurkiewicz.jdbcrepository.TableDescription;
 import org.springframework.data.domain.Pageable;
 
-/**
- * Author: tom
- */
 public class MssqlSqlGenerator extends AbstractMssqlSqlGenerator {
     public MssqlSqlGenerator() {
     }

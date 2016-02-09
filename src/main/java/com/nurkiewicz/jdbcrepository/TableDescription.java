@@ -22,10 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 12/18/12, 10:06 PM
- */
 public class TableDescription {
 
     private final String name;

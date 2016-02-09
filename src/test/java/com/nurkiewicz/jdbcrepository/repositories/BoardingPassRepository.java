@@ -25,10 +25,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 1/20/13, 10:09 AM
- */
 public class BoardingPassRepository extends JdbcRepository<BoardingPass, Object[]> {
     public BoardingPassRepository() {
         this("BOARDING_PASS");

@@ -18,9 +18,6 @@ package com.nurkiewicz.jdbcrepository.sql;
 import com.nurkiewicz.jdbcrepository.TableDescription;
 import org.springframework.data.domain.Pageable;
 
-/**
- * Author: tom
- */
 public class OracleSqlGenerator extends SqlGenerator {
     public OracleSqlGenerator() {
     }

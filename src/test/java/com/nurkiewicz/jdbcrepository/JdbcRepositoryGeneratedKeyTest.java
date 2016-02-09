@@ -27,10 +27,6 @@ import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 12/20/12, 10:55 PM
- */
 public abstract class JdbcRepositoryGeneratedKeyTest extends AbstractIntegrationTest {
 
     @Resource

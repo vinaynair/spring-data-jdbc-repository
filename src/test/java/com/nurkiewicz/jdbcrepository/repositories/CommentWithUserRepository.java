@@ -27,10 +27,6 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 1/16/13, 10:52 PM
- */
 @Repository
 public class CommentWithUserRepository extends JdbcRepository<CommentWithUser, Integer> {
 

@@ -21,10 +21,6 @@ import org.junit.Test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 3/6/13, 8:32 PM
- */
 public class SqlGeneratorTest {
 
     private final SqlGenerator sqlGenerator = new SqlGenerator();

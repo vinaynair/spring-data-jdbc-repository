@@ -19,10 +19,6 @@ import org.springframework.data.domain.Persistable;
 
 import static com.nurkiewicz.jdbcrepository.JdbcRepository.pk;
 
-/**
- * @author Tomasz Nurkiewicz
- * @since 1/20/13, 10:04 AM
- */
 public class BoardingPass implements Persistable<Object[]> {
 
     private transient boolean persisted;
