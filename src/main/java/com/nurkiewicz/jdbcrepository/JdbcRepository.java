@@ -188,7 +188,7 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
 
     @Override
     public <S extends T> Iterable<S> save(Iterable<S> entities) {
-        List<S> ret = new ArrayList<S>();
+        List<S> ret = new ArrayList<>();
         for (S s : entities) {
             ret.add(save(s));
         }
@@ -215,7 +215,7 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
     public Page<T> findAll(Pageable page) {
         String query = sqlGenerator.selectAll(table, page);
 
-        return new PageImpl<T>(jdbcOperations.query(query, rowMapper), page, count());
+        return new PageImpl<>(jdbcOperations.query(query, rowMapper), page, count());
     }
 
 
@@ -326,7 +326,7 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
     }
 
     private List<Object> removeIdColumns(Map<String, Object> columns) {
-        List<Object> idColumnsValues = new ArrayList<Object>(columns.size());
+        List<Object> idColumnsValues = new ArrayList<>(columns.size());
 
         for (String idColumn : table.getIdColumns()) {
             idColumnsValues.add(columns.remove(idColumn));
@@ -347,11 +347,11 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
     }
 
     private LinkedHashMap<String, Object> columns(T entity) {
-        return new LinkedHashMap<String, Object>(rowUnmapper.mapColumns(entity));
+        return new LinkedHashMap<>(rowUnmapper.mapColumns(entity));
     }
 
     private static <T> List<T> toList(Iterable<T> iterable) {
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         for (T item : iterable) {
             result.add(item);
         }
@@ -359,7 +359,7 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
     }
 
     private static <ID> Object[] flatten(List<ID> ids) {
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
         for (ID id : ids) {
             result.addAll(idToObjectList(id));
         }
