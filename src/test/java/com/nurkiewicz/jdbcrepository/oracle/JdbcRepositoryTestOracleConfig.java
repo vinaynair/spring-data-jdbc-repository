@@ -15,18 +15,19 @@
  */
 package com.nurkiewicz.jdbcrepository.oracle;
 
-import com.jolbox.bonecp.BoneCPDataSource;
 import com.nurkiewicz.jdbcrepository.JdbcRepositoryTestConfig;
 import com.nurkiewicz.jdbcrepository.repositories.BoardingPassRepository;
 import com.nurkiewicz.jdbcrepository.repositories.CommentRepository;
 import com.nurkiewicz.jdbcrepository.repositories.UserRepository;
 import com.nurkiewicz.jdbcrepository.sql.OracleSqlGenerator;
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @EnableTransactionManagement
 @Configuration
@@ -56,21 +57,21 @@ public class JdbcRepositoryTestOracleConfig extends JdbcRepositoryTestConfig {
         return new OracleSqlGenerator();
     }
 
-    @Bean
-    @Override
+    @Bean(destroyMethod = "shutdown")
     public DataSource dataSource() {
-        BoneCPDataSource ds = new BoneCPDataSource();
-        ds.setDriverClass("oracle.jdbc.OracleDriver");
 
-        String host = System.getProperty("oracle.hostname", "localhost");
-        String service = System.getProperty("oracle.sid", "XE");
-        String url = String.format("jdbc:oracle:thin:@%s:%d/%s", host, ORACLE_PORT, service);
+        Properties props = new Properties();
+        props.setProperty("driverType", "thin");
+        props.setProperty("serverName", System.getProperty("oracle.hostname", "localhost"));
+        props.setProperty("portNumber", String.valueOf(ORACLE_PORT));
+        props.setProperty("serviceName", System.getProperty("oracle.sid", "XE"));
+        props.setProperty("user", System.getProperty("oracle.username", "test"));
+        props.setProperty("password", System.getProperty("oracle.password", "test"));
 
-        ds.setJdbcUrl(url);
-        ds.setUsername(System.getProperty("oracle.username", "test"));
-        ds.setPassword(System.getProperty("oracle.password", "test"));
+        HikariDataSource ds = new HikariDataSource();
+        ds.setDataSourceClassName("oracle.jdbc.pool.OracleDataSource");
+        ds.setDataSourceProperties(props);
 
         return ds;
     }
-
 }
