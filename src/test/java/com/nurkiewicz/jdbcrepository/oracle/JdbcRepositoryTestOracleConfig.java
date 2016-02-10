@@ -16,9 +16,6 @@
 package com.nurkiewicz.jdbcrepository.oracle;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepositoryTestConfig;
-import com.nurkiewicz.jdbcrepository.repositories.BoardingPassRepository;
-import com.nurkiewicz.jdbcrepository.repositories.CommentRepository;
-import com.nurkiewicz.jdbcrepository.repositories.UserRepository;
 import com.nurkiewicz.jdbcrepository.sql.OracleSqlGenerator;
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator;
 import com.zaxxer.hikari.HikariDataSource;
@@ -34,23 +31,6 @@ import java.util.Properties;
 public class JdbcRepositoryTestOracleConfig extends JdbcRepositoryTestConfig {
 
     public static final int ORACLE_PORT = Integer.parseInt(System.getProperty("oracle.port", "1521"));
-
-    @Bean
-    @Override
-    public CommentRepository commentRepository() {
-        return new CommentRepository("comments");
-    }
-
-    @Bean
-    @Override
-    public UserRepository userRepository() {
-        return new UserRepository("users");
-    }
-
-    @Override
-    public BoardingPassRepository boardingPassRepository() {
-        return new BoardingPassRepository("boarding_pass");
-    }
 
     @Bean
     public SqlGenerator sqlGenerator() {

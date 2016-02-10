@@ -16,9 +16,6 @@
 package com.nurkiewicz.jdbcrepository.postgresql;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepositoryTestConfig;
-import com.nurkiewicz.jdbcrepository.repositories.BoardingPassRepository;
-import com.nurkiewicz.jdbcrepository.repositories.CommentRepository;
-import com.nurkiewicz.jdbcrepository.repositories.UserRepository;
 import com.nurkiewicz.jdbcrepository.sql.PostgreSqlGenerator;
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator;
 import org.postgresql.jdbc2.optional.PoolingDataSource;
@@ -33,23 +30,6 @@ import javax.sql.DataSource;
 public class JdbcRepositoryTestPostgresqlConfig extends JdbcRepositoryTestConfig {
 
     public static final int POSTGRESQL_PORT = 5432;
-
-    @Bean
-    @Override
-    public CommentRepository commentRepository() {
-        return new CommentRepository("comments");
-    }
-
-    @Bean
-    @Override
-    public UserRepository userRepository() {
-        return new UserRepository("users");
-    }
-
-    @Override
-    public BoardingPassRepository boardingPassRepository() {
-        return new BoardingPassRepository("boarding_pass");
-    }
 
     @Bean
     public SqlGenerator sqlGenerator() {
