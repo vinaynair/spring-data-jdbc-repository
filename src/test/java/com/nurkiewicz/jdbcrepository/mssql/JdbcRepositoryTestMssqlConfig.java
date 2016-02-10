@@ -87,10 +87,10 @@ public class JdbcRepositoryTestMssqlConfig extends JdbcRepositoryTestConfig {
     @Override
     public DataSource dataSource() {
         JtdsDataSource ds = new JtdsDataSource();
-        ds.setUser(System.getProperty("mssql.user", "unittest"));
-        ds.setPassword(System.getProperty("mssql.password"));
-        ds.setInstance(System.getProperty("mssql.instance"));
-        ds.setServerName(System.getProperty("mssql.hostname", "localhost"));
+        ds.setUser(System.getProperty("mssql2012.user", "sa"));
+        ds.setPassword(System.getProperty("mssql2012.password", "Password12!"));
+        ds.setInstance(System.getProperty("mssql2012.instance", "SQL2012SP1"));
+        ds.setServerName(System.getProperty("mssql2012.hostname", "localhost"));
         ds.setDatabaseName("spring_data_jdbc_repository_test");
         return ds;
     }

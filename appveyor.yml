@@ -1,0 +1,28 @@
+version: '{build}'
+clone_depth: 10
+skip_tags: true
+
+os: Windows Server 2012
+services:
+  - mssql2012sp1
+environment:
+  matrix:
+    - JAVA_HOME: C:\Program Files\Java\jdk1.7.0
+    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+
+install:
+  - ps: .\script\appveyor-setup-mssql.ps1 SQL2012SP1
+  - ps: .\script\appveyor-install-maven.ps1 3.3.9
+  - cmd: mvn --version
+  - cmd: java -version
+
+before_build:
+  - sqlcmd -U sa -P Password12! -S .\SQL2012SP1 -Q "CREATE DATABASE spring_data_jdbc_repository_test"
+  - sqlcmd -U sa -P Password12! -S .\SQL2012SP1 -d spring_data_jdbc_repository_test -i src\test\resources\schema_mssql.sql
+build_script:
+  - mvn clean install -DskipTests=true
+test_script:
+  - mvn verify -B
+cache:
+  - C:\maven\
+  - C:\Users\appveyor\.m2
