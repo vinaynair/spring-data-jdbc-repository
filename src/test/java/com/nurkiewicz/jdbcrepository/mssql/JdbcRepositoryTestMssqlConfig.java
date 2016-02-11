@@ -25,7 +25,7 @@ import com.nurkiewicz.jdbcrepository.repositories.CommentWithUserRepository;
 import com.nurkiewicz.jdbcrepository.repositories.UserRepository;
 import com.nurkiewicz.jdbcrepository.sql.MssqlSqlGenerator;
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator;
-import net.sourceforge.jtds.jdbcx.JtdsDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -34,6 +34,7 @@ import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @EnableTransactionManagement
 @Configuration
@@ -83,15 +84,19 @@ public class JdbcRepositoryTestMssqlConfig extends JdbcRepositoryTestConfig {
         );
     }
 
-    @Bean
-    @Override
+    @Bean(destroyMethod = "shutdown")
     public DataSource dataSource() {
-        JtdsDataSource ds = new JtdsDataSource();
-        ds.setUser(System.getProperty("mssql2012.user", "sa"));
-        ds.setPassword(System.getProperty("mssql2012.password", "Password12!"));
-        ds.setInstance(System.getProperty("mssql2012.instance", "SQL2012SP1"));
-        ds.setServerName(System.getProperty("mssql2012.hostname", "localhost"));
-        ds.setDatabaseName("spring_data_jdbc_repository_test");
+        Properties props = new Properties();
+        props.setProperty("serverName", System.getProperty("mssql2012.hostname", "localhost"));
+        props.setProperty("instance", System.getProperty("mssql2012.instance", "SQL2012SP1"));
+        props.setProperty("databaseName", "spring_data_jdbc_repository_test");
+        props.setProperty("user", System.getProperty("mssql2012.user", "sa"));
+        props.setProperty("password", System.getProperty("mssql2012.password", "Password12!"));
+
+        HikariDataSource ds = new HikariDataSource();
+        ds.setDataSourceClassName("net.sourceforge.jtds.jdbcx.JtdsDataSource");
+        ds.setDataSourceProperties(props);
+
         return ds;
     }
 
