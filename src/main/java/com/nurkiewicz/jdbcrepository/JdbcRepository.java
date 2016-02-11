@@ -231,9 +231,9 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
         }
         Object[] queryParams = columns.values().toArray();
 
-        jdbcOperations.update(updateQuery, queryParams);
+        int rowsAffected = jdbcOperations.update(updateQuery, queryParams);
 
-        return postUpdate(entity);
+        return postUpdate(entity, rowsAffected);
     }
 
     protected <S extends T> S create(S entity) {
@@ -270,6 +270,20 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
         return columns;
     }
 
+    /**
+     * General purpose hook method that is called every time {@link #update} is called.
+     *
+     * @param entity The entity that was passed to {@link #update}.
+     * @param rowsAffected The number of rows affected (updated).
+     * @return Either the same object as an argument or completely different one.
+     */
+    protected <S extends T> S postUpdate(S entity, int rowsAffected) {
+        return postUpdate(entity);
+    }
+
+    /**
+     * @see #postUpdate(Persistable, int)
+     */
     protected <S extends T> S postUpdate(S entity) {
         return entity;
     }
