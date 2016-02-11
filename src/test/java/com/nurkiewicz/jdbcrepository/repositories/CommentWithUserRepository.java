@@ -57,7 +57,7 @@ public class CommentWithUserRepository extends JdbcRepository<CommentWithUser, I
         }
     };
 
-    private static final RowUnmapper<CommentWithUser> ROW_UNMAPPER = new RowUnmapper<CommentWithUser>() {
+    public static final RowUnmapper<CommentWithUser> ROW_UNMAPPER = new RowUnmapper<CommentWithUser>() {
         @Override
         public Map<String, Object> mapColumns(CommentWithUser comment) {
             Map<String, Object> mapping = new LinkedHashMap<String, Object>();

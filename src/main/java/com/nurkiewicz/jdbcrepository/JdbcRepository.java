@@ -34,17 +34,14 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.util.Assert;
+import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import javax.sql.DataSource;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -346,8 +343,11 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
             : Collections.<Object>singletonList(id);
     }
 
-    private LinkedHashMap<String, Object> columns(T entity) {
-        return new LinkedHashMap<>(rowUnmapper.mapColumns(entity));
+    private Map<String, Object> columns(T entity) {
+        Map<String, Object> columns = new LinkedCaseInsensitiveMap<>();
+        columns.putAll(rowUnmapper.mapColumns(entity));
+
+        return columns;
     }
 
     private static <T> List<T> toList(Iterable<T> iterable) {

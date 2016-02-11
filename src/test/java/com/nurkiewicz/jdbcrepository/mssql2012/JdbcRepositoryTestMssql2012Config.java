@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +17,6 @@
 package com.nurkiewicz.jdbcrepository.mssql2012;
 
 import com.nurkiewicz.jdbcrepository.JdbcRepositoryTestConfig;
-import com.nurkiewicz.jdbcrepository.RowUnmapper;
-import com.nurkiewicz.jdbcrepository.TableDescription;
-import com.nurkiewicz.jdbcrepository.mssql.CommentWithUserMssqlGenerator;
-import com.nurkiewicz.jdbcrepository.repositories.BoardingPassRepository;
-import com.nurkiewicz.jdbcrepository.repositories.CommentRepository;
-import com.nurkiewicz.jdbcrepository.repositories.CommentWithUser;
-import com.nurkiewicz.jdbcrepository.repositories.CommentWithUserRepository;
-import com.nurkiewicz.jdbcrepository.repositories.UserRepository;
 import com.nurkiewicz.jdbcrepository.sql.Mssql2012SqlGenerator;
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator;
 import com.zaxxer.hikari.HikariDataSource;
@@ -32,9 +25,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.sql.Timestamp;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Properties;
 
 @EnableTransactionManagement
@@ -43,46 +33,10 @@ public class JdbcRepositoryTestMssql2012Config extends JdbcRepositoryTestConfig 
 
     public static final int MSSQL_PORT = Integer.parseInt(System.getProperty("mssql2012.port", "1433"));
 
-    @Bean
-    @Override
-    public CommentRepository commentRepository() {
-        return new CommentRepository("comments");
-    }
-
-    @Bean
-    @Override
-    public UserRepository userRepository() {
-        return new UserRepository("users");
-    }
-
-    @Override
-    public BoardingPassRepository boardingPassRepository() {
-        return new BoardingPassRepository("boarding_pass");
-    }
 
     @Bean
     public SqlGenerator sqlGenerator() {
         return new Mssql2012SqlGenerator();
-    }
-
-    @Override
-    public CommentWithUserRepository commentWithUserRepository() {
-        return new CommentWithUserRepository(CommentWithUserRepository.MAPPER,
-                new RowUnmapper<CommentWithUser>() {
-                    @Override
-                    public Map<String, Object> mapColumns(CommentWithUser comment) {
-                        Map<String, Object> mapping = new LinkedHashMap<String, Object>();
-                        mapping.put("ID", comment.getId());
-                        mapping.put("USER_NAME", comment.getUser().getUserName());
-                        mapping.put("CONTENTS", comment.getContents());
-                        mapping.put("CREATED_TIME", new Timestamp(comment.getCreatedTime().getTime()));
-                        mapping.put("FAVOURITE_COUNT", comment.getFavouriteCount());
-                        return mapping;
-                    }
-                },
-                new CommentWithUserMssqlGenerator(),
-                new TableDescription("COMMENTS", "COMMENTS c JOIN USERS u ON c.USER_NAME = u.USER_NAME", "ID")
-        );
     }
 
     @Bean(destroyMethod = "shutdown")
