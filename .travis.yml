@@ -18,9 +18,15 @@ matrix:
       jdk: oraclejdk8
       sudo: required
 
+cache:
+  directories:
+    - $HOME/.m2
+before_cache:
+  - rm -Rf $HOME/.m2/repository/cz/jirutka/spring/jdbc-repository
+
 before_script:
   - script/travis-setup
 install:
-  - mvn install -DskipTests=true
+  - mvn clean install -DskipTests=true
 script:
   - mvn verify -B -P ${PROFILE:-default}
