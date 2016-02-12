@@ -2,6 +2,7 @@
 :source-language: java
 :gh-name: jirutka/spring-data-jdbc-repository
 :gh-branch: master
+:appveyor-id: n3x2wog0vys5bgl0
 :src-base: link:src/main/java/com/nurkiewicz/jdbcrepository
 :src-test-base: link:src/test/groovy/com/nurkiewicz/jdbcrepository
 :src-fixtures-base: link:src/test/java/com/nurkiewicz/jdbcrepository/fixtures
@@ -10,6 +11,7 @@
 :javase-jdoc-uri: https://docs.oracle.com/javase/7/docs/api/java
 
 image:https://travis-ci.org/{gh-name}.svg?branch={gh-branch}["Build Status", link="https://travis-ci.org/{gh-name}"]
+image:https://ci.appveyor.com/api/projects/status/{appveyor-id}/branch/{gh-branch}?svg=true["Build status (Windows)", link="https://ci.appveyor.com/project/{gh-name}/branch/{gh-branch}"]
 image:https://maven-badges.herokuapp.com/maven-central/com.nurkiewicz.jdbcrepository/jdbcrepository/badge.svg[Maven Central, link="https://maven-badges.herokuapp.com/maven-central/com.nurkiewicz.jdbcrepository/jdbcrepository"]
 
 The purpose of this project is to provide generic, lightweight and easy to use DAO implementation for relational databases based on {spring-jdoc-uri}/jdbc/core/JdbcTemplate.html[JdbcTemplate] from https://projects.spring.io/spring-framework[Spring framework], compatible with Spring Data umbrella of projects.
@@ -513,7 +515,7 @@ Don't hesitate to https://github.com/{gh-name}/issues[submit bug reports] and ht
 === Testing
 
 This library is continuously tested using Travis.
-Test suite consists of 60+ distinct tests each run against 8 different databases: MySQL, PostgreSQL, H2, HSQLDB, Derby and Oracle + MS SQL Server tests not run as part of CI.
+Test suite consists of 60+ distinct tests each run against 8 different databases: MySQL, PostgreSQL, H2, HSQLDB, Derby, Oracle, and MS SQL Server.
 
 When filling https://github.com/{gh-name}/issues[bug reports] or submitting new features please try including supporting test cases.
 Each https://github.com/{gh-name}/pulls[pull request] is automatically tested on a separate branch.
