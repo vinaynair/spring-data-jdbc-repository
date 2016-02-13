@@ -27,8 +27,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
+import spock.lang.Requires
 
 import javax.sql.DataSource
+
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
 
 @DerbyTestContext
 class DerbyJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -43,6 +46,7 @@ class DerbyJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class DerbyJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
+@Requires({ env('CI') ? env('DB').equals('embedded') : true })
 @ContextConfiguration(classes = DerbyTestConfig)
 @interface DerbyTestContext {}
 

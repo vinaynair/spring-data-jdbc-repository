@@ -24,11 +24,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import spock.lang.IgnoreIf
+import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
+import static OracleTestConfig.ORACLE_HOST
+import static com.nurkiewicz.jdbcrepository.TestUtils.*
 
 @OracleTestContext
 class OracleJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -43,13 +44,15 @@ class OracleJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class OracleJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@IgnoreIf({ !isPortInUse(System.getProperty('oracle.hostname', 'localhost'), 1521) })
+@Requires({ env('CI') ? env('DB').equals('oracle') : isPortInUse(ORACLE_HOST, 1521) })
 @ContextConfiguration(classes = OracleTestConfig)
 @interface OracleTestContext {}
 
 @Configuration
 @EnableTransactionManagement
 class OracleTestConfig extends AbstractTestConfig {
+
+    static final String ORACLE_HOST = prop('oracle.hostname', 'localhost')
 
     @Bean SqlGenerator sqlGenerator() {
         new OracleSqlGenerator()
@@ -61,11 +64,11 @@ class OracleTestConfig extends AbstractTestConfig {
             dataSourceClassName: 'oracle.jdbc.pool.OracleDataSource',
             dataSourceProperties: [
                 driverType: 'thin',
-                serverName: p('oracle.hostname', 'localhost'),
-                portNumber: p('oracle.port', '1521'),
-                serviceName: p('oracle.sid', 'XE'),
-                user: p('oracle.username', 'test'),
-                password: p('oracle.password', 'test')
+                serverName: ORACLE_HOST,
+                portNumber: prop('oracle.port', '1521'),
+                serviceName: prop('oracle.sid', 'XE'),
+                user: prop('oracle.username', 'test'),
+                password: prop('oracle.password', 'test')
             ]
         )
     }

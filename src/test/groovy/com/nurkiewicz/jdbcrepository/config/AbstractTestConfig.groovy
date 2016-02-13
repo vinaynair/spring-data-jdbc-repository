@@ -32,8 +32,6 @@ abstract class AbstractTestConfig {
 
     static final String DATABASE_NAME = 'spring_data_jdbc_repository_test'
 
-    final p = System.&getProperty
-
 
     @Bean abstract DataSource dataSource()
 

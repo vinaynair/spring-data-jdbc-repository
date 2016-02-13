@@ -22,11 +22,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import spock.lang.IgnoreIf
+import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
+import static com.nurkiewicz.jdbcrepository.TestUtils.*
 
 @MySqlTestContext
 class MySqlJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -41,7 +41,7 @@ class MySqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class MySqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@IgnoreIf({ !isPortInUse('localhost', 3306) })
+@Requires({ env('CI') ? env('DB').equals('mysql') : isPortInUse('localhost', 3306) })
 @ContextConfiguration(classes = MysqlTestConfig)
 @interface MySqlTestContext {}
 
@@ -51,8 +51,8 @@ class MysqlTestConfig extends AbstractTestConfig {
 
     @Bean DataSource dataSource() {
         new MysqlConnectionPoolDataSource (
-            user: p('mysql.user', 'root'),
-            password: p('mysql.password', ''),
+            user: prop('mysql.user', 'root'),
+            password: prop('mysql.password', ''),
             databaseName: DATABASE_NAME
         )
     }

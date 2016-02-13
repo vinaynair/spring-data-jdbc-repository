@@ -24,11 +24,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import spock.lang.IgnoreIf
+import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
+import static com.nurkiewicz.jdbcrepository.TestUtils.*
 
 @PostgresqlTestContext
 class PostgresqlJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -43,7 +43,7 @@ class PostgresqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class PostgresqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@IgnoreIf({ !isPortInUse('localhost', 5432) })
+@Requires({ env('CI') ? env('DB').equals('postgresql') : isPortInUse('localhost', 5432) })
 @ContextConfiguration(classes = PostgresqlTestConfig)
 @interface PostgresqlTestContext {}
 
@@ -62,8 +62,8 @@ class PostgresqlTestConfig extends AbstractTestConfig {
             dataSourceProperties: [
                 serverName: 'localhost',
                 portNumber: 5432,
-                user: p('postgresql.user', 'postgres'),
-                password: p('postgresql.password', ''),
+                user: prop('postgresql.user', 'postgres'),
+                password: prop('postgresql.password', ''),
                 databaseName: DATABASE_NAME,
             ]
         )

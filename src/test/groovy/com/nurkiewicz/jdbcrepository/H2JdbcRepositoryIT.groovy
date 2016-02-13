@@ -22,8 +22,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
+import spock.lang.Requires
 
 import javax.sql.DataSource
+
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
 
 @H2TestContext
 class H2JdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -38,6 +41,7 @@ class H2JdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class H2JdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
+@Requires({ env('CI') ? env('DB').equals('embedded') : true })
 @ContextConfiguration(classes = H2TestConfig)
 @interface H2TestContext {}
 

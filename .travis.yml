@@ -5,16 +5,21 @@ jdk:
   - oraclejdk8
 env:
   global:
+    - PROFILE=default
     - ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
     - ORACLE_SID=XE
     - secure: DGNJTv3zKzaP6XdPIioZKyhdBCH/R4Ngbtkx61nONq5mLFUX4X9X1kFBRon7B7k+vuTbTsThE+Rt7L78hogwChkU7cG39/OJpNmLCAN7rQmb2QFln9fwygGKqYVza8vabYgIpM9z6pHr+miFKAxYaO8JqWghgMJKj8lhogRxZs4=  # ORACLE_LOGIN_ssousername
     - secure: w9IL1XjC3SWZ/6YD0qPsNxCYWvP9+zLMViUj+9JPyAaQe80n0uwWXfn1jBfoiBm1+69Qq4UjVbcxYLueIWeuHhRI3ZdvyZlw+DahgRzLviHEjJXTN7E+//UeoKMCSVFAxfn9jK3CuSDQ6T7IymhRXHC5uLvk/MHJLrv2QbHceyw=  # ORACLE_LOGIN_password
+  matrix:
+    - DB=embedded
+    - DB=postgresql
+    - DB=mysql
 matrix:
   include:
-    - env: PROFILE='oracle'
+    - env: DB=oracle PROFILE=oracle
       jdk: openjdk7
       sudo: required
-    - env: PROFILE='oracle'
+    - env: DB=oracle PROFILE=oracle
       jdk: oraclejdk8
       sudo: required
 
@@ -29,4 +34,4 @@ before_script:
 install:
   - mvn clean install -DskipTests=true
 script:
-  - mvn verify -B -P ${PROFILE:-default}
+  - mvn verify -B -P $PROFILE

@@ -25,11 +25,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import spock.lang.IgnoreIf
+import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
+import static MssqlTestConfig.MSSQL_HOST
+import static com.nurkiewicz.jdbcrepository.TestUtils.*
 
 @MssqlTestContext
 class MssqlJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -44,13 +45,16 @@ class MssqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class MssqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@IgnoreIf({ !isPortInUse(System.getProperty('mssql.hostname', 'localhost'), 1433) })
-@ContextConfiguration(classes = JdbcRepositoryTestMssqlConfig)
+@Requires({ env('CI') ? env('DB').equals('mssql') : isPortInUse(MSSQL_HOST, 1433) })
+@ContextConfiguration(classes = MssqlTestConfig)
 @interface MssqlTestContext {}
 
 @Configuration
 @EnableTransactionManagement
-class JdbcRepositoryTestMssqlConfig extends AbstractTestConfig {
+class MssqlTestConfig extends AbstractTestConfig {
+
+    static final String MSSQL_HOST = prop('mssql2012.hostname', 'localhost')
+
 
     @Override CommentWithUserRepository commentWithUserRepository() {
         new CommentWithUserRepository(
@@ -70,10 +74,10 @@ class JdbcRepositoryTestMssqlConfig extends AbstractTestConfig {
         new HikariDataSource(
             dataSourceClassName: 'net.sourceforge.jtds.jdbcx.JtdsDataSource',
             dataSourceProperties: [
-                serverName: p('mssql2012.hostname', 'localhost'),
-                instance: p('mssql2012.instance', 'SQL2012SP1'),
-                user: p('mssql2012.user', 'sa'),
-                password: p('mssql2012.password', 'Password12!'),
+                serverName: MSSQL_HOST,
+                instance: prop('mssql2012.instance', 'SQL2012SP1'),
+                user: prop('mssql2012.user', 'sa'),
+                password: prop('mssql2012.password', 'Password12!'),
                 databaseName: DATABASE_NAME
             ]
         )

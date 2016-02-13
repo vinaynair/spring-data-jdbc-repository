@@ -23,8 +23,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
+import spock.lang.Requires
 
 import javax.sql.DataSource
+
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
 
 @HsqldbTestContext
 class HsqldbJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -39,6 +42,7 @@ class HsqldbJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class HsqldbJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
+@Requires({ env('CI') ? env('DB').equals('embedded') : true })
 @ContextConfiguration(classes = HsqldbTestConfig)
 @interface HsqldbTestContext {}
 

@@ -24,11 +24,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import spock.lang.IgnoreIf
+import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
+import static Mssql2012TestConfig.MSSQL_HOST
+import static com.nurkiewicz.jdbcrepository.TestUtils.*
 
 @Mssql2012TestContext
 class Mssql2012JdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -43,13 +44,15 @@ class Mssql2012JdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class Mssql2012JdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@IgnoreIf({ !isPortInUse(System.getProperty('mssql2012.hostname', 'localhost'), 1433) })
+@Requires({ env('CI') ? env('DB').equals('mssql') : isPortInUse(MSSQL_HOST, 1433) })
 @ContextConfiguration(classes = Mssql2012TestConfig)
 @interface Mssql2012TestContext {}
 
 @Configuration
 @EnableTransactionManagement
 class Mssql2012TestConfig extends AbstractTestConfig {
+
+    static final String MSSQL_HOST = prop('mssql2012.hostname', 'localhost')
 
     @Bean SqlGenerator sqlGenerator() {
         new Mssql2012SqlGenerator()
@@ -60,10 +63,10 @@ class Mssql2012TestConfig extends AbstractTestConfig {
         new HikariDataSource(
             dataSourceClassName: 'net.sourceforge.jtds.jdbcx.JtdsDataSource',
             dataSourceProperties: [
-                serverName: p('mssql2012.hostname', 'localhost'),
-                instance: p('mssql2012.instance', 'SQL2012SP1'),
-                user: p('mssql2012.user', 'sa'),
-                password: p('mssql2012.password', 'Password12!'),
+                serverName: prop('mssql2012.hostname', 'localhost'),
+                instance: prop('mssql2012.instance', 'SQL2012SP1'),
+                user: prop('mssql2012.user', 'sa'),
+                password: prop('mssql2012.password', 'Password12!'),
                 databaseName: DATABASE_NAME
             ]
         )
