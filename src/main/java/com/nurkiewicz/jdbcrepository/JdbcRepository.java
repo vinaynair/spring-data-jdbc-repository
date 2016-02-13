@@ -59,7 +59,7 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
     private final RowMapper<T> rowMapper;
     private final RowUnmapper<T> rowUnmapper;
 
-    private SqlGenerator sqlGenerator = new SqlGenerator();
+    private SqlGenerator sqlGenerator;
     private BeanFactory beanFactory;
     private JdbcOperations jdbcOperations;
 
