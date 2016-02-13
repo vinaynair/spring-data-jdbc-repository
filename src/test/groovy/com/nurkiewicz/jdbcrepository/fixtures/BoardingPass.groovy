@@ -20,8 +20,6 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import org.springframework.data.domain.Persistable
 
-import static com.nurkiewicz.jdbcrepository.JdbcRepository.pk
-
 @ToString
 @EqualsAndHashCode
 class BoardingPass implements Persistable<Object[]>  {
@@ -49,7 +47,7 @@ class BoardingPass implements Persistable<Object[]>  {
 
 
     Object[] getId() {
-        pk(flightNo, seqNo)
+        [flightNo, seqNo]
     }
 
     boolean isNew() {

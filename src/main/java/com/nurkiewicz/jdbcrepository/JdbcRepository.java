@@ -101,6 +101,10 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
     }
 
 
+    /**
+     * @deprecated This method will be removed in 1.0.0.
+     */
+    @Deprecated
     public static Object[] pk(Object... idValues) {
         return idValues;
     }
