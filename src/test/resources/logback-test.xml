@@ -3,6 +3,7 @@
 
     <logger name="com.nurkiewicz.jdbcrepository" level="DEBUG" />
     <logger name="org.springframework.test" level="WARN" />
+    <logger name="org.springframework.aop.framework.CglibAopProxy" level="WARN" />
 
     <root level="INFO">
         <appender class="ch.qos.logback.core.ConsoleAppender">
