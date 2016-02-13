@@ -88,6 +88,19 @@ class SqlGeneratorTest extends Specification {
             2        || 'multiple id columns'
     }
 
+    def 'existsById(): with #desc'() {
+        given:
+            def table = new TableDescription('table', null, *idColumns(idsCount))
+        when:
+            def actual = sqlGenerator.existsById(table)
+        then:
+            actual == "SELECT 1 FROM table WHERE ${whereIds(idsCount)}"
+        where:
+            idsCount || desc
+            1        || 'single id column'
+            2        || 'multiple id columns'
+    }
+
 
     private idColumns(count) {
         [0..count].collect { "num${it}" }

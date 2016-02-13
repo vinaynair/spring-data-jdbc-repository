@@ -41,7 +41,10 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 
@@ -160,8 +163,8 @@ public abstract class JdbcRepository<T extends Persistable<ID>, ID extends Seria
 
     @Override
     public boolean exists(ID id) {
-        return jdbcOperations.queryForObject(
-            sqlGenerator.countById(table), Integer.class, idToObjectArray(id)) > 0;
+        return !jdbcOperations.queryForList(
+            sqlGenerator.existsById(table), idToObjectArray(id), Integer.class).isEmpty();
     }
 
     @Override
