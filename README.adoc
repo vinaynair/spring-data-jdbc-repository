@@ -1,5 +1,7 @@
 = Spring Data JDBC generic DAO implementation
 :source-language: java
+:group-id: cz.jirutka.spring
+:artifact-id: spring-data-jdbc-repository
 :gh-name: jirutka/spring-data-jdbc-repository
 :gh-branch: master
 :appveyor-id: n3x2wog0vys5bgl0
@@ -10,9 +12,12 @@
 :spring-data-jdoc-uri: https://docs.spring.io/spring-data/data-commons/docs/current/api/org/springframework/data
 :javase-jdoc-uri: https://docs.oracle.com/javase/7/docs/api/java
 
+ifdef::env-github[]
 image:https://travis-ci.org/{gh-name}.svg?branch={gh-branch}["Build Status", link="https://travis-ci.org/{gh-name}"]
 image:https://ci.appveyor.com/api/projects/status/{appveyor-id}/branch/{gh-branch}?svg=true["Build status (Windows)", link="https://ci.appveyor.com/project/{gh-name}/branch/{gh-branch}"]
-image:https://maven-badges.herokuapp.com/maven-central/com.nurkiewicz.jdbcrepository/jdbcrepository/badge.svg[Maven Central, link="https://maven-badges.herokuapp.com/maven-central/com.nurkiewicz.jdbcrepository/jdbcrepository"]
+image:https://maven-badges.herokuapp.com/maven-central/{group-id}/{artifact-id}/badge.svg[Maven Central, link="https://maven-badges.herokuapp.com/maven-central/{group-id}/{artifact-id}"]
+endif::env-github[]
+
 
 The purpose of this project is to provide generic, lightweight and easy to use DAO implementation for relational databases based on {spring-jdoc-uri}/jdbc/core/JdbcTemplate.html[JdbcTemplate] from https://projects.spring.io/spring-framework[Spring framework], compatible with Spring Data umbrella of projects.
 
