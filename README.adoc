@@ -5,6 +5,7 @@
 :gh-name: jirutka/spring-data-jdbc-repository
 :gh-branch: master
 :appveyor-id: n3x2wog0vys5bgl0
+:codacy-id: f44c7cac230b469793750a6899e286d6
 :src-base: link:src/main/java/com/nurkiewicz/jdbcrepository
 :src-test-base: link:src/test/groovy/com/nurkiewicz/jdbcrepository
 :src-fixtures-base: link:src/test/java/com/nurkiewicz/jdbcrepository/fixtures
@@ -15,6 +16,7 @@
 ifdef::env-github[]
 image:https://travis-ci.org/{gh-name}.svg?branch={gh-branch}["Build Status", link="https://travis-ci.org/{gh-name}"]
 image:https://ci.appveyor.com/api/projects/status/{appveyor-id}/branch/{gh-branch}?svg=true["Build status (Windows)", link="https://ci.appveyor.com/project/{gh-name}/branch/{gh-branch}"]
+image:https://api.codacy.com/project/badge/grade/{codacy-id}["Codacy code quality", link="https://www.codacy.com/app/{gh-name}"]
 image:https://maven-badges.herokuapp.com/maven-central/{group-id}/{artifact-id}/badge.svg[Maven Central, link="https://maven-badges.herokuapp.com/maven-central/{group-id}/{artifact-id}"]
 endif::env-github[]
 
