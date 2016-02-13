@@ -58,8 +58,6 @@ class MssqlTestConfig extends AbstractTestConfig {
 
     @Override CommentWithUserRepository commentWithUserRepository() {
         new CommentWithUserRepository(
-            CommentWithUserRepository.MAPPER,
-            CommentWithUserRepository.ROW_UNMAPPER,
             new MssqlSqlGenerator('c.*, u.date_of_birth, u.reputation, u.enabled'),
             new TableDescription('COMMENTS', 'COMMENTS c JOIN USERS u ON c.USER_NAME = u.USER_NAME', 'ID')
         )

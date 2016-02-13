@@ -30,11 +30,7 @@ class StandaloneUsageIT extends Specification {
     final JDBC_URL = "jdbc:h2:mem:DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema_h2.sql'"
 
     def dataSource = new JdbcDataSource(url: JDBC_URL)
-
-    def repository = new UserRepository('users').with {
-        it.dataSource = dataSource
-        it.sqlGenerator = new SqlGenerator(); it
-    }
+    def repository = new UserRepository(dataSource: dataSource, sqlGenerator: new SqlGenerator())
 
 
     def 'start repository without Spring'() {

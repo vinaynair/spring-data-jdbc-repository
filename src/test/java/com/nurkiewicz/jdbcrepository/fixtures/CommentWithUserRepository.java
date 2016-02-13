@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,51 +25,50 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Repository
 public class CommentWithUserRepository extends JdbcRepository<CommentWithUser, Integer> {
 
-    public CommentWithUserRepository(TableDescription table) {
-        this(MAPPER, ROW_UNMAPPER, table);
-    }
+    public static final RowMapper<CommentWithUser> ROW_MAPPER = new RowMapper<CommentWithUser>() {
 
-    public CommentWithUserRepository(RowMapper<CommentWithUser> rowMapper, RowUnmapper<CommentWithUser> rowUnmapper, TableDescription table) {
-        this(rowMapper, rowUnmapper, null, table);
-    }
-
-    public CommentWithUserRepository(RowMapper<CommentWithUser> rowMapper, RowUnmapper<CommentWithUser> rowUnmapper, SqlGenerator sqlGenerator, TableDescription table) {
-        super(rowMapper, rowUnmapper, sqlGenerator, table);
-    }
-
-    public static final RowMapper<CommentWithUser> MAPPER = new RowMapper<CommentWithUser>() {
-
-        @Override
         public CommentWithUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-            User user = UserRepository.MAPPER.mapRow(rs, rowNum);
+            User user = UserRepository.ROW_MAPPER.mapRow(rs, rowNum);
             return new CommentWithUser(
-                    rs.getInt("id"),
-                    user,
-                    rs.getString("contents"),
-                    rs.getTimestamp("created_time"),
-                    rs.getInt("favourite_count")
+                rs.getInt("id"),
+                user,
+                rs.getString("contents"),
+                rs.getTimestamp("created_time"),
+                rs.getInt("favourite_count")
             );
         }
     };
 
     public static final RowUnmapper<CommentWithUser> ROW_UNMAPPER = new RowUnmapper<CommentWithUser>() {
-        @Override
-        public Map<String, Object> mapColumns(CommentWithUser comment) {
-            Map<String, Object> mapping = new LinkedHashMap<>();
-            mapping.put("id", comment.getId());
-            mapping.put("user_name", comment.getUser().getUserName());
-            mapping.put("contents", comment.getContents());
-            mapping.put("created_time", new java.sql.Timestamp(comment.getCreatedTime().getTime()));
-            mapping.put("favourite_count", comment.getFavouriteCount());
-            return mapping;
+
+        public Map<String, Object> mapColumns(CommentWithUser o) {
+            Map<String, Object> cols = new LinkedHashMap<>();
+            cols.put("id", o.getId());
+            cols.put("user_name", o.getUser().getUserName());
+            cols.put("contents", o.getContents());
+            cols.put("created_time", new Timestamp(o.getCreatedTime().getTime()));
+            cols.put("favourite_count", o.getFavouriteCount());
+            return cols;
         }
     };
+
+
+    public CommentWithUserRepository() {
+        this(null, new TableDescription(
+            "COMMENTS", "COMMENTS JOIN USERS ON COMMENTS.user_name = USERS.user_name", "id"));
+    }
+
+    public CommentWithUserRepository(SqlGenerator sqlGenerator, TableDescription table) {
+        super(ROW_MAPPER, ROW_UNMAPPER, sqlGenerator, table);
+    }
+
 
     @Override
     protected <S extends CommentWithUser> S postCreate(S entity, Number generatedId) {

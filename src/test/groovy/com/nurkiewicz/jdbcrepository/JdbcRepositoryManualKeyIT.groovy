@@ -308,7 +308,7 @@ abstract class JdbcRepositoryManualKeyIT extends Specification {
     }
 
     def selectUserById(String id) {
-        jdbc.queryForObject('SELECT * FROM USERS WHERE user_name = ?', UserRepository.MAPPER, id)
+        jdbc.queryForObject('SELECT * FROM USERS WHERE user_name = ?', UserRepository.ROW_MAPPER, id)
     }
 
     def selectIds() {

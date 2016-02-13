@@ -56,18 +56,11 @@ class DerbyTestConfig extends AbstractTestConfig {
 
 
     @Bean CommentRepository commentRepository() {
-        new CommentRepository(
-            CommentRepository.MAPPER,
-            CommentRepository.ROW_UNMAPPER,
-            'COMMENTS',
-            'ID'
-        )
+        new CommentRepository(new TableDescription('COMMENTS', 'ID'))
     }
 
     @Bean CommentWithUserRepository commentWithUserRepository() {
-        new CommentWithUserRepository(
-            CommentWithUserRepository.MAPPER,
-            CommentWithUserRepository.ROW_UNMAPPER,
+        new CommentWithUserRepository(null,
             new TableDescription('COMMENTS', 'COMMENTS JOIN USERS ON COMMENTS.user_name = USERS.user_name', 'ID')
         )
     }

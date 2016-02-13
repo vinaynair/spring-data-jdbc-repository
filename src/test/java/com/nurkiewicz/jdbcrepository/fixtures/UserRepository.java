@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,33 +30,35 @@ import java.util.Map;
 @Repository
 public class UserRepository extends JdbcRepository<User, String> {
 
-    public UserRepository(String tableName) {
-        super(MAPPER, ROW_UNMAPPER, tableName, "user_name");
-    }
+    public static final RowMapper<User> ROW_MAPPER = new RowMapper<User>() {
 
-    public static final RowMapper<User> MAPPER = new RowMapper<User>() {
-        @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new User(
-                    rs.getString("user_name"),
-                    rs.getDate("date_of_birth"),
-                    rs.getInt("reputation"),
-                    rs.getBoolean("enabled")
+                rs.getString("user_name"),
+                rs.getDate("date_of_birth"),
+                rs.getInt("reputation"),
+                rs.getBoolean("enabled")
             ).withPersisted(true);
         }
     };
 
     public static final RowUnmapper<User> ROW_UNMAPPER = new RowUnmapper<User>() {
-        @Override
-        public Map<String, Object> mapColumns(User t) {
-            LinkedHashMap<String, Object> columns = new LinkedHashMap<String, Object>();
-            columns.put("user_name", t.getUserName());
-            columns.put("date_of_birth", new Date(t.getDateOfBirth().getTime()));
-            columns.put("reputation", t.getReputation());
-            columns.put("enabled", t.isEnabled());
-            return columns;
+
+        public Map<String, Object> mapColumns(User o) {
+            LinkedHashMap<String, Object> row = new LinkedHashMap<>();
+            row.put("user_name", o.getUserName());
+            row.put("date_of_birth", new Date(o.getDateOfBirth().getTime()));
+            row.put("reputation", o.getReputation());
+            row.put("enabled", o.isEnabled());
+            return row;
         }
     };
+
+
+    public UserRepository() {
+        super(ROW_MAPPER, ROW_UNMAPPER, "USERS", "user_name");
+    }
+
 
     @Override
     protected <S extends User> S postUpdate(S entity) {

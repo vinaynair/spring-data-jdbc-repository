@@ -16,7 +16,6 @@
  */
 package com.nurkiewicz.jdbcrepository.config
 
-import com.nurkiewicz.jdbcrepository.TableDescription
 import com.nurkiewicz.jdbcrepository.fixtures.BoardingPassRepository
 import com.nurkiewicz.jdbcrepository.fixtures.CommentRepository
 import com.nurkiewicz.jdbcrepository.fixtures.CommentWithUserRepository
@@ -45,11 +44,11 @@ abstract class AbstractTestConfig {
     }
 
     @Bean CommentRepository commentRepository() {
-        new CommentRepository('COMMENTS')
+        new CommentRepository()
     }
 
     @Bean UserRepository userRepository() {
-        new UserRepository('USERS')
+        new UserRepository()
     }
 
     @Bean BoardingPassRepository boardingPassRepository() {
@@ -57,7 +56,6 @@ abstract class AbstractTestConfig {
     }
 
     @Bean CommentWithUserRepository commentWithUserRepository() {
-        new CommentWithUserRepository(
-            new TableDescription('COMMENTS', 'COMMENTS JOIN USERS ON COMMENTS.user_name = USERS.user_name', 'id'))
+        new CommentWithUserRepository()
     }
 }

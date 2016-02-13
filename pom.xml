@@ -220,20 +220,6 @@
     </dependencies>
 
 
-    <!--//////////////////// BUILD ////////////////////-->
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <!-- TODO: Remove after refactoring tests. -->
-                    <excludes>/src/test/**/*.java</excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <!--//////////////////// PROFILES ////////////////////-->
 
     <profiles>
