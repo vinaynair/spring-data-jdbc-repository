@@ -8,7 +8,7 @@ case "$DB" in
 	postgresql)
 		script/setup-postgresql
 	;;
-	mysql)
+	mariadb | mysql)
 		script/setup-mysql
 	;;
 	oracle)

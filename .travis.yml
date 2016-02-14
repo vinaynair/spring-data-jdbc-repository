@@ -17,6 +17,14 @@ env:
     - DB=mysql
 matrix:
   include:
+    - env: DB=mariadb
+      jdk: openjdk7
+      addons:
+        mariadb: '10.1'
+    - env: DB=mariadb
+      jdk: oraclejdk8
+      addons:
+        mariadb: '10.1'
     - env: DB=oracle PROFILE=oracle
       jdk: openjdk7
       sudo: required
