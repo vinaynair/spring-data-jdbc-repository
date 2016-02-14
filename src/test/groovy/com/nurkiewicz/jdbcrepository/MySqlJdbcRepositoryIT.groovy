@@ -42,12 +42,12 @@ class MySqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('mysql') : isPortInUse('localhost', 3306) })
-@ContextConfiguration(classes = MysqlTestConfig)
+@ContextConfiguration(classes = MySqlTestConfig)
 @interface MySqlTestContext {}
 
 @Configuration
 @EnableTransactionManagement
-class MysqlTestConfig extends AbstractTestConfig {
+class MySqlTestConfig extends AbstractTestConfig {
 
     @Bean DataSource dataSource() {
         new MysqlConnectionPoolDataSource (
