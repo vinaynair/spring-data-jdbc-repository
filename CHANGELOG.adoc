@@ -1,8 +1,11 @@
 = Changelog
+:issues-nurkiewicz-uri: https://github.com/nurkiewicz/spring-data-jdbc-repository/issues
+:issues-uri: https://github.com/jirutka/spring-data-jdbc-repository/issues
+
 
 == 0.4.1 (2014-10-23)
 
-* Fixed standalone configuration and CDI Implementation (https://github.com/nurkiewicz/spring-data-jdbc-repository/issues/10[#10])
+* Fixed standalone configuration and CDI Implementation ({issues-nurkiewicz-uri}/10[nurkiewicz#10])
 
 == 0.4 (2014-06-16)
 
@@ -16,16 +19,16 @@
 == 0.3.1 (2013-03-16)
 
 * Upgraded Spring dependencies: 3.2.1 -> 3.2.4 and 1.5.0 -> 1.6.1
-* Allow manually injecting JdbcOperations, SqlGenerator and DataSource (https://github.com/nurkiewicz/spring-data-jdbc-repository/issues/5[#5])
+* Allow manually injecting JdbcOperations, SqlGenerator and DataSource ({issues-nurkiewicz-uri}/5[nurkiewicz#5])
 
 == 0.3 (2013-03-06)
 
-* Oracle 10g / 11g support (https://github.com/nurkiewicz/spring-data-jdbc-repository/pull/3[#3])
-* Upgrading Spring dependency to 3.2.1.RELEASE and http://www.springsource.org/spring-data/commons[Spring Data Commons] to 1.5.0.RELEASE (https://github.com/nurkiewicz/spring-data-jdbc-repository/issues/4[#4]).
+* Oracle 10g / 11g support ({issues-nurkiewicz-uri}/3[nurkiewicz#3])
+* Upgrading Spring dependency to 3.2.1.RELEASE and http://www.springsource.org/spring-data/commons[Spring Data Commons] to 1.5.0.RELEASE ({issues-nurkiewicz-uri}/4[nurkiewicz#4]).
 
 == 0.2 (2013-01-23)
 
-* MS SQL Server 2008/2012 support (https://github.com/nurkiewicz/spring-data-jdbc-repository/pull/2[#2])
+* MS SQL Server 2008/2012 support ({issues-nurkiewicz-uri}/2[nurkiewicz#2])
 
 == 0.1 (2013-01-20)
 
