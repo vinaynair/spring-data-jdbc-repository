@@ -1,26 +1,26 @@
-CREATE SEQUENCE user_seq;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS boarding_pass CASCADE;
 
-CREATE TABLE USERS (
-  user_name varchar(255) PRIMARY KEY DEFAULT nextval('user_seq'),
-  date_of_birth DATE NOT NULL,
-  reputation INT NOT NULL,
-  enabled BOOLEAN NOT NULL
+CREATE TABLE users (
+  user_name      text PRIMARY KEY,
+  date_of_birth  date NOT NULL,
+  reputation     integer NOT NULL,
+  enabled        boolean NOT NULL
 );
 
-CREATE SEQUENCE comment_seq;
-
-CREATE TABLE IF NOT EXISTS COMMENTS (
-  id INT PRIMARY KEY DEFAULT nextval('comment_seq'),
-  user_name varchar(256) REFERENCES USERS,
-  contents varchar(1000),
-  created_time TIMESTAMP NOT NULL,
-  favourite_count INT NOT NULL
+CREATE TABLE comments (
+  id               serial PRIMARY KEY,
+  user_name        text REFERENCES users,
+  contents         text,
+  created_time     timestamp NOT NULL,
+  favourite_count  integer NOT NULL
 );
 
-CREATE TABLE BOARDING_PASS (
-  flight_no VARCHAR(8) NOT NULL,
-  seq_no INT NOT NULL,
-  passenger VARCHAR(1000),
-  seat CHAR(3),
+CREATE TABLE boarding_pass (
+  flight_no  varchar(8) NOT NULL,
+  seq_no     integer NOT NULL,
+  passenger  text,
+  seat       char(3),
   PRIMARY KEY (flight_no, seq_no)
 );
