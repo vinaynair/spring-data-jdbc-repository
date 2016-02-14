@@ -9,22 +9,22 @@ $serverName = $env:COMPUTERNAME
 $smo = 'Microsoft.SqlServer.Management.Smo.'
 $wmi = new-object ($smo + 'Wmi.ManagedComputer')
 
-echo "Enabling TCP/IP for $serverName"
+echo "Enabling TCP/IP for $instanceName"
 $uri = "ManagedComputer[@Name='$serverName']/ServerInstance[@Name='$instanceName']/ServerProtocol[@Name='Tcp']"
 $Tcp = $wmi.GetSmoObject($uri)
 $Tcp.IsEnabled = $true
 foreach ($ipAddress in $Tcp.IPAddresses) {
-    $ipAddress.IPAddressProperties["TcpDynamicPorts"].Value = ""
-    $ipAddress.IPAddressProperties["TcpPort"].Value = "1433"
+	$ipAddress.IPAddressProperties["TcpDynamicPorts"].Value = ""
+	$ipAddress.IPAddressProperties["TcpPort"].Value = "1433"
 }
 $Tcp.Alter()
 
-echo "Enabling named pipes for $serverName"
+echo "Enabling named pipes for $instanceName"
 $uri = "ManagedComputer[@Name='$serverName']/ServerInstance[@Name='$instanceName']/ServerProtocol[@Name='Np']"
 $Np = $wmi.GetSmoObject($uri)
 $Np.IsEnabled = $true
 $Np.Alter()
 
-echo "Setting alias for $serverName"
+echo "Setting alias for $instanceName"
 New-Item HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client -Name ConnectTo | Out-Null
 Set-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\MSSQLServer\Client\ConnectTo -Name '(local)' -Value "DBMSSOCN,$serverName\$instanceName" | Out-Null
