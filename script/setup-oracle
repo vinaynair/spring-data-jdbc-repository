@@ -1,8 +1,0 @@
-#!/bin/bash
-# vim: set ts=4:
-set -o errexit -o pipefail
-
-cd "$(dirname "$0")/.."
-
-echo '==> Importing SQL schema to Oracle DB'
-echo exit | "$ORACLE_HOME"/bin/sqlplus test/test @src/test/resources/schema_oracle.sql

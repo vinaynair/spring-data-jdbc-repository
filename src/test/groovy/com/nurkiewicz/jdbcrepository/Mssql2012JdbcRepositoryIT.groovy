@@ -55,6 +55,9 @@ class Mssql2012TestConfig extends AbstractTestConfig {
 
     static final String MSSQL_HOST = env('MSSQL_HOST', 'localhost')
 
+    final initSqlScript = 'schema_mssql.sql'
+
+
     @Bean SqlGenerator sqlGenerator() {
         new Mssql2012SqlGenerator()
     }

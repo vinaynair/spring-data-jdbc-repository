@@ -53,6 +53,9 @@ class MySqlTestConfig extends AbstractTestConfig {
 
     static final String MYSQL_HOST = env('MYSQL_HOST', 'localhost')
 
+    final initSqlScript = 'schema_mysql.sql'
+
+
     @Bean DataSource dataSource() {
         new MysqlConnectionPoolDataSource (
             serverName:   MYSQL_HOST,

@@ -53,6 +53,9 @@ class MariaDbTestConfig extends AbstractTestConfig {
 
     static final String MARIADB_HOST = env('MARIADB_HOST', 'localhost')
 
+    final initSqlScript = 'schema_mysql.sql'
+
+
     @Bean(destroyMethod = 'shutdown')
     def DataSource dataSource() {
         new HikariDataSource(

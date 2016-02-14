@@ -2,7 +2,7 @@
 
 IF OBJECT_ID('USERS', 'U') IS NOT NULL
   DROP TABLE USERS;
-GO
+
 CREATE TABLE USERS (
   user_name     VARCHAR(255) PRIMARY KEY,
   date_of_birth DATE NOT NULL, --timestamp columns can not be used for explicit inserts
@@ -12,7 +12,7 @@ CREATE TABLE USERS (
 
 IF OBJECT_ID('COMMENTS', 'U') IS NOT NULL
   DROP TABLE COMMENTS;
-GO
+
 CREATE TABLE COMMENTS (
   id              INT IDENTITY (1, 1) PRIMARY KEY,
   user_name       VARCHAR(256),
@@ -23,7 +23,7 @@ CREATE TABLE COMMENTS (
 
 IF OBJECT_ID('BOARDING_PASS', 'U') IS NOT NULL
   DROP TABLE BOARDING_PASS;
-GO
+
 CREATE TABLE BOARDING_PASS (
   flight_no VARCHAR(8) NOT NULL,
   seq_no    INT        NOT NULL,

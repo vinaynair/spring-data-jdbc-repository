@@ -6,10 +6,10 @@ cd "$(dirname "$0")/.."
 
 case "$DB" in
 	postgresql)
-		script/setup-postgresql
+		psql -U postgres -c 'create database spring_data_jdbc_repository_test;'
 	;;
 	mariadb | mysql)
-		script/setup-mysql
+		mysql -e 'create database spring_data_jdbc_repository_test;'
 	;;
 	oracle)
 		# Workaround for nasty buffer overflow
@@ -19,6 +19,8 @@ case "$DB" in
 			| sudo tee /etc/hosts
 
 		script/travis-install-oracle
-		script/setup-oracle
+
+		# import schema
+		echo exit | "$ORACLE_HOME"/bin/sqlplus test/test @src/test/resources/schema_oracle.sql
 	;;
 esac

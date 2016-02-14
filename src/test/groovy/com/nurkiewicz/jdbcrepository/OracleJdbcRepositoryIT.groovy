@@ -55,6 +55,7 @@ class OracleTestConfig extends AbstractTestConfig {
 
     static final String ORACLE_HOST = env('ORACLE_HOST', 'localhost')
 
+
     @Bean SqlGenerator sqlGenerator() {
         new OracleSqlGenerator()
     }

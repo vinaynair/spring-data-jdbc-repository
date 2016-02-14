@@ -21,8 +21,13 @@ import com.nurkiewicz.jdbcrepository.fixtures.CommentRepository
 import com.nurkiewicz.jdbcrepository.fixtures.CommentWithUserRepository
 import com.nurkiewicz.jdbcrepository.fixtures.UserRepository
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.ResourceLoader
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
+import org.springframework.jdbc.datasource.init.DataSourceInitializer
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator
 import org.springframework.transaction.PlatformTransactionManager
 
 import javax.sql.DataSource
@@ -31,9 +36,26 @@ abstract class AbstractTestConfig {
 
     static final String DATABASE_NAME = 'spring_data_jdbc_repository_test'
 
+    @Autowired ResourceLoader resourceLoader
+
 
     @Bean abstract DataSource dataSource()
 
+
+    def getInitSqlScript() {
+    }
+
+    @Bean dataSourceInitializer() {
+        if (!initSqlScript) {
+            return null
+        }
+        new DataSourceInitializer (
+            dataSource: dataSource(),
+            databasePopulator: new ResourceDatabasePopulator(
+                scripts: new ClassPathResource(initSqlScript)
+            )
+        )
+    }
 
     @Bean PlatformTransactionManager transactionManager() {
         new DataSourceTransactionManager( dataSource() )

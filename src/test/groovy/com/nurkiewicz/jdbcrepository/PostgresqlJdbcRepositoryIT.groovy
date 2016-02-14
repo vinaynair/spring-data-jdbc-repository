@@ -55,6 +55,9 @@ class PostgresqlTestConfig extends AbstractTestConfig {
 
     static final String POSTGRESQL_HOST = env('POSTGRESQL_HOST', 'localhost')
 
+    final initSqlScript = 'schema_postgresql.sql'
+
+
     @Bean SqlGenerator sqlGenerator() {
         new PostgreSqlGenerator()
     }
