@@ -28,7 +28,9 @@ import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.*
+import static PostgresqlTestConfig.POSTGRESQL_HOST
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
+import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
 
 @PostgresqlTestContext
 class PostgresqlJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -43,13 +45,15 @@ class PostgresqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class PostgresqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@Requires({ env('CI') ? env('DB').equals('postgresql') : isPortInUse('localhost', 5432) })
+@Requires({ env('CI') ? env('DB').equals('postgresql') : isPortInUse(POSTGRESQL_HOST, 5432) })
 @ContextConfiguration(classes = PostgresqlTestConfig)
 @interface PostgresqlTestContext {}
 
 @Configuration
 @EnableTransactionManagement
 class PostgresqlTestConfig extends AbstractTestConfig {
+
+    static final String POSTGRESQL_HOST = env('POSTGRESQL_HOST', 'localhost')
 
     @Bean SqlGenerator sqlGenerator() {
         new PostgreSqlGenerator()
@@ -60,10 +64,10 @@ class PostgresqlTestConfig extends AbstractTestConfig {
         new HikariDataSource(
             dataSourceClassName: 'org.postgresql.ds.PGSimpleDataSource',
             dataSourceProperties: [
-                serverName: 'localhost',
+                serverName: POSTGRESQL_HOST,
                 portNumber: 5432,
-                user: prop('postgresql.user', 'postgres'),
-                password: prop('postgresql.password', ''),
+                user: env('POSTGRESQL_USER', 'postgres'),
+                password: env('POSTGRESQL_PASSWORD', ''),
                 databaseName: DATABASE_NAME,
             ]
         )

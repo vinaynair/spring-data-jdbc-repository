@@ -15,11 +15,9 @@
  */
 package com.nurkiewicz.jdbcrepository
 
-import com.nurkiewicz.jdbcrepository.config.AbstractTestConfig
 import com.nurkiewicz.jdbcrepository.fixtures.CommentWithUserRepository
 import com.nurkiewicz.jdbcrepository.sql.MssqlSqlGenerator
 import com.nurkiewicz.jdbcrepository.sql.SqlGenerator
-import com.zaxxer.hikari.HikariDataSource
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,10 +25,9 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import spock.lang.Requires
 
-import javax.sql.DataSource
-
 import static MssqlTestConfig.MSSQL_HOST
-import static com.nurkiewicz.jdbcrepository.TestUtils.*
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
+import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
 
 @MssqlTestContext
 class MssqlJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -51,10 +48,7 @@ class MssqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @Configuration
 @EnableTransactionManagement
-class MssqlTestConfig extends AbstractTestConfig {
-
-    static final String MSSQL_HOST = prop('mssql2012.hostname', 'localhost')
-
+class MssqlTestConfig extends Mssql2012TestConfig {
 
     @Override CommentWithUserRepository commentWithUserRepository() {
         new CommentWithUserRepository(
@@ -65,19 +59,5 @@ class MssqlTestConfig extends AbstractTestConfig {
 
     @Bean SqlGenerator sqlGenerator() {
         new MssqlSqlGenerator()
-    }
-
-    @Bean(destroyMethod = 'shutdown')
-    DataSource dataSource() {
-        new HikariDataSource(
-            dataSourceClassName: 'net.sourceforge.jtds.jdbcx.JtdsDataSource',
-            dataSourceProperties: [
-                serverName: MSSQL_HOST,
-                instance: prop('mssql2012.instance', 'SQL2012SP1'),
-                user: prop('mssql2012.user', 'sa'),
-                password: prop('mssql2012.password', 'Password12!'),
-                databaseName: DATABASE_NAME
-            ]
-        )
     }
 }

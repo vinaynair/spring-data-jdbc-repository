@@ -26,7 +26,9 @@ import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.*
+import static MySqlTestConfig.MYSQL_HOST
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
+import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
 
 @MySqlTestContext
 class MySqlJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -41,7 +43,7 @@ class MySqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class MySqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@Requires({ env('CI') ? env('DB').equals('mysql') : isPortInUse('localhost', 3306) })
+@Requires({ env('CI') ? env('DB').equals('mysql') : isPortInUse(MYSQL_HOST, 3306) })
 @ContextConfiguration(classes = MySqlTestConfig)
 @interface MySqlTestContext {}
 
@@ -49,10 +51,13 @@ class MySqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 @EnableTransactionManagement
 class MySqlTestConfig extends AbstractTestConfig {
 
+    static final String MYSQL_HOST = env('MYSQL_HOST', 'localhost')
+
     @Bean DataSource dataSource() {
         new MysqlConnectionPoolDataSource (
-            user: prop('mysql.user', 'root'),
-            password: prop('mysql.password', ''),
+            serverName:   MYSQL_HOST,
+            user:         env('MYSQL_USER', 'root'),
+            password:     env('MYSQL_PASSWORD', ''),
             databaseName: DATABASE_NAME
         )
     }

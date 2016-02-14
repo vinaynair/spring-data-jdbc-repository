@@ -29,7 +29,8 @@ import spock.lang.Requires
 import javax.sql.DataSource
 
 import static OracleTestConfig.ORACLE_HOST
-import static com.nurkiewicz.jdbcrepository.TestUtils.*
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
+import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
 
 @OracleTestContext
 class OracleJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -52,7 +53,7 @@ class OracleJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 @EnableTransactionManagement
 class OracleTestConfig extends AbstractTestConfig {
 
-    static final String ORACLE_HOST = prop('oracle.hostname', 'localhost')
+    static final String ORACLE_HOST = env('ORACLE_HOST', 'localhost')
 
     @Bean SqlGenerator sqlGenerator() {
         new OracleSqlGenerator()
@@ -63,12 +64,12 @@ class OracleTestConfig extends AbstractTestConfig {
         new HikariDataSource(
             dataSourceClassName: 'oracle.jdbc.pool.OracleDataSource',
             dataSourceProperties: [
-                driverType: 'thin',
-                serverName: ORACLE_HOST,
-                portNumber: prop('oracle.port', '1521'),
-                serviceName: prop('oracle.sid', 'XE'),
-                user: prop('oracle.username', 'test'),
-                password: prop('oracle.password', 'test')
+                driverType:  'thin',
+                serverName:  ORACLE_HOST,
+                portNumber:  1521,
+                serviceName: env('ORACLE_SID', 'XE'),
+                user:        env('ORACLE_USER', 'test'),
+                password:    env('ORACLE_PASSWORD', 'test')
             ]
         )
     }

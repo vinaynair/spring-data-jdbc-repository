@@ -29,7 +29,8 @@ import spock.lang.Requires
 import javax.sql.DataSource
 
 import static Mssql2012TestConfig.MSSQL_HOST
-import static com.nurkiewicz.jdbcrepository.TestUtils.*
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
+import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
 
 @Mssql2012TestContext
 class Mssql2012JdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -52,7 +53,7 @@ class Mssql2012JdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 @EnableTransactionManagement
 class Mssql2012TestConfig extends AbstractTestConfig {
 
-    static final String MSSQL_HOST = prop('mssql2012.hostname', 'localhost')
+    static final String MSSQL_HOST = env('MSSQL_HOST', 'localhost')
 
     @Bean SqlGenerator sqlGenerator() {
         new Mssql2012SqlGenerator()
@@ -63,10 +64,10 @@ class Mssql2012TestConfig extends AbstractTestConfig {
         new HikariDataSource(
             dataSourceClassName: 'net.sourceforge.jtds.jdbcx.JtdsDataSource',
             dataSourceProperties: [
-                serverName: prop('mssql2012.hostname', 'localhost'),
-                instance: prop('mssql2012.instance', 'SQL2012SP1'),
-                user: prop('mssql2012.user', 'sa'),
-                password: prop('mssql2012.password', 'Password12!'),
+                serverName:   MSSQL_HOST,
+                instance:     env('MSSQL_INSTANCE', 'SQL2012SP1'),
+                user:         env('MSSQL_USER', 'sa'),
+                password:     env('MSSQL_PASSWORD', 'Password12!'),
                 databaseName: DATABASE_NAME
             ]
         )

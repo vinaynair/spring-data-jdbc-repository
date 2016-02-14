@@ -26,7 +26,9 @@ import spock.lang.Requires
 
 import javax.sql.DataSource
 
-import static com.nurkiewicz.jdbcrepository.TestUtils.*
+import static MariaDbTestConfig.MARIADB_HOST
+import static com.nurkiewicz.jdbcrepository.TestUtils.env
+import static com.nurkiewicz.jdbcrepository.TestUtils.isPortInUse
 
 @MariaDbTestContext
 class MariaDbJdbcRepositoryCompoundPkIT extends JdbcRepositoryCompoundPkIT {}
@@ -41,7 +43,7 @@ class MariaDbJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 class MariaDbJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 
 @AnnotationCollector
-@Requires({ env('CI') ? env('DB').equals('mariadb') : isPortInUse('localhost', 3306) })
+@Requires({ env('CI') ? env('DB').equals('mariadb') : isPortInUse(MARIADB_HOST, 3306) })
 @ContextConfiguration(classes = MariaDbTestConfig)
 @interface MariaDbTestContext {}
 
@@ -49,15 +51,17 @@ class MariaDbJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
 @EnableTransactionManagement
 class MariaDbTestConfig extends AbstractTestConfig {
 
+    static final String MARIADB_HOST = env('MARIADB_HOST', 'localhost')
+
     @Bean(destroyMethod = 'shutdown')
     def DataSource dataSource() {
         new HikariDataSource(
             dataSourceClassName: 'org.mariadb.jdbc.MariaDbDataSource',
             dataSourceProperties: [
-                serverName: 'localhost',
-                portNumber: 3306,
-                user: prop('mariadb.user', 'root'),
-                password: prop('mariadb.password', ''),
+                serverName:   MARIADB_HOST,
+                portNumber:   3306,
+                user:         env('MARIADB_USER', 'root'),
+                password:     env('MARIADB_PASSWORD', ''),
                 databaseName: DATABASE_NAME,
             ]
         )

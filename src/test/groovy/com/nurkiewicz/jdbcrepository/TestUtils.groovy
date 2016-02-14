@@ -28,11 +28,7 @@ abstract class TestUtils {
         }
     }
 
-    static String env(String name) {
-        System.getenv(name)
-    }
-
-    static String prop(String key, String defaultValue) {
-        System.getProperty(key, defaultValue)
+    static String env(String name, String defaultValue = null) {
+        System.getenv(name) ?: defaultValue
     }
 }
