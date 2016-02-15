@@ -3,6 +3,35 @@
 :issues-uri: https://github.com/jirutka/spring-data-jdbc-repository/issues
 
 
+== 0.5.0 (2016-02-15)
+
+⭐️ Project forked and published under new coordinates: cz.jirutka.spring:spring-data-jdbc-repository.
+
+Enhancements::
+  * Rewrite all tests to Spock/Groovy.
+  * Add overloaded hook method `JdbcRepository#postUpdate(Persistable, int)` with number of affected rows.
+  * Improve `exists(ID)` performance; use `select 1` instead of `select count(*)`.
+  * Change visibility of methods `JdbcRepository#update(Persistable)` and `JdbcRepository#create(Persistable)` to public.
+
+Bug fixes::
+  * Treat column names as case-insensitive ({issues-nurkiewicz-uri}/16[nurkiewicz#16]).
+  * Fix autowiring of SqlGenerator bean ({issues-nurkiewicz-uri}/25[nurkiewicz#25]).
+
+Deprecations/changes::
+  * Drop support for Java 6, minimal required version is now 7.
+  * Deprecate method `JdbcRepository.pk(Object...)`
+
+Infrastructure::
+  * Reformat and slightly refactor sources.
+  * Test on CI with both OpenJDK 7 and OracleJDK 8.
+  * Run integration tests for Oracle on Travis using Oracle XE installed with https://github.com/cbandy/travis-oracle[cbandy/travis-oracle].
+  * Run integration tests for MS SQL on AppVeyor using SQL Server 2012SP1 and 2014.
+  * Add integration tests for MariaDB and run them on Travis.
+  * Separate CI build jobs for embedded databases, PostgreSQL, MariaDB, MySQL, Oracle, and MSSQL.
+  * Replace BoneCP with HikariCP in tests.
+  * Inherit versions from Spring’s platform-bom.
+
+
 == 0.4.1 (2014-10-23)
 
 * Fixed standalone configuration and CDI Implementation ({issues-nurkiewicz-uri}/10[nurkiewicz#10])
