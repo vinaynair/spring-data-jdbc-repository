@@ -10,9 +10,9 @@
 :appveyor-id: n3x2wog0vys5bgl0
 :codacy-id: f44c7cac230b469793750a6899e286d6
 // URIs
-:src-base: link:src/main/java/com/nurkiewicz/jdbcrepository
-:src-test-base: link:src/test/groovy/com/nurkiewicz/jdbcrepository
-:src-fixtures-base: link:src/test/java/com/nurkiewicz/jdbcrepository/fixtures
+:src-base: link:src/main/java/cz/jirutka/spring/data/jdbc
+:src-test-base: link:src/test/groovy/cz/jirutka/spring/data/jdbc
+:src-fixtures-base: link:src/test/java/cz/jirutka/spring/data/jdbc/fixtures
 :spring-jdoc-uri: https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework
 :spring-data-jdoc-uri: https://docs.spring.io/spring-data/data-commons/docs/current/api/org/springframework/data
 :javase-jdoc-uri: https://docs.oracle.com/javase/7/docs/api/java
@@ -476,7 +476,7 @@ BoardingPass foundFlight = boardingPassRepository.findOne(pk("FOO-1022", 42));
 
 …or just use some more expressive JVM-based language as Groovy. ;)
 
-Check out link:src/test/java/com/nurkiewicz/jdbcrepository/JdbcRepositoryCompoundPkIT.java[`JdbcRepositoryCompoundPkIT`] for a working code based on this example.
+Check out link:src/test/java/cz/jirutka/spring/data/jdbc/JdbcRepositoryCompoundPkIT.java[`JdbcRepositoryCompoundPkIT`] for a working code based on this example.
 
 
 === Transactions
