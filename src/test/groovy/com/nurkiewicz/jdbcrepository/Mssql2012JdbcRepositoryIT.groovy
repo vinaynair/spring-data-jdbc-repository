@@ -66,6 +66,7 @@ class Mssql2012TestConfig extends AbstractTestConfig {
     DataSource dataSource() {
         new HikariDataSource(
             dataSourceClassName: 'net.sourceforge.jtds.jdbcx.JtdsDataSource',
+            connectionTestQuery: 'select 1',
             dataSourceProperties: [
                 serverName:   MSSQL_HOST,
                 instance:     env('MSSQL_INSTANCE', 'SQL2012SP1'),
