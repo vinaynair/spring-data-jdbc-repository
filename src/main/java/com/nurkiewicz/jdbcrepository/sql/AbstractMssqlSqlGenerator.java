@@ -19,10 +19,10 @@ import org.springframework.data.domain.Pageable;
 
 abstract class AbstractMssqlSqlGenerator extends SqlGenerator {
 
-    public AbstractMssqlSqlGenerator() {
+    AbstractMssqlSqlGenerator() {
     }
 
-    public AbstractMssqlSqlGenerator(String allColumnsClause) {
+    AbstractMssqlSqlGenerator(String allColumnsClause) {
         super(allColumnsClause);
     }
 
