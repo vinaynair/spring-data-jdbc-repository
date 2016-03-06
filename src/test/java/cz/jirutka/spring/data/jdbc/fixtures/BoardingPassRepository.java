@@ -16,7 +16,7 @@
  */
 package cz.jirutka.spring.data.jdbc.fixtures;
 
-import cz.jirutka.spring.data.jdbc.JdbcRepository;
+import cz.jirutka.spring.data.jdbc.BaseJdbcRepository;
 import cz.jirutka.spring.data.jdbc.RowUnmapper;
 import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.jdbc.core.RowMapper;
@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BoardingPassRepository extends JdbcRepository<BoardingPass, Object[]> {
+public class BoardingPassRepository extends BaseJdbcRepository<BoardingPass, Object[]> {
 
     public static final RowMapper<BoardingPass> ROW_MAPPER = new RowMapper<BoardingPass>() {
 

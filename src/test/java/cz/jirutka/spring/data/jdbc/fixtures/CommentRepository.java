@@ -16,7 +16,7 @@
  */
 package cz.jirutka.spring.data.jdbc.fixtures;
 
-import cz.jirutka.spring.data.jdbc.JdbcRepository;
+import cz.jirutka.spring.data.jdbc.BaseJdbcRepository;
 import cz.jirutka.spring.data.jdbc.RowUnmapper;
 import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,7 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Repository
-public class CommentRepository extends JdbcRepository<Comment, Integer> {
+public class CommentRepository extends BaseJdbcRepository<Comment, Integer> {
 
     public static final RowMapper<Comment> ROW_MAPPER = new RowMapper<Comment>() {
 
