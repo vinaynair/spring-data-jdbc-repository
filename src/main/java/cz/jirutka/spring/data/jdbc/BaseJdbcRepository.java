@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static cz.jirutka.spring.data.jdbc.internal.IterableUtils.toList;
 import static java.util.Arrays.asList;
 
 /**
@@ -360,14 +361,6 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
         columns.putAll(rowUnmapper.mapColumns(entity));
 
         return columns;
-    }
-
-    private static <T> List<T> toList(Iterable<T> iterable) {
-        List<T> result = new ArrayList<>();
-        for (T item : iterable) {
-            result.add(item);
-        }
-        return result;
     }
 
     private static <ID> Object[] flatten(List<ID> ids) {
