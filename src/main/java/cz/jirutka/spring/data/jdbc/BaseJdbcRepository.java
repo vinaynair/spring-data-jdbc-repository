@@ -90,18 +90,6 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
         this(rowMapper, rowUnmapper, new TableDescription(tableName, "id"));
     }
 
-    public BaseJdbcRepository(RowMapper<T> rowMapper, TableDescription table) {
-        this(rowMapper, new MissingRowUnmapper<T>(), null, table);
-    }
-
-    public BaseJdbcRepository(RowMapper<T> rowMapper, String tableName, String idColumn) {
-        this(rowMapper, new MissingRowUnmapper<T>(), null, new TableDescription(tableName, idColumn));
-    }
-
-    public BaseJdbcRepository(RowMapper<T> rowMapper, String tableName) {
-        this(rowMapper, new MissingRowUnmapper<T>(), new TableDescription(tableName, "id"));
-    }
-
 
     @Override
     public void afterPropertiesSet() throws Exception {
