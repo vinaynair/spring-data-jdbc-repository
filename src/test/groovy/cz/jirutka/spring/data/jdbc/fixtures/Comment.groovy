@@ -18,12 +18,13 @@ package cz.jirutka.spring.data.jdbc.fixtures
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import org.springframework.data.domain.Persistable
+import org.springframework.data.annotation.Id
 
 @ToString
 @EqualsAndHashCode
-class Comment implements Persistable<Integer> {
+class Comment {
 
+    @Id
     Integer id
 
     String userName
@@ -41,9 +42,5 @@ class Comment implements Persistable<Integer> {
         this.contents = contents
         this.createdTime = createdTime
         this.favouriteCount = favouriteCount
-    }
-
-    boolean isNew() {
-        id == null
     }
 }

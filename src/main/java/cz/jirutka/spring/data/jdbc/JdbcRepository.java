@@ -15,7 +15,6 @@
  */
 package cz.jirutka.spring.data.jdbc;
 
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -30,8 +29,7 @@ import java.util.List;
  * @param <ID> the type of the id of the entity the repository manages.
  */
 @NoRepositoryBean
-public interface JdbcRepository<T extends Persistable<ID>, ID extends Serializable>
-        extends PagingAndSortingRepository<T, ID> {
+public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSortingRepository<T, ID> {
 
     List<T> findAll();
 
@@ -56,7 +54,7 @@ public interface JdbcRepository<T extends Persistable<ID>, ID extends Serializab
     /**
      * Saves all the given entities.
      *
-     * @see #save(Persistable)
+     * @see #save(S)
      * @param entities
      * @return the saved entities
      * @throws IllegalArgumentException if one of the given entities is null.

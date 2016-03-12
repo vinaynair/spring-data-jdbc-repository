@@ -18,11 +18,10 @@ package cz.jirutka.spring.data.jdbc.fixtures
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import org.springframework.data.domain.Persistable
 
 @ToString
 @EqualsAndHashCode
-class CommentWithUser extends Comment implements Persistable<Integer> {
+class CommentWithUser extends Comment {
 
     User user
 
