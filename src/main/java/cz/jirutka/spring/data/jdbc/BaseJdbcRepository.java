@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 import static cz.jirutka.spring.data.jdbc.internal.IterableUtils.toList;
+import static cz.jirutka.spring.data.jdbc.internal.ObjectUtils.wrapToArray;
 import static java.util.Arrays.asList;
 
 /**
@@ -137,12 +138,12 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
 
     @Override
     public void delete(ID id) {
-        jdbcOperations.update(sqlGenerator.deleteById(table), idToObjectArray(id));
+        jdbcOperations.update(sqlGenerator.deleteById(table), wrapToArray(id));
     }
 
     @Override
     public void delete(T entity) {
-        jdbcOperations.update(sqlGenerator.deleteById(table), idToObjectArray(entity.getId()));
+        jdbcOperations.update(sqlGenerator.deleteById(table), wrapToArray(entity.getId()));
     }
 
     @Override
@@ -160,7 +161,7 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
     @Override
     public boolean exists(ID id) {
         return !jdbcOperations.queryForList(
-            sqlGenerator.existsById(table), idToObjectArray(id), Integer.class).isEmpty();
+            sqlGenerator.existsById(table), wrapToArray(id), Integer.class).isEmpty();
     }
 
     @Override
@@ -170,9 +171,8 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
 
     @Override
     public T findOne(ID id) {
-        Object[] idColumns = idToObjectArray(id);
         List<T> entityOrEmpty = jdbcOperations.query(
-            sqlGenerator.selectById(table), idColumns, rowMapper);
+            sqlGenerator.selectById(table), wrapToArray(id), rowMapper);
 
         return entityOrEmpty.isEmpty() ? null : entityOrEmpty.get(0);
     }
@@ -344,18 +344,6 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
         return idColumnsValues;
     }
 
-    private static <ID> Object[] idToObjectArray(ID id) {
-        return (id instanceof Object[])
-            ? (Object[]) id
-            : new Object[]{id};
-    }
-
-    private static <ID> List<Object> idToObjectList(ID id) {
-        return (id instanceof Object[])
-            ? asList((Object[]) id)
-            : Collections.<Object>singletonList(id);
-    }
-
     private Map<String, Object> columns(T entity) {
         Map<String, Object> columns = new LinkedCaseInsensitiveMap<>();
         columns.putAll(rowUnmapper.mapColumns(entity));
@@ -366,10 +354,8 @@ public abstract class BaseJdbcRepository<T extends Persistable<ID>, ID extends S
     private static <ID> Object[] flatten(List<ID> ids) {
         List<Object> result = new ArrayList<>();
         for (ID id : ids) {
-            result.addAll(idToObjectList(id));
+            result.addAll(asList(wrapToArray(id)));
         }
         return result.toArray();
     }
 }
-
-
