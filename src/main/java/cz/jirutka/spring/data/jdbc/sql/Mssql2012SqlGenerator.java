@@ -18,36 +18,39 @@ package cz.jirutka.spring.data.jdbc.sql;
 
 import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
+
+import static java.lang.String.format;
 
 /**
  * SQLServer Pagination feature for SQLServer 2012+ -> extension of order by clause
  *
  * @see http://msdn.microsoft.com/en-us/library/ms188385.aspx
  */
-public class Mssql2012SqlGenerator extends AbstractMssqlSqlGenerator {
+public class Mssql2012SqlGenerator extends SqlGenerator {
 
-    /**
-     * Sort by first column
-     */
-    private static final String MSSQL_DEFAULT_SORT_CLAUSE = " ORDER BY 1 ASC";
+    public Mssql2012SqlGenerator() {
+    }
+
+    public Mssql2012SqlGenerator(String allColumnsClause) {
+        super(allColumnsClause);
+    }
 
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {
 
-        int offset = page.getPageNumber() * page.getPageSize() + 1;
-        String sortingClause = sortingClauseIfRequired(page.getSort());
+        // The Pagination feature requires a sort clause, if none is given then
+        // we sort by the first column.
+        String orderByClause = page.getSort() != null
+                ? orderByClause(page.getSort())
+                : " ORDER BY 1 ASC";
 
-        if (!StringUtils.hasText(sortingClause)) {
-            // The Pagination feature requires a sort clause, if none is given
-            // we sort by the first column.
-            sortingClause = MSSQL_DEFAULT_SORT_CLAUSE;
-        }
+        return selectAll(table) + orderByClause + limitClause(page);
+    }
 
-        String paginationClause = String.format(
-            " OFFSET %d ROWS FETCH NEXT %d ROW ONLY", offset - 1, page.getPageSize());
-
-        return super.selectAll(table) + sortingClause + paginationClause;
+    @Override
+    protected String limitClause(Pageable page) {
+        return format(" OFFSET %d ROWS FETCH NEXT %d ROW ONLY",
+                page.getOffset(), page.getPageSize());
     }
 }

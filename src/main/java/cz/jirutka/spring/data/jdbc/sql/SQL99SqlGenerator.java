@@ -16,24 +16,37 @@
  */
 package cz.jirutka.spring.data.jdbc.sql;
 
+import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 
 import static java.lang.String.format;
 
-public class DerbySqlGenerator extends SqlGenerator {
+public class SQL99SqlGenerator extends SqlGenerator {
 
-
-    public DerbySqlGenerator() {
+    public SQL99SqlGenerator() {
     }
 
-    public DerbySqlGenerator(String allColumnsClause) {
+    public SQL99SqlGenerator(String allColumnsClause) {
         super(allColumnsClause);
     }
 
 
     @Override
+    public String selectAll(TableDescription table, Pageable page) {
+
+        String orderByColumns = page.getSort() != null
+            ? orderByExpression(page.getSort())
+            : table.getIdColumns().get(0);
+
+        return format("SELECT a__.* FROM ("
+                + "SELECT row_number() OVER (ORDER BY %s) AS ROW_NUM, t__.* FROM (%s) t__"
+                + ") a__ WHERE a__.row_num BETWEEN %s AND %s",
+            orderByColumns, selectAll(table),
+            page.getOffset() + 1, page.getOffset() + page.getPageSize());
+    }
+
+    @Override
     protected String limitClause(Pageable page) {
-        return format(" OFFSET %d ROWS FETCH NEXT %d ROWS ONLY",
-                page.getOffset(), page.getPageSize());
+        throw new UnsupportedOperationException("LIMIT clause is not supported by this dialect");
     }
 }

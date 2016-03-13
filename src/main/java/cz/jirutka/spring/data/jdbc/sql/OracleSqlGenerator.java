@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +16,12 @@
  */
 package cz.jirutka.spring.data.jdbc.sql;
 
-import cz.jirutka.spring.data.jdbc.TableDescription;
-import org.springframework.data.domain.Pageable;
-
-public class OracleSqlGenerator extends SqlGenerator {
+public class OracleSqlGenerator extends SQL99SqlGenerator {
 
     public OracleSqlGenerator() {
     }
 
     public OracleSqlGenerator(String allColumnsClause) {
         super(allColumnsClause);
-    }
-
-    @Override
-    protected String limitClause(Pageable page) {
-        return "";
-    }
-
-    @Override
-    public String selectAll(TableDescription table, Pageable page) {
-        return SQL99Helper.generateSelectAllWithPagination(table, page, this);
     }
 }

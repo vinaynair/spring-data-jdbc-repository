@@ -16,21 +16,12 @@
  */
 package cz.jirutka.spring.data.jdbc.sql;
 
-import cz.jirutka.spring.data.jdbc.TableDescription;
-import org.springframework.data.domain.Pageable;
-
-public class MssqlSqlGenerator extends AbstractMssqlSqlGenerator {
+public class MssqlSqlGenerator extends SQL99SqlGenerator {
 
     public MssqlSqlGenerator() {
     }
 
     public MssqlSqlGenerator(String allColumnsClause) {
         super(allColumnsClause);
-    }
-
-
-    @Override
-    public String selectAll(TableDescription table, Pageable page) {
-        return SQL99Helper.generateSelectAllWithPagination(table, page, this);
     }
 }
