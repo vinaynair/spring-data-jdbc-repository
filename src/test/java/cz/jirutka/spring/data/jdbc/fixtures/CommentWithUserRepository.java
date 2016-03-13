@@ -19,7 +19,6 @@ package cz.jirutka.spring.data.jdbc.fixtures;
 import cz.jirutka.spring.data.jdbc.BaseJdbcRepository;
 import cz.jirutka.spring.data.jdbc.RowUnmapper;
 import cz.jirutka.spring.data.jdbc.TableDescription;
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -61,12 +60,12 @@ public class CommentWithUserRepository extends BaseJdbcRepository<CommentWithUse
 
 
     public CommentWithUserRepository() {
-        this(null, new TableDescription(
+        this(new TableDescription(
             "COMMENTS", "COMMENTS JOIN USERS ON COMMENTS.user_name = USERS.user_name", "id"));
     }
 
-    public CommentWithUserRepository(SqlGenerator sqlGenerator, TableDescription table) {
-        super(ROW_MAPPER, ROW_UNMAPPER, sqlGenerator, table);
+    public CommentWithUserRepository(TableDescription table) {
+        super(ROW_MAPPER, ROW_UNMAPPER, table);
     }
 
 

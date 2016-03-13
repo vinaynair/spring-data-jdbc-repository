@@ -22,14 +22,6 @@ import static java.lang.String.format;
 
 public class PostgreSqlGenerator extends SqlGenerator {
 
-    public PostgreSqlGenerator() {
-    }
-
-    public PostgreSqlGenerator(String allColumnsClause) {
-        super(allColumnsClause);
-    }
-
-
     @Override
     protected String limitClause(Pageable page) {
         return format(" LIMIT %d OFFSET %d", page.getPageSize(), page.getOffset());

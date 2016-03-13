@@ -23,14 +23,6 @@ import static java.lang.String.format;
 
 public class SQL99SqlGenerator extends SqlGenerator {
 
-    public SQL99SqlGenerator() {
-    }
-
-    public SQL99SqlGenerator(String allColumnsClause) {
-        super(allColumnsClause);
-    }
-
-
     @Override
     public String selectAll(TableDescription table, Pageable page) {
 

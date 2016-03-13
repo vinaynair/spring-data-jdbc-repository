@@ -39,17 +39,6 @@ public class SqlGenerator {
             COMMA = ", ",
             PARAM = " = ?";
 
-    private final String allColumnsClause;
-
-
-    public SqlGenerator(String allColumnsClause) {
-        this.allColumnsClause = allColumnsClause;
-    }
-
-    public SqlGenerator() {
-        this("*");
-    }
-
 
     public String count(TableDescription table) {
         return format("SELECT count(*) FROM %s", table.getFromClause());
@@ -60,7 +49,7 @@ public class SqlGenerator {
     }
 
     public String selectAll(TableDescription table) {
-        return format("SELECT %s FROM %s", allColumnsClause, table.getFromClause());
+        return format("SELECT %s FROM %s", table.getSelectClause(), table.getFromClause());
     }
 
     public String selectAll(TableDescription table, Pageable page) {
@@ -103,10 +92,6 @@ public class SqlGenerator {
 
     public String existsById(TableDescription table) {
         return format("SELECT 1 FROM %s WHERE %s", table.getTableName(), idPredicate(table));
-    }
-
-    public String getAllColumnsClause() {
-        return allColumnsClause;
     }
 
 

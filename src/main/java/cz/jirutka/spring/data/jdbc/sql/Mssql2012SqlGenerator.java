@@ -28,14 +28,6 @@ import static java.lang.String.format;
  */
 public class Mssql2012SqlGenerator extends SqlGenerator {
 
-    public Mssql2012SqlGenerator() {
-    }
-
-    public Mssql2012SqlGenerator(String allColumnsClause) {
-        super(allColumnsClause);
-    }
-
-
     @Override
     public String selectAll(TableDescription table, Pageable page) {
 

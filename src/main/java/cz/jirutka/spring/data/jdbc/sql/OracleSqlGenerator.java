@@ -17,11 +17,4 @@
 package cz.jirutka.spring.data.jdbc.sql;
 
 public class OracleSqlGenerator extends SQL99SqlGenerator {
-
-    public OracleSqlGenerator() {
-    }
-
-    public OracleSqlGenerator(String allColumnsClause) {
-        super(allColumnsClause);
-    }
 }

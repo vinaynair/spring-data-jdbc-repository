@@ -17,11 +17,4 @@
 package cz.jirutka.spring.data.jdbc.sql;
 
 public class MssqlSqlGenerator extends SQL99SqlGenerator {
-
-    public MssqlSqlGenerator() {
-    }
-
-    public MssqlSqlGenerator(String allColumnsClause) {
-        super(allColumnsClause);
-    }
 }

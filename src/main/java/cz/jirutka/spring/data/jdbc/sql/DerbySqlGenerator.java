@@ -22,15 +22,6 @@ import static java.lang.String.format;
 
 public class DerbySqlGenerator extends SqlGenerator {
 
-
-    public DerbySqlGenerator() {
-    }
-
-    public DerbySqlGenerator(String allColumnsClause) {
-        super(allColumnsClause);
-    }
-
-
     @Override
     protected String limitClause(Pageable page) {
         return format(" OFFSET %d ROWS FETCH NEXT %d ROWS ONLY",

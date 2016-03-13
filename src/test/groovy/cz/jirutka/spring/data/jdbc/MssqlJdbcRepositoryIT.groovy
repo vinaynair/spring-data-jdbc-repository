@@ -16,8 +16,8 @@
 package cz.jirutka.spring.data.jdbc
 
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.MssqlSqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -52,8 +52,12 @@ class MssqlTestConfig extends Mssql2012TestConfig {
 
     @Override CommentWithUserRepository commentWithUserRepository() {
         new CommentWithUserRepository(
-            new MssqlSqlGenerator('c.*, u.date_of_birth, u.reputation, u.enabled'),
-            new TableDescription('COMMENTS', 'COMMENTS c JOIN USERS u ON c.USER_NAME = u.USER_NAME', 'ID')
+            new TableDescription(
+                tableName: 'COMMENTS',
+                selectClause: 'c.*, u.date_of_birth, u.reputation, u.enabled',
+                fromClause: 'COMMENTS c JOIN USERS u ON c.USER_NAME = u.USER_NAME',
+                pkColumns: ['ID']
+            )
         )
     }
 
