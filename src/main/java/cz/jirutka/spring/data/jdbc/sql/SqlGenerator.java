@@ -56,7 +56,7 @@ public class SqlGenerator {
     }
 
     public String deleteById(TableDescription table) {
-        return format("DELETE FROM %s WHERE %s", table.getName(), idPredicate(table));
+        return format("DELETE FROM %s WHERE %s", table.getTableName(), idPredicate(table));
     }
 
     public String selectAll(TableDescription table) {
@@ -84,7 +84,7 @@ public class SqlGenerator {
     public String update(TableDescription table, Map<String, Object> columns) {
 
         return format("UPDATE %s SET %s WHERE %s",
-            table.getName(),
+            table.getTableName(),
             formatParameters(columns.keySet(), COMMA),
             idPredicate(table));
     }
@@ -92,17 +92,17 @@ public class SqlGenerator {
     public String insert(TableDescription table, Map<String, Object> columns) {
 
         return format("INSERT INTO %s (%s) VALUES (%s)",
-            table.getName(),
-                collectionToDelimitedString(columns.keySet(), COMMA),
+            table.getTableName(),
+            collectionToDelimitedString(columns.keySet(), COMMA),
             repeat("?", COMMA, columns.size()));
     }
 
     public String deleteAll(TableDescription table) {
-        return format("DELETE FROM %s", table.getName());
+        return format("DELETE FROM %s", table.getTableName());
     }
 
     public String existsById(TableDescription table) {
-        return format("SELECT 1 FROM %s WHERE %s", table.getName(), idPredicate(table));
+        return format("SELECT 1 FROM %s WHERE %s", table.getTableName(), idPredicate(table));
     }
 
     public String getAllColumnsClause() {
@@ -132,13 +132,13 @@ public class SqlGenerator {
 
 
     private String idPredicate(TableDescription table) {
-        return formatParameters(table.getIdColumns(), AND);
+        return formatParameters(table.getPkColumns(), AND);
     }
 
     private String idsPredicate(TableDescription table, int idsCount) {
         Assert.isTrue(idsCount > 0, "idsCount must be greater than zero");
 
-        List<String> idColumnNames = table.getIdColumns();
+        List<String> idColumnNames = table.getPkColumns();
 
         if (idsCount == 1) {
             return idPredicate(table);

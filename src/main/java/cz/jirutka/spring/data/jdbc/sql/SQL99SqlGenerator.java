@@ -36,7 +36,7 @@ public class SQL99SqlGenerator extends SqlGenerator {
 
         String orderByColumns = page.getSort() != null
             ? orderByExpression(page.getSort())
-            : table.getIdColumns().get(0);
+            : table.getPkColumns().get(0);
 
         return format("SELECT a__.* FROM ("
                 + "SELECT row_number() OVER (ORDER BY %s) AS ROW_NUM, t__.* FROM (%s) t__"

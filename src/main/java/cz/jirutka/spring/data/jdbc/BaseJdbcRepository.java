@@ -226,8 +226,8 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         List<Object> idValues = removeIdColumns(columns);
         String updateQuery = sqlGenerator.update(table, columns);
 
-        for (int i = 0; i < table.getIdColumns().size(); ++i) {
-            columns.put(table.getIdColumns().get(i), idValues.get(i));
+        for (int i = 0; i < table.getPkColumns().size(); ++i) {
+            columns.put(table.getPkColumns().get(i), idValues.get(i));
         }
         Object[] queryParams = columns.values().toArray();
 
@@ -337,7 +337,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
         jdbcOperations.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                String idColumnName = table.getIdColumns().get(0);
+                String idColumnName = table.getPkColumns().get(0);
                 PreparedStatement ps = con.prepareStatement(createQuery, new String[]{idColumnName});
                 for (int i = 0; i < queryParams.length; ++i) {
                     ps.setObject(i + 1, queryParams[i]);
@@ -352,7 +352,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     private List<Object> removeIdColumns(Map<String, Object> columns) {
         List<Object> idColumnsValues = new ArrayList<>(columns.size());
 
-        for (String idColumn : table.getIdColumns()) {
+        for (String idColumn : table.getPkColumns()) {
             idColumnsValues.add(columns.remove(idColumn));
         }
         return idColumnsValues;
