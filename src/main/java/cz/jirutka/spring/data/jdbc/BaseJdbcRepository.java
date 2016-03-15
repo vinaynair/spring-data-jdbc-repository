@@ -275,7 +275,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
             throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(updateQuery, 1, rowsAffected);
         }
 
-        return postUpdate(entity, rowsAffected);
+        return postUpdate(entity);
     }
 
     public <S extends T> S create(S entity) {
@@ -339,15 +339,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
      * General purpose hook method that is called every time {@link #update} is called.
      *
      * @param entity The entity that was passed to {@link #update}.
-     * @param rowsAffected The number of rows affected (updated).
      * @return Either the same object as an argument or completely different one.
-     */
-    protected <S extends T> S postUpdate(S entity, int rowsAffected) {
-        return postUpdate(entity);
-    }
-
-    /**
-     * @see #postUpdate(S, int)
      */
     protected <S extends T> S postUpdate(S entity) {
         return entity;
