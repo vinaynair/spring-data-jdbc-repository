@@ -23,12 +23,14 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.domain.Sort.Order
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.annotation.Resource
 
 import static org.springframework.data.domain.Sort.Direction.ASC
 import static org.springframework.data.domain.Sort.Direction.DESC
 
+@Unroll
 @Transactional
 abstract class JdbcRepositoryCompoundPkIT extends Specification {
 
@@ -51,7 +53,7 @@ abstract class JdbcRepositoryCompoundPkIT extends Specification {
             repository.findOne(entity.id) == entity
     }
 
-    def 'save(T): updates entity with compound PK'() {
+    def '#method(T): updates entity with compound PK'() {
         setup:
             repository.save(entities[0])
             def entity = repository.save(entities[1])
@@ -59,10 +61,12 @@ abstract class JdbcRepositoryCompoundPkIT extends Specification {
             entity.passenger = 'Jameson'
             entity.seat = 'C03'
         when:
-            repository.save(entity)
+            repository./$method/(entity)
         then:
             repository.count() == 2
             repository.findOne(entity.id) == new BoardingPass('FOO-100', 2, 'Jameson', 'C03')
+        where:
+            method << ['save', 'update']
     }
 
 

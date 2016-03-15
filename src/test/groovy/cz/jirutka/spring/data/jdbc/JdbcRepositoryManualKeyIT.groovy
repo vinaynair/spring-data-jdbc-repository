@@ -26,6 +26,7 @@ import org.springframework.data.domain.Sort.Order
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.annotation.Resource
 import javax.sql.DataSource
@@ -34,6 +35,7 @@ import java.sql.Date
 import static org.springframework.data.domain.Sort.Direction.ASC
 import static org.springframework.data.domain.Sort.Direction.DESC
 
+@Unroll
 @Transactional
 abstract class JdbcRepositoryManualKeyIT extends Specification {
 
@@ -193,7 +195,7 @@ abstract class JdbcRepositoryManualKeyIT extends Specification {
             thrown DuplicateKeyException
     }
 
-    def 'save(T): updates the record when already exists'() {
+    def '#method(T): updates the record when already exists'() {
         setup:
             deleteAllUsers()
         and:
@@ -201,9 +203,31 @@ abstract class JdbcRepositoryManualKeyIT extends Specification {
             entity.enabled = false
             entity.reputation = 42
         when:
-            repository.save(entity)
+            repository./$method/(entity)
         then:
             repository.findOne(entity.id) == new User(entity.id, entity.dateOfBirth, 42, false)
+        where:
+            method << ['save', 'update']
+    }
+
+    def 'update(): throws NoRecordUpdatedException when record does not exist'() {
+        setup:
+            deleteAllUsers()
+        when:
+            repository.update(entities['Emma'])
+        then:
+            def ex = thrown(NoRecordUpdatedException)
+            ex.tableName == repository.tableDesc.tableName
+            ex.id == ['Emma']
+    }
+
+    def 'update(): throws IllegalArgumentException when given entity with null id'() {
+        setup:
+            deleteAllUsers()
+        when:
+            repository.update(new User(null, someDateOfBirth, 0, true))
+        then:
+            thrown IllegalArgumentException
     }
 
 

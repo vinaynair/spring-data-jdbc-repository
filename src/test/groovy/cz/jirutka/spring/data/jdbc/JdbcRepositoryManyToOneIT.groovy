@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.annotation.Resource
 import java.sql.Date
@@ -33,6 +34,7 @@ import static java.util.Calendar.JANUARY
 import static org.springframework.data.domain.Sort.Direction.ASC
 import static org.springframework.data.domain.Sort.Direction.DESC
 
+@Unroll
 @Transactional
 abstract class JdbcRepositoryManyToOneIT extends Specification {
 
@@ -73,17 +75,19 @@ abstract class JdbcRepositoryManyToOneIT extends Specification {
             actual.user == expected.user
     }
 
-    def "save(T): update entity's association"() {
+    def "#method(T): updates entity's association"() {
         setup:
             def firstUser = userRepository.save(new User('First user', someDate, 10, false))
             def comment = repository.save(entities[0])
         when:
             comment.user = firstUser
-            repository.save(comment)
+            repository./$method/(comment)
         then:
             repository.count() == 1
             def result = repository.findOne(comment.id)
             result.user == firstUser
+        where:
+            method << ['save', 'update']
     }
 
 

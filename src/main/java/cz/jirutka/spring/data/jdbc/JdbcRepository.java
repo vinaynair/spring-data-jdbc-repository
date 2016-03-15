@@ -42,11 +42,11 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
      * entity.isNew()} returns true, then it creates a new record; otherwise it
      * updates the existing one.
      *
-     * Use the returned instance for further operations as the save operation
-     * might have changed the entity instance completely.
+     * <p>Use the returned instance for further operations as the save
+     * operation might have changed the entity instance completely.</p>
      *
      * @param entity
-     * @return the saved entity
+     * @return A saved entity.
      * @throws IllegalArgumentException if the given entity is null.
      */
     <S extends T> S save(S entity);
@@ -56,8 +56,24 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
      *
      * @see #save(S)
      * @param entities
-     * @return the saved entities
+     * @return Saved entities.
      * @throws IllegalArgumentException if one of the given entities is null.
      */
     <S extends T> List<S> save(Iterable<S> entities);
+
+    /**
+     * Updates the given entity. If no record with the entity's ID exists in
+     * the database, then it throws an exception.
+     *
+     * <p>Use the returned instance for further operations as the update
+     * operation might have changed the entity instance.</p>
+     *
+     * @param entity
+     * @return An updated entity.
+     * @throws NoRecordUpdatedException if the entity doesn't exist (i.e. no
+     *         record has been updated).
+     * @throws IllegalArgumentException if some of the properties mapped to the
+     *         entity's primary key are null.
+     */
+    <S extends T> S update(S entity);
 }

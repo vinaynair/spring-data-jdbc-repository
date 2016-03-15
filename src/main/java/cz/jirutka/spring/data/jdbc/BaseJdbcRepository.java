@@ -251,6 +251,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         return new PageImpl<>(jdbcOps.query(query, rowMapper), page, count());
     }
 
+    @Override
     public <S extends T> S update(S entity) {
         Map<String, Object> columns = preUpdate(entity, columns(entity));
 

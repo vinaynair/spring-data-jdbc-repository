@@ -22,9 +22,11 @@ import cz.jirutka.spring.data.jdbc.fixtures.User
 import cz.jirutka.spring.data.jdbc.fixtures.UserRepository
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.annotation.Resource
 
+@Unroll
 @Transactional
 abstract class JdbcRepositoryGeneratedKeyIT extends Specification {
 
@@ -59,7 +61,7 @@ abstract class JdbcRepositoryGeneratedKeyIT extends Specification {
             first.id < second.id
     }
 
-    def 'save(T): updates the record when already exists'() {
+    def '#method(T): updates the record when already exists'() {
         given:
             def oldDate = new Date(100000000)
             def newDate = new Date(200000000)
@@ -67,10 +69,12 @@ abstract class JdbcRepositoryGeneratedKeyIT extends Specification {
             def comment = repository.save(new Comment(null, someUser, 'Some content', oldDate, 0))
             def modifiedComment = new Comment(comment.id, someUser, 'New content', newDate, 1)
         when:
-            def updatedComment = repository.save(modifiedComment)
+            def updatedComment = repository./$method/(modifiedComment)
         then:
             repository.count() == 1
             updatedComment == modifiedComment
+        where:
+            method << ['save', 'update']
     }
 
 
