@@ -30,6 +30,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.support.PersistableEntityInformation;
 import org.springframework.data.repository.core.support.ReflectionEntityInformation;
+import org.springframework.jdbc.JdbcUpdateAffectedIncorrectNumberOfRowsException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -253,15 +254,26 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     public <S extends T> S update(S entity) {
         Map<String, Object> columns = preUpdate(entity, columns(entity));
 
-        List<Object> idValues = removeIdColumns(columns);
+        List<Object> idValues = removeIdColumns(columns);  // modifies the columns list!
         String updateQuery = sqlGenerator.update(table, columns);
 
-        for (int i = 0; i < table.getPkColumns().size(); ++i) {
+        if (idValues.contains(null)) {
+            throw new IllegalArgumentException("Entity's ID contains null values");
+        }
+
+        for (int i = 0; i < table.getPkColumns().size(); i++) {
             columns.put(table.getPkColumns().get(i), idValues.get(i));
         }
         Object[] queryParams = columns.values().toArray();
 
         int rowsAffected = jdbcOps.update(updateQuery, queryParams);
+
+        if (rowsAffected < 1) {
+            throw new NoRecordUpdatedException(table.getTableName(), idValues.toArray());
+        }
+        if (rowsAffected > 1) {
+            throw new JdbcUpdateAffectedIncorrectNumberOfRowsException(updateQuery, 1, rowsAffected);
+        }
 
         return postUpdate(entity, rowsAffected);
     }
