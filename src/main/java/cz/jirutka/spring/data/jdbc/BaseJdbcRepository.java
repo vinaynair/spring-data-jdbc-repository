@@ -60,14 +60,16 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     private final EntityInformation<T, ID> entityInfo;
     private final TableDescription table;
-
     private final RowMapper<T> rowMapper;
     private final RowUnmapper<T> rowUnmapper;
 
+    // Read-only after initialization (invoking afterPropertiesSet()).
     private DataSource dataSource;
     private JdbcOperations jdbcOperations;
     private SqlGeneratorFactory sqlGeneratorFactory = SqlGeneratorFactory.getInstance();
     private SqlGenerator sqlGenerator;
+
+    private boolean initialized;
 
 
     public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
@@ -105,25 +107,52 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         if (sqlGenerator == null) {
             sqlGenerator = sqlGeneratorFactory.getGenerator(dataSource);
         }
+        initialized = true;
     }
 
+    /**
+     * @param dataSource The DataSource to use (required).
+     * @throws IllegalStateException if invoked after initialization
+     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     */
     @Autowired
     public void setDataSource(DataSource dataSource) {
+        throwOnChangeAfterInitialization("dataSource");
         this.dataSource = dataSource;
     }
 
+    /**
+     * @param jdbcOperations If not set, {@link JdbcTemplate} is created.
+     * @throws IllegalStateException if invoked after initialization
+     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     */
     @Autowired(required = false)
     public void setJdbcOperations(JdbcOperations jdbcOperations) {
+        throwOnChangeAfterInitialization("jdbcOperations");
         this.jdbcOperations = jdbcOperations;
     }
 
+    /**
+     * @param sqlGeneratorFactory If not set, {@link SqlGeneratorFactory#getInstance()}
+     *        is used.
+     * @throws IllegalStateException if invoked after initialization
+     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     */
     @Autowired(required = false)
     public void setSqlGeneratorFactory(SqlGeneratorFactory sqlGeneratorFactory) {
+        throwOnChangeAfterInitialization("sqlGeneratorFactory");
         this.sqlGeneratorFactory = sqlGeneratorFactory;
     }
 
+    /**
+     * @param sqlGenerator If not set, then it's obtained from
+     *        {@link SqlGeneratorFactory}.
+     * @throws IllegalStateException if invoked after initialization
+     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     */
     @Autowired(required = false)
     public void setSqlGenerator(SqlGenerator sqlGenerator) {
+        throwOnChangeAfterInitialization("sqlGenerator");
         this.sqlGenerator = sqlGenerator;
     }
 
@@ -365,5 +394,12 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
             return new PersistableEntityInformation(entityType);
         }
         return new ReflectionEntityInformation(entityType);
+    }
+
+    private void throwOnChangeAfterInitialization(String propertyName) {
+        if (initialized) {
+            throw new IllegalStateException(
+                propertyName + " should not be changed after initialization");
+        }
     }
 }
