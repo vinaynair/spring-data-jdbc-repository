@@ -59,10 +59,10 @@ public class SqlGenerator {
     public String selectAll(TableDescription table, Pageable page) {
         Sort sort = page.getSort() != null ? page.getSort() : sortById(table);
 
-        return format("SELECT a__.* FROM ("
-                + "SELECT row_number() OVER (%s) AS ROW_NUM, t__.* FROM (%s) t__"
-                + ") a__ WHERE a__.row_num BETWEEN %s AND %s",
-            orderByClause(sort), selectAll(table),
+        return format("SELECT t2__.* FROM ( "
+                + "SELECT row_number() OVER (ORDER BY %s) AS rn__, t1__.* FROM ( %s ) t1__ "
+                + ") t2__ WHERE t2__.rn__ BETWEEN %s AND %s",
+            orderByExpression(sort), selectAll(table),
             page.getOffset() + 1, page.getOffset() + page.getPageSize());
     }
 
@@ -104,10 +104,6 @@ public class SqlGenerator {
         return format("SELECT 1 FROM %s WHERE %s", table.getTableName(), idPredicate(table));
     }
 
-
-    protected String limitClause(Pageable page) {
-        return format(" LIMIT %d, %d", page.getOffset(), page.getPageSize());
-    }
 
     protected String orderByClause(Sort sort) {
         return " ORDER BY " + orderByExpression(sort);
