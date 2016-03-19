@@ -18,7 +18,6 @@ package cz.jirutka.spring.data.jdbc
 
 import cz.jirutka.spring.data.jdbc.fixtures.User
 import cz.jirutka.spring.data.jdbc.fixtures.UserRepository
-import cz.jirutka.spring.data.jdbc.sql.DefaultSqlGenerator
 import org.h2.jdbcx.JdbcDataSource
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.transaction.TransactionStatus
@@ -30,7 +29,7 @@ class StandaloneUsageIT extends Specification {
     final JDBC_URL = "jdbc:h2:mem:DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:schema_h2.sql'"
 
     def dataSource = new JdbcDataSource(url: JDBC_URL)
-    def repository = new UserRepository(dataSource: dataSource, sqlGenerator: new DefaultSqlGenerator())
+    def repository = new UserRepository(dataSource: dataSource)
 
 
     def 'start repository without Spring'() {

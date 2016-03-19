@@ -18,11 +18,8 @@ package cz.jirutka.spring.data.jdbc;
 
 import cz.jirutka.spring.data.jdbc.sql.DefaultSqlGenerator;
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -59,7 +56,7 @@ import static java.util.Arrays.asList;
  * Implementation of {@link PagingAndSortingRepository} using {@link JdbcTemplate}
  */
 public abstract class BaseJdbcRepository<T, ID extends Serializable>
-        implements JdbcRepository<T, ID>, InitializingBean, BeanFactoryAware {
+        implements JdbcRepository<T, ID>, InitializingBean {
 
     private final EntityInformation<T, ID> entityInfo;
     private final TableDescription table;
@@ -67,14 +64,13 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     private final RowMapper<T> rowMapper;
     private final RowUnmapper<T> rowUnmapper;
 
-    private SqlGenerator sqlGenerator;
-    private BeanFactory beanFactory;
+    private SqlGenerator sqlGenerator = new DefaultSqlGenerator();
+    private DataSource dataSource;
     private JdbcOperations jdbcOperations;
 
 
-    public BaseJdbcRepository(EntityInformation<T, ID> entityInformation,
-                              RowMapper<T> rowMapper, RowUnmapper<T> rowUnmapper,
-                              SqlGenerator sqlGenerator, TableDescription table) {
+    public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
+                              RowUnmapper<T> rowUnmapper, TableDescription table) {
         Assert.notNull(rowMapper);
         Assert.notNull(rowUnmapper);
         Assert.notNull(table);
@@ -82,21 +78,15 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         this.entityInfo = entityInformation != null ? entityInformation : createEntityInformation();
         this.rowUnmapper = rowUnmapper;
         this.rowMapper = rowMapper;
-        this.sqlGenerator = sqlGenerator;
         this.table = table;
     }
 
-    public BaseJdbcRepository(RowMapper<T> rowMapper, RowUnmapper<T> rowUnmapper,
-                              SqlGenerator sqlGenerator, TableDescription table) {
-        this(null, rowMapper, rowUnmapper, sqlGenerator, table);
-    }
-
     public BaseJdbcRepository(RowMapper<T> rowMapper, RowUnmapper<T> rowUnmapper, TableDescription table) {
-        this(rowMapper, rowUnmapper, null, table);
+        this(null, rowMapper, rowUnmapper, table);
     }
 
     public BaseJdbcRepository(RowMapper<T> rowMapper, RowUnmapper<T> rowUnmapper, String tableName, String idColumn) {
-        this(rowMapper, rowUnmapper, null, new TableDescription(tableName, idColumn));
+        this(rowMapper, rowUnmapper, new TableDescription(tableName, idColumn));
     }
 
     public BaseJdbcRepository(RowMapper<T> rowMapper, RowUnmapper<T> rowUnmapper, String tableName) {
@@ -105,28 +95,29 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        obtainJdbcTemplate();
-        if (sqlGenerator == null) {
-            obtainSqlGenerator();
+    public void afterPropertiesSet() {
+        Assert.notNull(dataSource, "dataSource must be provided");
+        Assert.notNull(jdbcOperations, "jdbcOperations must not be null");
+        Assert.notNull(sqlGenerator, "sqlGenerator must not be null");
+    }
+
+    @Autowired
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+
+        if (jdbcOperations == null) {
+            jdbcOperations = new JdbcTemplate(dataSource);
         }
     }
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
-
-    public void setSqlGenerator(SqlGenerator sqlGenerator) {
-        this.sqlGenerator = sqlGenerator;
-    }
-
+    @Autowired(required = false)
     public void setJdbcOperations(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
     }
 
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcOperations = new JdbcTemplate(dataSource);
+    @Autowired(required = false)
+    public void setSqlGenerator(SqlGenerator sqlGenerator) {
+        this.sqlGenerator = sqlGenerator;
     }
 
 
@@ -301,23 +292,6 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     private ID id(T entity) {
         return getEntityInfo().getId(entity);
-    }
-
-    private void obtainSqlGenerator() {
-        try {
-            sqlGenerator = beanFactory.getBean(SqlGenerator.class);
-        } catch (NoSuchBeanDefinitionException e) {
-            sqlGenerator = new DefaultSqlGenerator();
-        }
-    }
-
-    private void obtainJdbcTemplate() {
-        try {
-            jdbcOperations = beanFactory.getBean(JdbcOperations.class);
-        } catch (NoSuchBeanDefinitionException e) {
-            DataSource dataSource = beanFactory.getBean(DataSource.class);
-            jdbcOperations = new JdbcTemplate(dataSource);
-        }
     }
 
     private <S extends T> S createWithManuallyAssignedKey(S entity, Map<String, Object> columns) {
