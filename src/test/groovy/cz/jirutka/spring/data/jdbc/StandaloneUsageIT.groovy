@@ -36,6 +36,11 @@ class StandaloneUsageIT extends Specification {
         repository.afterPropertiesSet()
     }
 
+    def cleanup() {
+        repository.deleteAll()
+    }
+
+
     def 'start repository without Spring'() {
         expect:
             repository.findAll().isEmpty()
