@@ -1,5 +1,4 @@
 /*
- * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
  * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +15,23 @@
  */
 package cz.jirutka.spring.data.jdbc.sql;
 
+import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import static java.lang.String.format;
 
-public class DerbySqlGenerator extends SqlGenerator {
+/**
+ * SQL Generator for DB servers that support the SQL:2008 standard OFFSET
+ * feature: Apache Derby, Microsoft SQL Server 2012, and Oracle 12c.
+ */
+public class SQL2008SqlGenerator extends SqlGenerator {
 
     @Override
-    protected String limitClause(Pageable page) {
-        return format(" OFFSET %d ROWS FETCH NEXT %d ROWS ONLY",
-                page.getOffset(), page.getPageSize());
+    public String selectAll(TableDescription table, Pageable page) {
+        Sort sort = page.getSort() != null ? page.getSort() : sortById(table);
+
+        return format("%s OFFSET %d ROWS FETCH NEXT %d ROW ONLY",
+            selectAll(table, sort), page.getOffset(), page.getPageSize());
     }
 }

@@ -1,5 +1,4 @@
 /*
- * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
  * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +15,20 @@
  */
 package cz.jirutka.spring.data.jdbc.sql;
 
+import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 
 import static java.lang.String.format;
 
-public class PostgreSqlGenerator extends SqlGenerator {
+/**
+ * SQL Generator for DB servers that support LIMIT ... OFFSET clause:
+ * PostgreSQL, H2, HSQLDB, SQLite, MariaDB, and MySQL.
+ */
+public class LimitOffsetSqlGenerator extends SqlGenerator {
 
     @Override
-    protected String limitClause(Pageable page) {
-        return format(" LIMIT %d OFFSET %d", page.getPageSize(), page.getOffset());
+    public String selectAll(TableDescription table, Pageable page) {
+        return format("%s LIMIT %d OFFSET %d",
+            selectAll(table, page.getSort()), page.getPageSize(), page.getOffset());
     }
 }

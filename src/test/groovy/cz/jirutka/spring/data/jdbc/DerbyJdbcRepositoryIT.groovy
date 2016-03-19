@@ -18,7 +18,7 @@ package cz.jirutka.spring.data.jdbc
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.fixtures.CommentRepository
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
-import cz.jirutka.spring.data.jdbc.sql.DerbySqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SQL2008SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
@@ -68,7 +68,7 @@ class DerbyTestConfig extends AbstractTestConfig {
     }
 
     @Bean SqlGenerator sqlGenerator() {
-        new DerbySqlGenerator()
+        new SQL2008SqlGenerator()
     }
 
     @Bean DataSource dataSource() {

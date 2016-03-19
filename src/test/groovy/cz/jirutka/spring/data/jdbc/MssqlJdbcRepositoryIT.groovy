@@ -16,7 +16,6 @@
 package cz.jirutka.spring.data.jdbc
 
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
-import cz.jirutka.spring.data.jdbc.sql.MssqlSqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
@@ -62,6 +61,6 @@ class MssqlTestConfig extends Mssql2012TestConfig {
     }
 
     @Bean SqlGenerator sqlGenerator() {
-        new MssqlSqlGenerator()
+        new SqlGenerator()
     }
 }

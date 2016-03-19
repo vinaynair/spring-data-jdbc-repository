@@ -17,6 +17,8 @@ package cz.jirutka.spring.data.jdbc
 
 import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
+import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -55,6 +57,10 @@ class MySqlTestConfig extends AbstractTestConfig {
 
     final initSqlScript = 'schema_mysql.sql'
 
+
+    @Bean SqlGenerator sqlGenerator() {
+        new LimitOffsetSqlGenerator()
+    }
 
     @Bean DataSource dataSource() {
         new MysqlConnectionPoolDataSource (

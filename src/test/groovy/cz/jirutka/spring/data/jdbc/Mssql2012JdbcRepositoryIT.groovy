@@ -17,7 +17,7 @@ package cz.jirutka.spring.data.jdbc
 
 import com.zaxxer.hikari.HikariDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
-import cz.jirutka.spring.data.jdbc.sql.Mssql2012SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SQL2008SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
@@ -59,7 +59,7 @@ class Mssql2012TestConfig extends AbstractTestConfig {
 
 
     @Bean SqlGenerator sqlGenerator() {
-        new Mssql2012SqlGenerator()
+        new SQL2008SqlGenerator()
     }
 
     @Bean(destroyMethod = 'shutdown')

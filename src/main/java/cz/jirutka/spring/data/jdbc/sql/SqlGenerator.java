@@ -19,6 +19,7 @@ package cz.jirutka.spring.data.jdbc.sql;
 import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.util.Assert;
 
@@ -31,6 +32,9 @@ import static cz.jirutka.spring.data.jdbc.internal.StringUtils.repeat;
 import static java.lang.String.format;
 import static org.springframework.util.StringUtils.collectionToDelimitedString;
 
+/**
+ * SQL Generator compatible with SQL:99.
+ */
 public class SqlGenerator {
 
     static final String
@@ -53,7 +57,13 @@ public class SqlGenerator {
     }
 
     public String selectAll(TableDescription table, Pageable page) {
-        return selectAll(table, page.getSort()) + limitClause(page);
+        Sort sort = page.getSort() != null ? page.getSort() : sortById(table);
+
+        return format("SELECT a__.* FROM ("
+                + "SELECT row_number() OVER (%s) AS ROW_NUM, t__.* FROM (%s) t__"
+                + ") a__ WHERE a__.row_num BETWEEN %s AND %s",
+            orderByClause(sort), selectAll(table),
+            page.getOffset() + 1, page.getOffset() + page.getPageSize());
     }
 
     public String selectAll(TableDescription table, Sort sort) {
@@ -113,6 +123,10 @@ public class SqlGenerator {
             if (it.hasNext()) sb.append(COMMA);
         }
         return sb.toString();
+    }
+
+    protected Sort sortById(TableDescription table) {
+        return new Sort(Direction.ASC, table.getPkColumns());
     }
 
 
