@@ -40,7 +40,7 @@ class SqlGeneratorTest extends Specification {
         pkColumns: ['tid']
     )
 
-    def getSqlGenerator() { new SqlGenerator() }
+    def getSqlGenerator() { new DefaultSqlGenerator() }
 
 
     def 'count()'() {

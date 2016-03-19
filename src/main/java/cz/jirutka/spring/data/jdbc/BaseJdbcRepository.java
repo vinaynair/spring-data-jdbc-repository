@@ -16,6 +16,7 @@
  */
 package cz.jirutka.spring.data.jdbc;
 
+import cz.jirutka.spring.data.jdbc.sql.DefaultSqlGenerator;
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -306,7 +307,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         try {
             sqlGenerator = beanFactory.getBean(SqlGenerator.class);
         } catch (NoSuchBeanDefinitionException e) {
-            sqlGenerator = new SqlGenerator();
+            sqlGenerator = new DefaultSqlGenerator();
         }
     }
 

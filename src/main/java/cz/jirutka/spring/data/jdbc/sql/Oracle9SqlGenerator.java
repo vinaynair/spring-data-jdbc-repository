@@ -28,7 +28,7 @@ import static java.lang.String.format;
  * @see <a href="https://explainextended.com/2009/05/06/oracle-row_number-vs-rownum/">
  *      Oracle: ROW_NUMBER vs ROWNUM</a>
  */
-public class Oracle9SqlGenerator extends SqlGenerator {
+public class Oracle9SqlGenerator extends DefaultSqlGenerator {
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {

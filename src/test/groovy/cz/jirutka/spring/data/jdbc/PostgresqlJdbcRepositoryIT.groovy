@@ -15,10 +15,10 @@
  */
 package cz.jirutka.spring.data.jdbc
 
-import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import com.zaxxer.hikari.HikariDataSource
+import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

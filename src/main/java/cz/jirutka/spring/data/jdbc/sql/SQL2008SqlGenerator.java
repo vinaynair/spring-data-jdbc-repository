@@ -25,7 +25,7 @@ import static java.lang.String.format;
  * SQL Generator for DB servers that support the SQL:2008 standard OFFSET
  * feature: Apache Derby, Microsoft SQL Server 2012, and Oracle 12c.
  */
-public class SQL2008SqlGenerator extends SqlGenerator {
+public class SQL2008SqlGenerator extends DefaultSqlGenerator {
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {

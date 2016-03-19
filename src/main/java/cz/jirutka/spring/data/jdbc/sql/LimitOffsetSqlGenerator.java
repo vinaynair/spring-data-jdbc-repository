@@ -24,7 +24,7 @@ import static java.lang.String.format;
  * SQL Generator for DB servers that support LIMIT ... OFFSET clause:
  * PostgreSQL, H2, HSQLDB, SQLite, MariaDB, and MySQL.
  */
-public class LimitOffsetSqlGenerator extends SqlGenerator {
+public class LimitOffsetSqlGenerator extends DefaultSqlGenerator {
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {

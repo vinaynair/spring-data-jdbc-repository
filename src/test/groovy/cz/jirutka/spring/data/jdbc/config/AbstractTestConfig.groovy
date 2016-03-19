@@ -16,11 +16,12 @@
  */
 package cz.jirutka.spring.data.jdbc.config
 
-import cz.jirutka.spring.data.jdbc.fixtures.CommentRepository
-import cz.jirutka.spring.data.jdbc.fixtures.UserRepository
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import cz.jirutka.spring.data.jdbc.fixtures.BoardingPassRepository
+import cz.jirutka.spring.data.jdbc.fixtures.CommentRepository
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
+import cz.jirutka.spring.data.jdbc.fixtures.UserRepository
+import cz.jirutka.spring.data.jdbc.sql.DefaultSqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.core.io.ClassPathResource
@@ -62,7 +63,7 @@ abstract class AbstractTestConfig {
     }
 
     @Bean SqlGenerator sqlGenerator() {
-        new SqlGenerator()
+        new DefaultSqlGenerator()
     }
 
     @Bean CommentRepository commentRepository() {
