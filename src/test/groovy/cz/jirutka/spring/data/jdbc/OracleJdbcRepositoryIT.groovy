@@ -18,7 +18,6 @@ package cz.jirutka.spring.data.jdbc
 import com.zaxxer.hikari.HikariDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.Oracle9SqlGenerator
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
@@ -61,10 +60,6 @@ class OracleTestConfig extends AbstractTestConfig {
 
     static final String ORACLE_HOST = env('ORACLE_HOST', 'localhost')
 
-
-    @Bean SqlGenerator sqlGenerator() {
-        new Oracle9SqlGenerator()
-    }
 
     @Bean(destroyMethod = 'shutdown')
     def DataSource dataSource() {

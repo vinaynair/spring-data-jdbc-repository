@@ -17,7 +17,6 @@ package cz.jirutka.spring.data.jdbc
 
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.h2.jdbcx.JdbcDataSource
@@ -56,10 +55,6 @@ class H2SqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
 @Configuration
 @EnableTransactionManagement
 class H2TestConfig extends AbstractTestConfig {
-
-    @Bean SqlGenerator sqlGenerator() {
-        new LimitOffsetSqlGenerator()
-    }
 
     @Bean DataSource dataSource() {
         new JdbcDataSource (

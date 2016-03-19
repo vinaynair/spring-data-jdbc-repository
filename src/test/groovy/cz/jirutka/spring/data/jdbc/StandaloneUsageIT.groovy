@@ -32,6 +32,10 @@ class StandaloneUsageIT extends Specification {
     def repository = new UserRepository(dataSource: dataSource)
 
 
+    def setup() {
+        repository.afterPropertiesSet()
+    }
+
     def 'start repository without Spring'() {
         expect:
             repository.findAll().isEmpty()

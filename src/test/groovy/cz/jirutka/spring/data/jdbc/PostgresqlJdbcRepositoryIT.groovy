@@ -18,7 +18,6 @@ package cz.jirutka.spring.data.jdbc
 import com.zaxxer.hikari.HikariDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
@@ -63,10 +62,6 @@ class PostgresqlTestConfig extends AbstractTestConfig {
 
     final initSqlScript = 'schema_postgresql.sql'
 
-
-    @Bean SqlGenerator sqlGenerator() {
-        new LimitOffsetSqlGenerator()
-    }
 
     @Bean(destroyMethod = 'shutdown')
     def DataSource dataSource() {

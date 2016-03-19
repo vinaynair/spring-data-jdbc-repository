@@ -16,8 +16,8 @@
  */
 package cz.jirutka.spring.data.jdbc;
 
-import cz.jirutka.spring.data.jdbc.sql.DefaultSqlGenerator;
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator;
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
@@ -64,9 +64,10 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     private final RowMapper<T> rowMapper;
     private final RowUnmapper<T> rowUnmapper;
 
-    private SqlGenerator sqlGenerator = new DefaultSqlGenerator();
     private DataSource dataSource;
     private JdbcOperations jdbcOperations;
+    private SqlGeneratorFactory sqlGeneratorFactory = SqlGeneratorFactory.getInstance();
+    private SqlGenerator sqlGenerator;
 
 
     public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
@@ -97,22 +98,28 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     @Override
     public void afterPropertiesSet() {
         Assert.notNull(dataSource, "dataSource must be provided");
-        Assert.notNull(jdbcOperations, "jdbcOperations must not be null");
-        Assert.notNull(sqlGenerator, "sqlGenerator must not be null");
+
+        if (jdbcOperations == null) {
+            jdbcOperations = new JdbcTemplate(dataSource);
+        }
+        if (sqlGenerator == null) {
+            sqlGenerator = sqlGeneratorFactory.getGenerator(dataSource);
+        }
     }
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
-
-        if (jdbcOperations == null) {
-            jdbcOperations = new JdbcTemplate(dataSource);
-        }
     }
 
     @Autowired(required = false)
     public void setJdbcOperations(JdbcOperations jdbcOperations) {
         this.jdbcOperations = jdbcOperations;
+    }
+
+    @Autowired(required = false)
+    public void setSqlGeneratorFactory(SqlGeneratorFactory sqlGeneratorFactory) {
+        this.sqlGeneratorFactory = sqlGeneratorFactory;
     }
 
     @Autowired(required = false)

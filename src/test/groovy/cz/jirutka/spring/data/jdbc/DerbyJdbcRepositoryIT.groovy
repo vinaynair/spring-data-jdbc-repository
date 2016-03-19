@@ -19,7 +19,6 @@ import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.fixtures.CommentRepository
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
 import cz.jirutka.spring.data.jdbc.sql.SQL2008SqlGenerator
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
@@ -60,7 +59,6 @@ class DerbySqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
 @EnableTransactionManagement
 class DerbyTestConfig extends AbstractTestConfig {
 
-
     @Bean CommentRepository commentRepository() {
         new CommentRepository(new TableDescription('COMMENTS', 'ID'))
     }
@@ -71,10 +69,6 @@ class DerbyTestConfig extends AbstractTestConfig {
             fromClause: 'COMMENTS JOIN USERS ON COMMENTS.user_name = USERS.user_name',
             pkColumns: ['ID']
         ))
-    }
-
-    @Bean SqlGenerator sqlGenerator() {
-        new SQL2008SqlGenerator()
     }
 
     @Bean DataSource dataSource() {

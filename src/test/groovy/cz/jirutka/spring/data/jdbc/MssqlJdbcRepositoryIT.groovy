@@ -16,10 +16,7 @@
 package cz.jirutka.spring.data.jdbc
 
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
-import cz.jirutka.spring.data.jdbc.sql.DefaultSqlGenerator
-import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
 import groovy.transform.AnnotationCollector
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.EnableTransactionManagement
@@ -59,9 +56,5 @@ class MssqlTestConfig extends Mssql2012TestConfig {
                 pkColumns: ['ID']
             )
         )
-    }
-
-    @Bean SqlGenerator sqlGenerator() {
-        new DefaultSqlGenerator()
     }
 }
