@@ -65,7 +65,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     // Read-only after initialization (invoking afterPropertiesSet()).
     private DataSource dataSource;
-    private JdbcOperations jdbcOperations;
+    private JdbcOperations jdbcOps;
     private SqlGeneratorFactory sqlGeneratorFactory = SqlGeneratorFactory.getInstance();
     private SqlGenerator sqlGenerator;
 
@@ -101,8 +101,8 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     public void afterPropertiesSet() {
         Assert.notNull(dataSource, "dataSource must be provided");
 
-        if (jdbcOperations == null) {
-            jdbcOperations = new JdbcTemplate(dataSource);
+        if (jdbcOps == null) {
+            jdbcOps = new JdbcTemplate(dataSource);
         }
         if (sqlGenerator == null) {
             sqlGenerator = sqlGeneratorFactory.getGenerator(dataSource);
@@ -122,14 +122,14 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     }
 
     /**
-     * @param jdbcOperations If not set, {@link JdbcTemplate} is created.
+     * @param jdbcOps If not set, {@link JdbcTemplate} is created.
      * @throws IllegalStateException if invoked after initialization
      *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
      */
     @Autowired(required = false)
-    public void setJdbcOperations(JdbcOperations jdbcOperations) {
+    public void setJdbcOperations(JdbcOperations jdbcOps) {
         throwOnChangeAfterInitialization("jdbcOperations");
-        this.jdbcOperations = jdbcOperations;
+        this.jdbcOps = jdbcOps;
     }
 
     /**
@@ -161,7 +161,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     @Override
     public long count() {
-        return jdbcOperations.queryForObject(sqlGenerator.count(table), Long.class);
+        return jdbcOps.queryForObject(sqlGenerator.count(table), Long.class);
     }
 
     @Override
@@ -172,7 +172,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
             // noinspection unchecked
             id = id((T) id);
         }
-        jdbcOperations.update(sqlGenerator.deleteById(table), wrapToArray(id));
+        jdbcOps.update(sqlGenerator.deleteById(table), wrapToArray(id));
     }
 
     @Override
@@ -189,23 +189,23 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     @Override
     public void deleteAll() {
-        jdbcOperations.update(sqlGenerator.deleteAll(table));
+        jdbcOps.update(sqlGenerator.deleteAll(table));
     }
 
     @Override
     public boolean exists(ID id) {
-        return !jdbcOperations.queryForList(
+        return !jdbcOps.queryForList(
             sqlGenerator.existsById(table), wrapToArray(id), Integer.class).isEmpty();
     }
 
     @Override
     public List<T> findAll() {
-        return jdbcOperations.query(sqlGenerator.selectAll(table), rowMapper);
+        return jdbcOps.query(sqlGenerator.selectAll(table), rowMapper);
     }
 
     @Override
     public T findOne(ID id) {
-        List<T> entityOrEmpty = jdbcOperations.query(
+        List<T> entityOrEmpty = jdbcOps.query(
             sqlGenerator.selectById(table), wrapToArray(id), rowMapper);
 
         return entityOrEmpty.isEmpty() ? null : entityOrEmpty.get(0);
@@ -232,20 +232,20 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         if (idsList.isEmpty()) {
             return Collections.emptyList();
         }
-        return jdbcOperations.query(
+        return jdbcOps.query(
             sqlGenerator.selectByIds(table, idsList.size()), rowMapper, flatten(idsList));
     }
 
     @Override
     public List<T> findAll(Sort sort) {
-        return jdbcOperations.query(sqlGenerator.selectAll(table, sort), rowMapper);
+        return jdbcOps.query(sqlGenerator.selectAll(table, sort), rowMapper);
     }
 
     @Override
     public Page<T> findAll(Pageable page) {
         String query = sqlGenerator.selectAll(table, page);
 
-        return new PageImpl<>(jdbcOperations.query(query, rowMapper), page, count());
+        return new PageImpl<>(jdbcOps.query(query, rowMapper), page, count());
     }
 
     public <S extends T> S update(S entity) {
@@ -259,7 +259,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         }
         Object[] queryParams = columns.values().toArray();
 
-        int rowsAffected = jdbcOperations.update(updateQuery, queryParams);
+        int rowsAffected = jdbcOps.update(updateQuery, queryParams);
 
         return postUpdate(entity, rowsAffected);
     }
@@ -334,7 +334,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         String createQuery = sqlGenerator.insert(table, columns);
         Object[] queryParams = columns.values().toArray();
 
-        jdbcOperations.update(createQuery, queryParams);
+        jdbcOps.update(createQuery, queryParams);
 
         return postCreate(entity, null);
     }
@@ -346,7 +346,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         final Object[] queryParams = columns.values().toArray();
         final GeneratedKeyHolder key = new GeneratedKeyHolder();
 
-        jdbcOperations.update(new PreparedStatementCreator() {
+        jdbcOps.update(new PreparedStatementCreator() {
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 String idColumnName = table.getPkColumns().get(0);
                 PreparedStatement ps = con.prepareStatement(createQuery, new String[]{idColumnName});
