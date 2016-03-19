@@ -19,6 +19,7 @@ import com.zaxxer.hikari.HikariDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.Oracle9SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +44,11 @@ class OracleJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 
 @OracleTestContext
 class OracleJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
+
+@OracleTestContext
+class OracleSqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
+    Class getExpectedGenerator() { Oracle9SqlGenerator }
+}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('oracle') : isPortInUse(ORACLE_HOST, 1521) })

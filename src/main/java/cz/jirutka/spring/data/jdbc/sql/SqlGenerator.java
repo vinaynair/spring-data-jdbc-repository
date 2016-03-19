@@ -20,9 +20,22 @@ import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Map;
 
 public interface SqlGenerator {
+
+    /**
+     * This method is used by {@link SqlGeneratorFactory} to select a right
+     * SQL Generator.
+     *
+     * @param metadata The database metadata.
+     * @return Whether is this generator compatible with the database described
+     *         by the given {@code metadata}.
+     */
+    boolean isCompatible(DatabaseMetaData metadata) throws SQLException;
+
 
     String count(TableDescription table);
 

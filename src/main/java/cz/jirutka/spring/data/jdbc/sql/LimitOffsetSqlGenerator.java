@@ -18,13 +18,27 @@ package cz.jirutka.spring.data.jdbc.sql;
 import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.util.List;
+
 import static java.lang.String.format;
+import static java.util.Arrays.asList;
 
 /**
  * SQL Generator for DB servers that support LIMIT ... OFFSET clause:
  * PostgreSQL, H2, HSQLDB, SQLite, MariaDB, and MySQL.
  */
 public class LimitOffsetSqlGenerator extends DefaultSqlGenerator {
+
+    private static final List<String> SUPPORTED_PRODUCTS =
+        asList("PostgreSQL", "H2", "HSQL Database Engine", "MySQL");
+
+
+    @Override
+    public boolean isCompatible(DatabaseMetaData metadata) throws SQLException {
+        return SUPPORTED_PRODUCTS.contains(metadata.getDatabaseProductName());
+    }
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {

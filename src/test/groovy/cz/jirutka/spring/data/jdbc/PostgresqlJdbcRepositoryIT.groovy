@@ -19,6 +19,7 @@ import com.zaxxer.hikari.HikariDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +44,11 @@ class PostgresqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 
 @PostgresqlTestContext
 class PostgresqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
+
+@PostgresqlTestContext
+class PostgresqlSqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
+    Class getExpectedGenerator() { LimitOffsetSqlGenerator }
+}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('postgresql') : isPortInUse(POSTGRESQL_HOST, 5432) })

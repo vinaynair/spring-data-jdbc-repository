@@ -19,6 +19,9 @@ import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+
 import static java.lang.String.format;
 
 /**
@@ -26,6 +29,16 @@ import static java.lang.String.format;
  * feature: Apache Derby, Microsoft SQL Server 2012, and Oracle 12c.
  */
 public class SQL2008SqlGenerator extends DefaultSqlGenerator {
+
+    @Override
+    public boolean isCompatible(DatabaseMetaData metadata) throws SQLException {
+        String productName = metadata.getDatabaseProductName();
+        int majorVersion = metadata.getDatabaseMajorVersion();
+
+        return "Apache Derby".equals(productName)
+            || "Oracle".equals(productName) && majorVersion >= 12
+            || "Microsoft SQL Server".equals(productName) && majorVersion >= 11;  // >= 2012
+    }
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {

@@ -20,6 +20,7 @@ import cz.jirutka.spring.data.jdbc.fixtures.CommentRepository
 import cz.jirutka.spring.data.jdbc.fixtures.CommentWithUserRepository
 import cz.jirutka.spring.data.jdbc.sql.SQL2008SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -44,6 +45,11 @@ class DerbyJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 
 @DerbyTestContext
 class DerbyJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
+
+@DerbyTestContext
+class DerbySqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
+    Class getExpectedGenerator() { SQL2008SqlGenerator }
+}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('embedded') : true })

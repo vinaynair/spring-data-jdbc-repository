@@ -18,6 +18,7 @@ package cz.jirutka.spring.data.jdbc
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.h2.jdbcx.JdbcDataSource
 import org.springframework.context.annotation.Bean
@@ -41,6 +42,11 @@ class H2JdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 
 @H2TestContext
 class H2JdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
+
+@H2TestContext
+class H2SqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
+    Class getExpectedGenerator() { LimitOffsetSqlGenerator }
+}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('embedded') : true })

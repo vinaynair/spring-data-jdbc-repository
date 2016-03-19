@@ -19,6 +19,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.LimitOffsetSqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +44,11 @@ class MySqlJdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 
 @MySqlTestContext
 class MySqlJdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
+
+@MySqlTestContext
+class MySqlSqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
+    Class getExpectedGenerator() { LimitOffsetSqlGenerator }
+}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('mysql') : isPortInUse(MYSQL_HOST, 3306) })

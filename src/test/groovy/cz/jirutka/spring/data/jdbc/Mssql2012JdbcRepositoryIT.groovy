@@ -19,6 +19,7 @@ import com.zaxxer.hikari.HikariDataSource
 import cz.jirutka.spring.data.jdbc.config.AbstractTestConfig
 import cz.jirutka.spring.data.jdbc.sql.SQL2008SqlGenerator
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator
+import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactoryIT
 import groovy.transform.AnnotationCollector
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -43,6 +44,11 @@ class Mssql2012JdbcRepositoryManualKeyIT extends JdbcRepositoryManualKeyIT {}
 
 @Mssql2012TestContext
 class Mssql2012JdbcRepositoryManyToOneIT extends JdbcRepositoryManyToOneIT {}
+
+@Mssql2012TestContext
+class Mssql2012SqlGeneratorFactoryIT extends SqlGeneratorFactoryIT {
+    Class getExpectedGenerator() { SQL2008SqlGenerator }
+}
 
 @AnnotationCollector
 @Requires({ env('CI') ? env('DB').equals('mssql') : isPortInUse(MSSQL_HOST, 1433) })

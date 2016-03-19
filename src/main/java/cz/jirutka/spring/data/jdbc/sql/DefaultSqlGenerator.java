@@ -23,6 +23,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.util.Assert;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,11 @@ public class DefaultSqlGenerator implements SqlGenerator {
             OR = " OR ",
             COMMA = ", ",
             PARAM = " = ?";
+
+
+    public boolean isCompatible(DatabaseMetaData metadata) throws SQLException {
+        return true;
+    }
 
 
     public String count(TableDescription table) {

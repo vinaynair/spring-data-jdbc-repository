@@ -19,6 +19,9 @@ import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+
 import static java.lang.String.format;
 
 /**
@@ -29,6 +32,11 @@ import static java.lang.String.format;
  *      Oracle: ROW_NUMBER vs ROWNUM</a>
  */
 public class Oracle9SqlGenerator extends DefaultSqlGenerator {
+
+    @Override
+    public boolean isCompatible(DatabaseMetaData metadata) throws SQLException {
+        return "Oracle".equals(metadata.getDatabaseProductName());
+    }
 
     @Override
     public String selectAll(TableDescription table, Pageable page) {
