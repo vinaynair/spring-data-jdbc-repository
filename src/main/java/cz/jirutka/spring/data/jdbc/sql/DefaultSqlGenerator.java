@@ -60,7 +60,11 @@ public class DefaultSqlGenerator implements SqlGenerator {
     }
 
     public String deleteById(TableDescription table) {
-        return format("DELETE FROM %s WHERE %s", table.getTableName(), idPredicate(table));
+        return deleteByIds(table, 1);
+    }
+
+    public String deleteByIds(TableDescription table, int idsCount) {
+        return deleteAll(table) + " WHERE " + idsPredicate(table, idsCount);
     }
 
     public String existsById(TableDescription table) {

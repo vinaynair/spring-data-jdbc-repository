@@ -182,8 +182,10 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     @Override
     public void delete(Iterable<? extends T> entities) {
-        for (T t : entities) {
-            delete(t);
+        List<ID> ids = ids(entities);
+
+        if (!ids.isEmpty()) {
+            jdbcOps.update(sqlGenerator.deleteByIds(table, ids.size()), flatten(ids));
         }
     }
 
@@ -342,6 +344,15 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     private ID id(T entity) {
         return getEntityInfo().getId(entity);
+    }
+
+    private List<ID> ids(Iterable<? extends T> entities) {
+        List<ID> ids = new ArrayList<>();
+
+        for (T entity : entities) {
+            ids.add(id(entity));
+        }
+        return ids;
     }
 
     private <S extends T> S createWithManuallyAssignedKey(S entity, Map<String, Object> columns) {

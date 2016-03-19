@@ -67,9 +67,39 @@ class SqlGeneratorTest extends Specification {
     }
 
 
+    def 'deleteByIds(): with idsCount = #idsCount'() {
+        when:
+            sqlGenerator.deleteByIds(table, idsCount)
+        then:
+            thrown IllegalArgumentException
+        where:
+            idsCount << [0, -1]
+    }
+
+    def 'deleteByIds(): when simple PK and given #desc'() {
+        expect:
+            sqlGenerator.deleteByIds(table, idsCount) == "DELETE FROM tab WHERE ${whereClause}"
+        where:
+            idsCount || whereClause        | desc
+            1        || 'tid = ?'          | 'one id'
+            3        || 'tid IN (?, ?, ?)' | 'several ids'
+    }
+
+    def 'deleteByIds(): when composite PK and given #desc'() {
+        setup:
+            table.pkColumns = pkColumns(2)
+        expect:
+            sqlGenerator.deleteByIds(table, idsCount) == "DELETE FROM tab WHERE ${whereClause}"
+        where:
+            idsCount || whereClause                                  | desc
+            1        || pkPredicate(2)                               | 'one id'
+            2        || "(${pkPredicate(2)}) OR (${pkPredicate(2)})" | 'several ids'
+    }
+
+
     def 'existsById(): with #desc'() {
         setup:
-          table.pkColumns = pkColumns(pkSize)
+            table.pkColumns = pkColumns(pkSize)
         expect:
             sqlGenerator.existsById(table) == "SELECT 1 FROM tab WHERE ${pkPredicate(pkSize)}"
         where:
@@ -205,11 +235,11 @@ class SqlGeneratorTest extends Specification {
         'ORDER BY ' + sort.collect { "${it.property} ${it.direction.name()}" }.join(', ')
     }
 
-    def pkColumns(count) {
+    static pkColumns(count) {
         (1..count).collect { "id${it}" }*.toString()
     }
 
-    def pkPredicate(count) {
+    static pkPredicate(count) {
         pkColumns(count).collect { "$it = ?" }.join(' AND ')
     }
 }

@@ -43,6 +43,8 @@ public interface SqlGenerator {
 
     String deleteById(TableDescription table);
 
+    String deleteByIds(TableDescription table, int idsCount);
+
     String existsById(TableDescription table);
 
     String insert(TableDescription table, Map<String, Object> columns);
