@@ -273,12 +273,26 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     }
 
 
-    protected TableDescription getTable() {
-        return table;
-    }
+    ////////// Getters //////////
 
     protected EntityInformation<T, ID> getEntityInfo() {
         return entityInfo;
+    }
+
+    protected JdbcOperations getJdbcOperations() {
+        return jdbcOps;
+    }
+
+    protected SqlGenerator getSqlGenerator() {
+        return sqlGenerator;
+    }
+
+    protected TableDescription getTableDesc() {
+        return table;
+    }
+
+    protected JdbcOperations jdbc() {
+        return jdbcOps;
     }
 
 
