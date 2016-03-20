@@ -17,7 +17,7 @@ package cz.jirutka.spring.data.jdbc.internal;
 
 import static org.springframework.util.ObjectUtils.toObjectArray;
 
-public abstract class ObjectUtils {
+public final class ObjectUtils {
 
     private ObjectUtils() {}
 

@@ -18,7 +18,7 @@ package cz.jirutka.spring.data.jdbc.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class IterableUtils {
+public final class IterableUtils {
 
     private IterableUtils() {}
 

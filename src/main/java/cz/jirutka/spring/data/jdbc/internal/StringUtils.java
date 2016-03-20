@@ -17,7 +17,7 @@ package cz.jirutka.spring.data.jdbc.internal;
 
 import static java.lang.Math.max;
 
-public abstract class StringUtils {
+public final class StringUtils {
 
     private StringUtils() {}
 
