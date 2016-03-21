@@ -44,13 +44,15 @@ abstract class JdbcRepositoryCompoundPkIT extends Specification {
     ]
 
 
-    def 'save(T): inserts entity with compound PK'() {
+    def '#method(T): inserts entity with compound PK'() {
         setup:
             def entity = entities[0]
         when:
-            repository.save(entity)
+            repository./$method/(entity)
         then:
             repository.findOne(entity.id) == entity
+        where:
+            method << ['save', 'insert']
     }
 
     def '#method(T): updates entity with compound PK'() {

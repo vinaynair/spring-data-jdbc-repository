@@ -179,13 +179,15 @@ abstract class JdbcRepositoryManualKeyIT extends Specification {
     }
 
 
-    def 'save(T): inserts the given entity'() {
+    def '#method(T): inserts the given new entity'() {
         setup:
             deleteAllUsers()
         when:
-            repository.save(entities['Mindy'])
+            repository./$method/(entities['Mindy'])
         then:
             selectUserById('Mindy') == entities['Mindy']
+        where:
+            method << ['save', 'insert']
     }
 
     def 'save(T): throws DuplicateKeyException when the given entity is marked as new, but already exists'() {
@@ -193,6 +195,13 @@ abstract class JdbcRepositoryManualKeyIT extends Specification {
             repository.save(entities['Mindy'])
         then:
             thrown DuplicateKeyException
+    }
+
+    def 'insert(): throws DuplicateKeyException when given entity that is already persisted'() {
+        when:
+            repository.save(entities['Mindy'])
+        then:
+           thrown DuplicateKeyException
     }
 
     def '#method(T): updates the record when already exists'() {

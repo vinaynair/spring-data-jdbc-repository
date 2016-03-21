@@ -57,22 +57,26 @@ abstract class JdbcRepositoryManyToOneIT extends Specification {
     }
 
 
-    def 'save(T): generates primary key'() {
+    def '#method(T): generates primary key'() {
         when:
             repository.save(entities[0])
         then:
             entities[0].id != null
+        where:
+            method << ['save', 'insert']
     }
 
-    def 'save(T)/findOne(): inserts and returns entity with association attached'() {
+    def '#method(T)/findOne(): inserts and returns entity with association attached'() {
         setup:
             def expected = entities[0]
         when:
-            repository.save(expected)
+            repository./$method/(expected)
             def actual = repository.findOne(expected.id)
         then:
             actual == expected
             actual.user == expected.user
+        where:
+            method << ['save', 'insert']
     }
 
     def "#method(T): updates entity's association"() {

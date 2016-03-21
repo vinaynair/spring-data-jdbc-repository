@@ -62,6 +62,19 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
     <S extends T> List<S> save(Iterable<S> entities);
 
     /**
+     * Inserts the given new entity into database.
+     *
+     * <p>Use the returned instance for further operations as the insert
+     * operation might have changed the entity instance.</p>
+     *
+     * @param entity
+     * @return An inserted entity.
+     * @throws org.springframework.dao.DuplicateKeyException if record with the
+     *         same primary key as the given entity already exists.
+     */
+    <S extends T> S insert(S entity);
+
+    /**
      * Updates the given entity. If no record with the entity's ID exists in
      * the database, then it throws an exception.
      *

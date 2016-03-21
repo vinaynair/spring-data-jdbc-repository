@@ -41,24 +41,28 @@ abstract class JdbcRepositoryGeneratedKeyIT extends Specification {
     }
 
 
-    def 'save(T): generates key'() {
+    def '#method(T): generates key'() {
         given:
             def comment = createComment()
         when:
-            repository.save(comment)
+            repository./$method/(comment)
         then:
             comment.id != null
+        where:
+            method << ['save', 'insert']
     }
 
-    def 'save(T): generates subsequent ids'() {
+    def '#method(T): generates subsequent ids'() {
         given:
             def first = createComment()
             def second = createComment()
         when:
-            repository.save(first)
-            repository.save(second)
+            repository./$method/(first)
+            repository./$method/(second)
         then:
             first.id < second.id
+        where:
+            method << ['save', 'insert']
     }
 
     def '#method(T): updates the record when already exists'() {
