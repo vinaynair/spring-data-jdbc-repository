@@ -70,7 +70,7 @@ public class CommentWithUserRepository extends BaseJdbcRepository<CommentWithUse
 
 
     @Override
-    protected <S extends CommentWithUser> S postCreate(S entity, Number generatedId) {
+    protected <S extends CommentWithUser> S postInsert(S entity, Number generatedId) {
         entity.setId(generatedId.intValue());
         return entity;
     }
