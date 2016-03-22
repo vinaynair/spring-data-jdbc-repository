@@ -33,19 +33,19 @@ public class NoRecordUpdatedException extends IncorrectUpdateSemanticsDataAccess
         super(format("No record with id = {%s} exists in table %s",
                 arrayToCommaDelimitedString(id), tableName));
         this.tableName = tableName;
-        this.id = id;
+        this.id = id.clone();
     }
 
     public NoRecordUpdatedException(String tableName, String msg) {
         super(msg);
         this.tableName = tableName;
-        this.id = null;
+        this.id = new Object[0];
     }
 
     public NoRecordUpdatedException(String tableName, String msg, Throwable cause) {
         super(msg, cause);
         this.tableName = tableName;
-        this.id = null;
+        this.id = new Object[0];
     }
 
 
@@ -59,6 +59,6 @@ public class NoRecordUpdatedException extends IncorrectUpdateSemanticsDataAccess
     }
 
     public Object[] getId() {
-        return id;
+        return id.clone();
     }
 }
