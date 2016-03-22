@@ -76,11 +76,10 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
                               RowUnmapper<T> rowUnmapper, TableDescription table) {
         Assert.notNull(rowMapper);
-        Assert.notNull(rowUnmapper);
         Assert.notNull(table);
 
         this.entityInfo = entityInformation != null ? entityInformation : createEntityInformation();
-        this.rowUnmapper = rowUnmapper;
+        this.rowUnmapper = rowUnmapper != null ? rowUnmapper : new UnsupportedRowUnmapper<T>();
         this.rowMapper = rowMapper;
         this.table = table;
     }
