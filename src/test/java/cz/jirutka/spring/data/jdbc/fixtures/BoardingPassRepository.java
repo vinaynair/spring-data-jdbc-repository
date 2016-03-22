@@ -61,7 +61,7 @@ public class BoardingPassRepository extends BaseJdbcRepository<BoardingPass, Obj
 
 
     @Override
-    protected <S extends BoardingPass> S postInsert(S entity, Number generatedId) {
+    protected <S extends BoardingPass> S postInsert(S entity, Object generatedId) {
         entity.withPersisted(true);
         return entity;
     }

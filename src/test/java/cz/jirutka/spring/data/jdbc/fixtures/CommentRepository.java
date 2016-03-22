@@ -21,6 +21,7 @@ import cz.jirutka.spring.data.jdbc.RowUnmapper;
 import cz.jirutka.spring.data.jdbc.TableDescription;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -67,8 +68,9 @@ public class CommentRepository extends BaseJdbcRepository<Comment, Integer> {
 
 
     @Override
-    protected <S extends Comment> S postInsert(S entity, Number generatedId) {
-        entity.setId(generatedId.intValue());
+    protected <S extends Comment> S postInsert(S entity, Object generatedId) {
+        Assert.isInstanceOf(Number.class, generatedId);
+        entity.setId(((Number) generatedId).intValue());
         return entity;
     }
 }
