@@ -1,5 +1,6 @@
 /*
  * Copyright 2012-2014 Tomasz Nurkiewicz <nurkiewicz@gmail.com>.
+ * Copyright 2016 Jakub Jirutka <jakub@jirutka.cz>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +18,13 @@ package cz.jirutka.spring.data.jdbc;
 
 import java.util.Map;
 
-public class MissingRowUnmapper<T> implements RowUnmapper<T> {
+/**
+ * No-operational implementation of {@link RowUnmapper} that just
+ * throws {@link UnsupportedOperationException}.
+ */
+public class UnsupportedRowUnmapper<T> implements RowUnmapper<T> {
 
-    public Map<String, Object> mapColumns(Object o) {
+    public Map<String, Object> mapColumns(T o) {
         throw new UnsupportedOperationException(
             "This repository is read-only, it can't store or update entities");
     }

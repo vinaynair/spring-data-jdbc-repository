@@ -34,6 +34,7 @@ Changes::
   * `SqlGenerator` and subclasses:
     ** remove field `allColumnsClause` and one-argument constructor (this is replaced by property `selectClause` in `TableDescription`),
     ** rename `SqlGenerator` to `DefaultSqlGenerator`, create interface `SqlGenerator` and reorganize subclasses.
+  * Rename `MissingRowUnmapper` to `UnsupportedRowUnmapper`.
 
 Infrastructure::
   * Update dependencies.
