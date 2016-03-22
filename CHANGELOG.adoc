@@ -3,6 +3,44 @@
 :issues-uri: https://github.com/jirutka/spring-data-jdbc-repository/issues
 
 
+== 0.6.0 (unreleased)
+
+Enhancements::
+  * Remove requirement for entities to implement `Persistable` interface. Entities may implement `Persistable`, or use annotation `@Id` from Spring Data Commons.
+  * Add `SqlGeneratorFactory` that automatically selects compatible `SqlGenerator` according to used database.
+  * Add protected getter for `jdbcOperations` ({issues-uri}/2[#2]).
+  * Optimize `delete(Iterable)` – delete entities in a single query.
+  * Make `update(S)` more robust – throw exception when ID is not null or wrong number of rows is (not) updated.
+
+Bug fixes::
+  * Fix duplication in test dependencies – exclude `groovy-all` from `spock-spring`.
+
+Changes::
+  * Rename base package from `com.nurkiewicz.jdbcrepository` to `cz.jirutka.spring.data.jdbc`.
+  * `JdbcRepository`:
+    ** remove method `pk(Object...)`,
+    ** rename `JdbcRepository` to `BaseJdbcRepository` and create interface `JdbcRepository`,
+    ** remove argument `sqlGenerator` from constructors and remove constructors without `rowUnmapper`,
+    ** rename `getTable()` to `getTableDesc()`,
+    ** rename `create(..)` to `insert(..)`, `preCreate(..)` to `preInsert(..)` and `postCreate` to `postInsert(..)`,
+    ** remove overloaded method `postUpdate(S, int)` (it’s not needed anymore, see above),
+    ** inject dependencies using `@Autowired` instead of manual lookup in `BeanFactory`,
+    ** add required dependency on `DataSource` and make dependency on `JdbcOperations` optional,
+    ** disallow properties change after initialization (invoking `afterPropertiesSet()`).
+  * `TableDescription`:
+    ** rename `getName()` to `getTableName()` and `getIdColumns()` to `getPkColumns()`,
+    ** add property `selectClause`,
+    ** add setters for all properties.
+  * `SqlGenerator` and subclasses:
+    ** remove field `allColumnsClause` and one-argument constructor (this is replaced by property `selectClause` in `TableDescription`),
+    ** rename `SqlGenerator` to `DefaultSqlGenerator`, create interface `SqlGenerator` and reorganize subclasses.
+
+Infrastructure::
+  * Update dependencies.
+  * Refactor and extend tests for `SqlGenerator`.
+  * Add tests for methods `insert(..)` and `update(..)`.
+
+
 == 0.5.0 (2016-02-15)
 
 ⭐️ Project forked and published under new coordinates: cz.jirutka.spring:spring-data-jdbc-repository.
