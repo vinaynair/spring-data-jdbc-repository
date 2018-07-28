@@ -52,6 +52,12 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+    <distributionManagement>
+        <repository>
+            <id>my-bintray-id</id>
+            <url>https://api.bintray.com/maven/vinaynair/maven/spring-data-jdbc-repository;publish=1</url>
+        </repository>
+    </distributionManagement>
 
 
     <licenses>
