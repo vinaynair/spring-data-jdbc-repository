@@ -40,8 +40,6 @@
     </developers>
 
 
-    <!--//////////////////// DISTRIBUTION ////////////////////-->
-
     <licenses>
         <license>
             <name>Apache 2.0</name>
