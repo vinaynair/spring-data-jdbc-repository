@@ -44,10 +44,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cz.jirutka.spring.data.jdbc.internal.IterableUtils.toList;
 import static cz.jirutka.spring.data.jdbc.internal.ObjectUtils.wrapToArray;
@@ -57,7 +54,7 @@ import static java.util.Arrays.asList;
  * Implementation of {@link PagingAndSortingRepository} using {@link JdbcTemplate}
  */
 public abstract class BaseJdbcRepository<T, ID extends Serializable>
-        implements JdbcRepository<T, ID>, InitializingBean {
+    implements JdbcRepository<T, ID>, InitializingBean {
 
     private final EntityInformation<T, ID> entityInfo;
     private final TableDescription table;
@@ -113,7 +110,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     /**
      * @param dataSource The DataSource to use (required).
      * @throws IllegalStateException if invoked after initialization
-     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     *                               (i.e. after {@link #afterPropertiesSet()} has been invoked).
      */
     @Autowired
     public void setDataSource(DataSource dataSource) {
@@ -124,7 +121,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     /**
      * @param jdbcOps If not set, {@link JdbcTemplate} is created.
      * @throws IllegalStateException if invoked after initialization
-     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     *                               (i.e. after {@link #afterPropertiesSet()} has been invoked).
      */
     @Autowired(required = false)
     public void setJdbcOperations(JdbcOperations jdbcOps) {
@@ -134,9 +131,9 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     /**
      * @param sqlGeneratorFactory If not set, {@link SqlGeneratorFactory#getInstance()}
-     *        is used.
+     *                            is used.
      * @throws IllegalStateException if invoked after initialization
-     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     *                               (i.e. after {@link #afterPropertiesSet()} has been invoked).
      */
     @Autowired(required = false)
     public void setSqlGeneratorFactory(SqlGeneratorFactory sqlGeneratorFactory) {
@@ -146,9 +143,9 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     /**
      * @param sqlGenerator If not set, then it's obtained from
-     *        {@link SqlGeneratorFactory}.
+     *                     {@link SqlGeneratorFactory}.
      * @throws IllegalStateException if invoked after initialization
-     *         (i.e. after {@link #afterPropertiesSet()} has been invoked).
+     *                               (i.e. after {@link #afterPropertiesSet()} has been invoked).
      */
     @Autowired(required = false)
     public void setSqlGenerator(SqlGenerator sqlGenerator) {
@@ -164,8 +161,9 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         return jdbcOps.queryForObject(sqlGenerator.count(table), Long.class);
     }
 
+
     @Override
-    public void delete(ID id) {
+    public void deleteById(ID id) {
         // Workaround for Groovy that cannot distinguish between two methods
         // with almost the same type erasure and always calls the former one.
         if (getEntityInfo().getJavaType().isInstance(id)) {
@@ -177,11 +175,11 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
 
     @Override
     public void delete(T entity) {
-        delete(id(entity));
+        deleteById(id(entity));
     }
 
     @Override
-    public void delete(Iterable<? extends T> entities) {
+    public void deleteAll(Iterable<? extends T> entities) {
         List<ID> ids = ids(entities);
 
         if (!ids.isEmpty()) {
@@ -195,7 +193,7 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     }
 
     @Override
-    public boolean exists(ID id) {
+    public boolean existsById(ID id) {
         return !jdbcOps.queryForList(
             sqlGenerator.existsById(table), wrapToArray(id), Integer.class).isEmpty();
     }
@@ -206,11 +204,11 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     }
 
     @Override
-    public T findOne(ID id) {
+    public Optional<T> findById(ID id) {
         List<T> entityOrEmpty = jdbcOps.query(
             sqlGenerator.selectById(table), wrapToArray(id), rowMapper);
 
-        return entityOrEmpty.isEmpty() ? null : entityOrEmpty.get(0);
+        return entityOrEmpty.isEmpty() ? Optional.empty() : Optional.of(entityOrEmpty.get(0));
     }
 
     @Override
@@ -322,17 +320,16 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
      * <p/>
      * OVerride this method e.g. if you want to fetch auto-generated key from database
      *
-     *
-     * @param entity Entity that was passed to {@link #insert}
+     * @param entity      Entity that was passed to {@link #insert}
      * @param generatedId ID generated during INSERT or NULL if not available/not generated.
-     * TODO: Type should be ID, not Number
+     *                    TODO: Type should be ID, not Number
      * @return Either the same object as an argument or completely different one
      */
     protected <S extends T> S postInsert(S entity, Number generatedId) {
         return entity;
     }
 
-    protected Map<String,Object> preUpdate(T entity, Map<String, Object> columns) {
+    protected Map<String, Object> preUpdate(T entity, Map<String, Object> columns) {
         return columns;
     }
 
@@ -431,5 +428,15 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
             throw new IllegalStateException(
                 propertyName + " should not be changed after initialization");
         }
+    }
+
+    @Override
+    public <S extends T> Iterable<S> saveAll(Iterable<S> iterable) {
+        return save(iterable);
+    }
+
+    @Override
+    public Iterable<T> findAllById(Iterable<ID> iterable) {
+        return findAll(iterable);
     }
 }
