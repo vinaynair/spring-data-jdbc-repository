@@ -6,7 +6,7 @@
     <servers>
         <server>
             <id>jfrog-oss-snapshot-local</id>
-            <username>jirutka</username>
+            <username>vinaynair</username>
             <password>${env.BINTRAY_API_KEY}</password>
         </server>
     </servers>
