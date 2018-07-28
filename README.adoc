@@ -2,11 +2,11 @@
 :source-language: java
 // Project meta
 :name: spring-data-jdbc-repository
-:version: 0.5.0
-:group-id: cz.jirutka.spring
+:version: 0.0.1-SNAPSHOT
+:group-id: com.github.vinaynair
 :artifact-id: {name}
-:gh-name: jirutka/{name}
-:gh-branch: master
+:gh-name: vinaynair/{name}
+:gh-branch: develop
 :appveyor-id: n3x2wog0vys5bgl0
 :codacy-id: f44c7cac230b469793750a6899e286d6
 // URIs
