@@ -56,7 +56,7 @@
         <repository>
             <id>bintray-vinaynair-maven</id>
             <name>vinaynair-maven</name>
-            <url>https://api.bintray.com/maven/vinaynair/maven/com.github.vinaynair/;publish=1</url>
+            <url>https://api.bintray.com/maven/vinaynair/maven/com.github.vinaynair/;publish=1;override=1</url>
         </repository>
     </distributionManagement>
 
