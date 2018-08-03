@@ -16,8 +16,10 @@
  */
 package cz.jirutka.spring.data.jdbc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.jirutka.spring.data.jdbc.sql.SqlGenerator;
 import cz.jirutka.spring.data.jdbc.sql.SqlGeneratorFactory;
+import org.simpleflatmapper.jdbc.spring.JdbcTemplateMapperFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
@@ -68,6 +70,32 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     private SqlGenerator sqlGenerator;
 
     private boolean initialized;
+
+    /**
+     * Simple helper
+     *
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public static <T> RowMapper<T> ROW_MAPPER(Class<T> type) {
+        return JdbcTemplateMapperFactory.newInstance().newRowMapper(type);
+    }
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    public static <T> RowUnmapper<T> ROW_UNMAPPER(Class<T> type) {
+        return new RowUnmapper<T>() {
+            @Override
+            public Map<String, Object> mapColumns(T t) {
+                Map<String, Object> map = OBJECT_MAPPER.convertValue(t, Map.class);
+                //remove persisted and new TODO: Find better way to remove transient fields
+                map.remove("new");
+                map.remove("persisted");
+                return map;
+            }
+        };
+    }
 
 
     public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
