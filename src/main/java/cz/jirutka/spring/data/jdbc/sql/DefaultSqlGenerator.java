@@ -40,10 +40,10 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
 public class DefaultSqlGenerator implements SqlGenerator {
 
     static final String
-            AND = " AND ",
-            OR = " OR ",
-            COMMA = ", ",
-            PARAM = " = ?";
+        AND = " AND ",
+        OR = " OR ",
+        COMMA = ", ",
+        PARAM = " = ?";
 
 
     public boolean isCompatible(DatabaseMetaData metadata) throws SQLException {
@@ -159,5 +159,23 @@ public class DefaultSqlGenerator implements SqlGenerator {
 
     private String formatParameters(Collection<String> columns, String delimiter) {
         return collectionToDelimitedString(columns, delimiter, "", PARAM);
+    }
+
+    /**
+     * with default sort on "id" column, page the results
+     *
+     * @param sql
+     * @param page
+     * @return
+     */
+    public String page(String sql, Pageable page) {
+        if (page.getSort() == null)
+            throw new UnsupportedOperationException("Expecting sort order to be set");
+
+        return format("SELECT t2__.* FROM ( "
+                + "SELECT row_number() OVER (ORDER BY %s) AS rn__, t1__.* FROM ( %s ) t1__ "
+                + ") t2__ WHERE t2__.rn__ BETWEEN %s AND %s",
+            orderByExpression(page.getSort()), sql,
+            page.getOffset() + 1, page.getOffset() + page.getPageSize());
     }
 }

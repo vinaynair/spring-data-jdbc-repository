@@ -32,7 +32,7 @@ public interface SqlGenerator {
      *
      * @param metadata The database metadata.
      * @return Whether is this generator compatible with the database described
-     *         by the given {@code metadata}.
+     * by the given {@code metadata}.
      */
     boolean isCompatible(DatabaseMetaData metadata) throws SQLException;
 
@@ -60,4 +60,6 @@ public interface SqlGenerator {
     String selectByIds(TableDescription table, int idsCount);
 
     String update(TableDescription table, Map<String, Object> columns);
+
+    String page(String sql, Pageable page);
 }

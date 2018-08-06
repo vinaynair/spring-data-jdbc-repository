@@ -45,4 +45,11 @@ public class LimitOffsetSqlGenerator extends DefaultSqlGenerator {
         return format("%s LIMIT %d OFFSET %d",
             selectAll(table, page.getSort()), page.getPageSize(), page.getOffset());
     }
+
+    @Override
+    public String page(String sql, Pageable page) {
+        if (page.getSort() == null) throw new UnsupportedOperationException("Expecting sort order to be set");
+        return format("%s LIMIT %d OFFSET %d",
+            sql + orderByClause(page.getSort()), page.getPageSize(), page.getOffset());
+    }
 }

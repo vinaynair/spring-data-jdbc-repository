@@ -43,6 +43,8 @@ import org.springframework.util.LinkedCaseInsensitiveMap;
 
 import javax.sql.DataSource;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -97,6 +99,41 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
         };
     }
 
+    private Class<T> entityClass;
+
+    /**
+     * constructor with all defaults that includes
+     * <ul>
+     *   <li>row mapper</li>
+     *   <li>row UN mapper</li>
+     *   <li>table name</li>
+     *   <li>id column</li>
+     * </ul>
+     */
+    public BaseJdbcRepository() {
+        this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass())
+            .getActualTypeArguments()[0];
+        this.rowMapper = ROW_MAPPER(entityClass);
+        this.rowUnmapper = ROW_UNMAPPER(entityClass);
+        this.entityInfo = createEntityInformation();
+        String tableName = entityClass.getSimpleName().replaceAll("(.)(\\p{Upper})", "$1_$2").toUpperCase();
+        String idColumn = "id";
+        //override with annotation, if present
+        if (entityClass.getAnnotationsByType(Table.class).length == 1) {
+            tableName = entityClass.getAnnotationsByType(Table.class)[0].value();
+            idColumn = entityClass.getAnnotationsByType(Table.class)[0].id();
+        }
+        this.table = new TableDescription(tableName, idColumn);
+    }
+
+    public BaseJdbcRepository(String tableName) {
+        this.entityClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass())
+            .getActualTypeArguments()[0];
+        this.rowMapper = ROW_MAPPER(entityClass);
+        this.rowUnmapper = ROW_UNMAPPER(entityClass);
+        this.entityInfo = createEntityInformation();
+        this.table = new TableDescription(tableName, "id");
+    }
 
     public BaseJdbcRepository(EntityInformation<T, ID> entityInformation, RowMapper<T> rowMapper,
                               RowUnmapper<T> rowUnmapper, TableDescription table) {
@@ -466,5 +503,13 @@ public abstract class BaseJdbcRepository<T, ID extends Serializable>
     @Override
     public Iterable<T> findAllById(Iterable<ID> iterable) {
         return findAll(iterable);
+    }
+
+    public RowMapper<T> getRowMapper() {
+        return rowMapper;
+    }
+
+    public RowUnmapper<T> getRowUnmapper() {
+        return rowUnmapper;
     }
 }
