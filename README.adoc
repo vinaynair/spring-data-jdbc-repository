@@ -19,18 +19,88 @@
 
 ifdef::env-github[]
 image:https://travis-ci.org/{gh-name}.svg?branch={gh-branch}["Build Status", link="https://travis-ci.org/{gh-name}"]
-image:https://ci.appveyor.com/api/projects/status/{appveyor-id}/branch/{gh-branch}?svg=true["Build status (Windows)", link="https://ci.appveyor.com/project/{gh-name}/branch/{gh-branch}"]
-image:https://api.codacy.com/project/badge/grade/{codacy-id}["Codacy code quality", link="https://www.codacy.com/app/{gh-name}"]
-image:https://maven-badges.herokuapp.com/maven-central/{group-id}/{artifact-id}/badge.svg[Maven Central, link="https://maven-badges.herokuapp.com/maven-central/{group-id}/{artifact-id}"]
 endif::env-github[]
 
 
-The purpose of this project is to provide generic, lightweight and easy to use DAO implementation for relational databases based on {spring-jdoc-uri}/jdbc/core/JdbcTemplate.html[JdbcTemplate] from https://projects.spring.io/spring-framework[Spring framework], compatible with Spring Data umbrella of projects.
+The purpose of this project is to provide generic, lightweight and easy to use DAO implementation for relational databases based on {spring-jdoc-uri}/jdbc/core/JdbcTemplate.html[JdbcTemplate] from https://projects.spring.io/spring-framework[Spring framework], compatible with Spring *boot* umbrella of projects.
 It’s intended for small applications where JPA or even MyBatis is an overkill.
 
-This project is a fork of https://github.com/nurkiewicz/spring-data-jdbc-repository[nurkiewicz/spring-data-jdbc-repository].
+This project is a fork of https://github.com/jirutka/spring-data-jdbc-repository/].
 See link:CHANGELOG.adoc[CHANGELOG] for a list of changes.
 
+
+== Newly added features to this fork
+
+=== Support for Spring Boot 2.0.1.RELEASE
+
+=== Better defaults
+For example:-
+
+_Entity definition_
+
+[source]
+----
+import cz.jirutka.spring.data.jdbc.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+// @Table("APP_USER") or explicitly provide the table mapping.
+public class AppUser extends AbstractEntity {
+  private String name;
+
+  public AppUser() {
+  }
+}
+----
+
+_Repository definition_
+
+[source]
+----
+
+package com.refapp.dao.impl;
+
+import com.refapp.entity.AppUser;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class AppUserRepository extends DefaultJdbcRepository<AppUser> {
+
+}
+----
+
+_a simple base class that support Long ID as PK for entity tables_
+
+[source]
+----
+import com.refapp.entity.AbstractEntity;
+import cz.jirutka.spring.data.jdbc.BaseJdbcRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+@Slf4j
+public abstract class DefaultJdbcRepository<T extends AbstractEntity> extends BaseJdbcRepository<T, Long> {
+
+  /** Default assuming Long PK ID column for the entity model for the given project*/
+  @Override
+  protected <S extends T> S postInsert(S entity, Number generatedId) {
+    entity.setId(generatedId.longValue());
+    return entity;
+  }
+  /** helper method to page a sql if we are directly using the underlying jdbcTemplate */
+  protected String page(String sql, Pageable pageable) {
+    return getSqlGenerator().page(sql, pageable);
+  }
+}
+----
 
 == Design objectives
 
